@@ -1,5 +1,6 @@
 
 `timescale 1ns / 1ps 
+`default_nettype none
 
 module counter_all(
         //counter clock domain.
@@ -74,83 +75,83 @@ module counter_all(
 parameter   COUNTER_NUM=4;
 localparam SEL_WIDTH=$clog2(COUNTER_NUM+4+4+2);
 
-input  [COUNTER_NUM-1:0] i_clk;// counter clock domain.
-input  [COUNTER_NUM-1:0] i_rst_n;
+input wire [COUNTER_NUM-1:0] i_clk;// counter clock domain.
+input wire [COUNTER_NUM-1:0] i_rst_n;
 //apb bus register clock domain.
-input       i_pclk;
-input       i_prst_n;
+input wire      i_pclk;
+input wire      i_prst_n;
 //sync data & trigger
-input  [COUNTER_NUM-1:0] i_extern_din_a;
-input  [COUNTER_NUM-1:0] i_extern_din_b;
+input wire [COUNTER_NUM-1:0] i_extern_din_a;
+input wire [COUNTER_NUM-1:0] i_extern_din_b;
 //input  [COUNTER_NUM*COUNTER_NUM-1:0] i_inner_din;
-input  [COUNTER_NUM-1:0] i_single_start_trigger;
-input  [COUNTER_NUM-1:0] i_single_stop_trigger;
-input  [COUNTER_NUM-1:0] i_single_clear_trigger;
-input  [COUNTER_NUM-1:0] i_single_reset_trigger;
-input                    i_global_start_trigger;
-input                    i_global_stop_trigger;
-input                    i_global_clear_trigger;
-input                    i_global_reset_trigger;
-output [COUNTER_NUM-1:0] o_extern_dout_a;
-output [COUNTER_NUM-1:0] o_extern_dout_a_oen;
-output [COUNTER_NUM-1:0] o_extern_dout_b;
-output [COUNTER_NUM-1:0] o_extern_dout_b_oen;
+input wire [COUNTER_NUM-1:0] i_single_start_trigger;
+input wire [COUNTER_NUM-1:0] i_single_stop_trigger;
+input wire [COUNTER_NUM-1:0] i_single_clear_trigger;
+input wire [COUNTER_NUM-1:0] i_single_reset_trigger;
+input wire                   i_global_start_trigger;
+input wire                   i_global_stop_trigger;
+input wire                   i_global_clear_trigger;
+input wire                   i_global_reset_trigger;
+output  wire [COUNTER_NUM-1:0] o_extern_dout_a;
+output  wire [COUNTER_NUM-1:0] o_extern_dout_a_oen;
+output  wire [COUNTER_NUM-1:0] o_extern_dout_b;
+output  wire [COUNTER_NUM-1:0] o_extern_dout_b_oen;
 //
 //configure register & status.
-input  [COUNTER_NUM-1:0] i_enable;
-input  [COUNTER_NUM*COUNTER_NUM-1:0] i_mux_sel;
-input  [COUNTER_NUM*8-1:0] i_soft_trigger_ctrl;   // to control the function of single/global_trigger, as a normal control signal or a softward trigger signal.
-input  [COUNTER_NUM*SEL_WIDTH-1:0] i_src_sel_start;
-input  [COUNTER_NUM*2-1:0] i_src_edge_start;
-input  [COUNTER_NUM*SEL_WIDTH-1:0] i_src_sel_stop;
-input  [COUNTER_NUM*2-1:0] i_src_edge_stop;
-input  [COUNTER_NUM*SEL_WIDTH-1:0] i_src_sel_din0;
-input  [COUNTER_NUM*2-1:0] i_src_edge_din0;
-input  [COUNTER_NUM*SEL_WIDTH-1:0] i_src_sel_din1;
-input  [COUNTER_NUM*2-1:0] i_src_edge_din1;
-input  [COUNTER_NUM*4-1:0] i_ctrl_snap;
-output [COUNTER_NUM*32-1:0] o_shadow_reg;
-input  [COUNTER_NUM*6-1:0] i_target_reg_ctrl;
+input  wire [COUNTER_NUM-1:0] i_enable;
+input  wire [COUNTER_NUM*COUNTER_NUM-1:0] i_mux_sel;
+input  wire [COUNTER_NUM*8-1:0] i_soft_trigger_ctrl;   // to control the function of single/global_trigger, as a normal control signal or a softward trigger signal.
+input  wire [COUNTER_NUM*SEL_WIDTH-1:0] i_src_sel_start;
+input  wire [COUNTER_NUM*2-1:0] i_src_edge_start;
+input  wire [COUNTER_NUM*SEL_WIDTH-1:0] i_src_sel_stop;
+input  wire [COUNTER_NUM*2-1:0] i_src_edge_stop;
+input  wire [COUNTER_NUM*SEL_WIDTH-1:0] i_src_sel_din0;
+input  wire [COUNTER_NUM*2-1:0] i_src_edge_din0;
+input  wire [COUNTER_NUM*SEL_WIDTH-1:0] i_src_sel_din1;
+input  wire [COUNTER_NUM*2-1:0] i_src_edge_din1;
+input  wire [COUNTER_NUM*4-1:0] i_ctrl_snap;
+output wire [COUNTER_NUM*32-1:0] o_shadow_reg;
+input  wire [COUNTER_NUM*6-1:0] i_target_reg_ctrl;
 //[0]: when counters meet i_target_reg_a2, 1- keep the value,   0- reset the value.
 //[1]: when counters meet i_target_reg_a2, 1- stop the counter, 0- restart the counter.
 //[2]: when counters meet i_target_reg_b2, 1- keep the value,   0- reset the value.
 //[3]: when counters meet i_target_reg_b2, 1- stop the counter, 0- restart the counter.
 //[4]: dout_a reset value.
 //[5]: dout_b reset value.
-input  [COUNTER_NUM*32-1:0] i_target_reg_a0;
-input  [COUNTER_NUM*32-1:0] i_target_reg_a1;
-input  [COUNTER_NUM*32-1:0] i_target_reg_a2;
-input  [COUNTER_NUM*32-1:0] i_target_reg_b0;
-input  [COUNTER_NUM*32-1:0] i_target_reg_b1;
-input  [COUNTER_NUM*32-1:0] i_target_reg_b2;
-output [COUNTER_NUM*6-1:0] o_capture_reg_status;//(a2/a1/a0)bit2-bit0:1-active.(b2/b1/b0)bit5-bit3;
-input  [COUNTER_NUM*6-1:0] i_capture_reg_read_flag;//(a2/a1/a0)bit2-bit0:1-active.(b2/b1/b0)bit5-bit3:
-input  [COUNTER_NUM*6-1:0] i_capture_reg_overflow_ctrl;//bit5~bit0: 1-overwrite,0-discard.
-output [COUNTER_NUM*32-1:0] o_capture_reg_a0;
-output [COUNTER_NUM*32-1:0] o_capture_reg_a1;
-output [COUNTER_NUM*32-1:0] o_capture_reg_a2;
-output [COUNTER_NUM*32-1:0] o_capture_reg_b0;
-output [COUNTER_NUM*32-1:0] o_capture_reg_b1;
-output [COUNTER_NUM*32-1:0] o_capture_reg_b2;
-input  [COUNTER_NUM*3-1:0] i_mode_sel;
+input  wire [COUNTER_NUM*32-1:0] i_target_reg_a0;
+input  wire [COUNTER_NUM*32-1:0] i_target_reg_a1;
+input  wire [COUNTER_NUM*32-1:0] i_target_reg_a2;
+input  wire [COUNTER_NUM*32-1:0] i_target_reg_b0;
+input  wire [COUNTER_NUM*32-1:0] i_target_reg_b1;
+input  wire [COUNTER_NUM*32-1:0] i_target_reg_b2;
+output wire [COUNTER_NUM*6-1:0] o_capture_reg_status;//(a2/a1/a0)bit2-bit0:1-active.(b2/b1/b0)bit5-bit3;
+input  wire [COUNTER_NUM*6-1:0] i_capture_reg_read_flag;//(a2/a1/a0)bit2-bit0:1-active.(b2/b1/b0)bit5-bit3:
+input  wire [COUNTER_NUM*6-1:0] i_capture_reg_overflow_ctrl;//bit5~bit0: 1-overwrite,0-discard.
+output wire [COUNTER_NUM*32-1:0] o_capture_reg_a0;
+output wire [COUNTER_NUM*32-1:0] o_capture_reg_a1;
+output wire [COUNTER_NUM*32-1:0] o_capture_reg_a2;
+output wire [COUNTER_NUM*32-1:0] o_capture_reg_b0;
+output wire [COUNTER_NUM*32-1:0] o_capture_reg_b1;
+output wire [COUNTER_NUM*32-1:0] o_capture_reg_b2;
+input  wire [COUNTER_NUM*3-1:0] i_mode_sel;
 //[0]: 0-capture_mode/shitin_mode, 1-waveform_mode/shiftout_mode.
 //[1]: 0-count mode, 1-shift mode.
 //[2]: 0-automatic switch mode disable. 1-enable.
-input  [COUNTER_NUM*16-1:0] i_switch_mode_onebit_cnts;
-input  [COUNTER_NUM*8-1:0] i_waveform_mode_cnts;//waveform/shiftout mode cnts.
-input  [COUNTER_NUM*8-1:0] i_capture_mode_cnts;//capture/shiftin mode cnts.
-input  [COUNTER_NUM-1:0] i_waveform_mode_automatic_sw;//1-automatic switch to waveform mode enable,0-disable.
-input  [COUNTER_NUM-1:0] i_capture_mode_automatic_sw;//1-automatic switch to capture mode enable,0-disable.
-input  [COUNTER_NUM-1:0] i_shiftmode_ctrl;//0-bus_a(din_a/dout_a),1-bus_b(din_b/dout_b).
-input  [COUNTER_NUM*32-1:0] i_shiftout_data;
-input  [COUNTER_NUM*5-1:0] i_shiftout_data_ctrl_bitcnts;//n-> (n+1) bit;
-input  [COUNTER_NUM-1:0] i_shiftout_data_valid;//1->active.
-output [COUNTER_NUM*32-1:0] o_shiftin_data;
-output [COUNTER_NUM*32-1:0] o_shiftin_databits_updated;//1-> new data.
-input  [COUNTER_NUM*5-1:0] i_shiftin_data_ctrl_bitcnts;//n-> (n+1) bit;
+input  wire [COUNTER_NUM*16-1:0] i_switch_mode_onebit_cnts;
+input  wire [COUNTER_NUM*8-1:0] i_waveform_mode_cnts;//waveform/shiftout mode cnts.
+input  wire [COUNTER_NUM*8-1:0] i_capture_mode_cnts;//capture/shiftin mode cnts.
+input  wire [COUNTER_NUM-1:0] i_waveform_mode_automatic_sw;//1-automatic switch to waveform mode enable,0-disable.
+input  wire [COUNTER_NUM-1:0] i_capture_mode_automatic_sw;//1-automatic switch to capture mode enable,0-disable.
+input  wire [COUNTER_NUM-1:0] i_shiftmode_ctrl;//0-bus_a(din_a/dout_a),1-bus_b(din_b/dout_b).
+input  wire [COUNTER_NUM*32-1:0] i_shiftout_data;
+input  wire [COUNTER_NUM*5-1:0] i_shiftout_data_ctrl_bitcnts;//n-> (n+1) bit;
+input  wire [COUNTER_NUM-1:0] i_shiftout_data_valid;//1->active.
+output wire [COUNTER_NUM*32-1:0] o_shiftin_data;
+output wire [COUNTER_NUM*32-1:0] o_shiftin_databits_updated;//1-> new data.
+input  wire [COUNTER_NUM*5-1:0] i_shiftin_data_ctrl_bitcnts;//n-> (n+1) bit;
 
 //interrupt.
-output [COUNTER_NUM*8-1:0] o_int;//
+output wire [COUNTER_NUM*8-1:0] o_int;//
 
 wire [COUNTER_NUM*COUNTER_NUM-1:0] w_inner_din;
 
@@ -306,3 +307,4 @@ endgenerate
 
 
 endmodule
+`default_nettype wire

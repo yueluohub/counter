@@ -1,5 +1,6 @@
 
 `timescale 1ns / 1ps 
+`default_nettype none
 
 module counter_datamux_syn(
         i_clk_din,
@@ -13,17 +14,17 @@ module counter_datamux_syn(
 );
 
 parameter   COUNTER_NUM=4;
-input [COUNTER_NUM-1:0] i_clk_din;
-input [COUNTER_NUM-1:0] i_rstn_din;
-input [COUNTER_NUM-1:0] i_mux_sel;
+input wire [COUNTER_NUM-1:0] i_clk_din;
+input wire [COUNTER_NUM-1:0] i_rstn_din;
+input wire [COUNTER_NUM-1:0] i_mux_sel;
 //[0]:0->i_inner_din_a[0],1->i_inner_din_b[0];
 //[1]:0->i_inner_din_a[1],1->i_inner_din_b[1];
 //[n]:0->i_inner_din_a[n],1->i_inner_din_b[n];
-input [COUNTER_NUM-1:0] i_inner_din_a;
-input [COUNTER_NUM-1:0] i_inner_din_b;
-output [COUNTER_NUM-1:0] o_mux_dout;
-input   i_clk_dout;
-input   i_rstn_dout;
+input wire [COUNTER_NUM-1:0] i_inner_din_a;
+input wire [COUNTER_NUM-1:0] i_inner_din_b;
+output wire[COUNTER_NUM-1:0] o_mux_dout;
+input  wire i_clk_dout;
+input  wire i_rstn_dout;
 
 wire [COUNTER_NUM-1:0] w1_inner_din;
 
@@ -55,3 +56,4 @@ endgenerate
 
 
 endmodule
+`default_nettype wire

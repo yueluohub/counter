@@ -1,6 +1,7 @@
 
 `timescale 1ns / 1ps 
 
+`default_nettype none
 module counter_top(
         //counter clock domain.
         i_clk,
@@ -31,45 +32,46 @@ module counter_top(
 parameter   COUNTER_NUM=4;
 localparam SEL_WIDTH=$clog2(COUNTER_NUM+4+4+2);
 
-input  [COUNTER_NUM-1:0] i_clk;// counter clock domain.
-input  [COUNTER_NUM-1:0] i_rst_n;
+input wire  [COUNTER_NUM-1:0] i_clk;// counter clock domain.
+input wire  [COUNTER_NUM-1:0] i_rst_n;
 //apb bus register clock domain.
-input       i_pclk;
-input       i_prst_n;
+input wire       i_pclk;
+input wire       i_prst_n;
 
-input   [ 31 : 0 ] i_paddr;
-input   [ 31 : 0 ] i_pwdata;
-input              i_pwrite;
-input              i_psel;
-input              i_penable;
+input wire   [ 31 : 0 ] i_paddr;
+input wire   [ 31 : 0 ] i_pwdata;
+input wire              i_pwrite;
+input wire              i_psel;
+input wire              i_penable;
 output [ 31 : 0 ]  o_prdata;
 
 //sync data & trigger
-input  [COUNTER_NUM-1:0] i_extern_din_a;
-input  [COUNTER_NUM-1:0] i_extern_din_b;
+input wire  [COUNTER_NUM-1:0] i_extern_din_a;
+input wire  [COUNTER_NUM-1:0] i_extern_din_b;
 
-output [COUNTER_NUM-1:0] o_extern_dout_a;
-output [COUNTER_NUM-1:0] o_extern_dout_a_oen;
-output [COUNTER_NUM-1:0] o_extern_dout_b;
-output [COUNTER_NUM-1:0] o_extern_dout_b_oen;
+output wire [COUNTER_NUM-1:0] o_extern_dout_a;
+output wire [COUNTER_NUM-1:0] o_extern_dout_a_oen;
+output wire [COUNTER_NUM-1:0] o_extern_dout_b;
+output wire [COUNTER_NUM-1:0] o_extern_dout_b_oen;
 
 //configure register & status.
-output  [COUNTER_NUM*8-1:0] o_clk_ctrl;//
-output  [COUNTER_NUM-1:0]   o_enable;//
+output wire [COUNTER_NUM*8-1:0] o_clk_ctrl;//
+output wire [COUNTER_NUM-1:0]   o_enable;//
 
 //interrupt.
-output  o_int;//
+output wire  o_int;//
 reg [ 31 : 0 ]  o_prdata;
 
 
 `include "counter_all_apb_reg_inst.inc"
 //counter_all_apb_reg counter_all_apb_reg ();
-assign haddr_10w = i_psel ? i_paddr[31:2] : 32'h0;
+assign haddr_11w  = i_psel ? i_paddr[31:2] : 32'h0;
 assign hwdata_32w = i_psel && i_pwrite ? i_pwdata : 32'h0;
 assign hwen = i_psel && i_pwrite && (!i_penable);
+assign hren = i_psel && !i_pwrite && (!i_penable);
 always @ ( posedge i_pclk or negedge i_prst_n) begin
   if (!i_prst_n) o_prdata <= 32'h0;
-  else if (i_psel && !i_pwrite && !i_penable) o_prdata <= hrdata_32w;
+  else if (hren) o_prdata <= hrdata_32w;
 end
 
 //   wire              [ 31 : 0 ] sts_intr_status_counter;
@@ -167,7 +169,7 @@ wire                     w_global_clear_trigger ;
 wire                     w_global_reset_trigger ;
 
 //configure register & status.
-wire  [COUNTER_NUM-1:0] o_enable;
+//wire  [COUNTER_NUM-1:0] o_enable;
 wire  [COUNTER_NUM*COUNTER_NUM-1:0] w_mux_sel;
 wire  [COUNTER_NUM*8-1:0] w_soft_trigger_ctrl;   // to control the function of single/global_trigger, as a normal control signal or a softward trigger signal.
 wire  [COUNTER_NUM*SEL_WIDTH-1:0] w_src_sel_start;
@@ -268,7 +270,7 @@ assign w_shiftmode_ctrl = {o_shiftmode_ctrl_c3,o_shiftmode_ctrl_c2,o_shiftmode_c
 assign w_shiftout_data  = {o_shiftout_data_c3,o_shiftout_data_c2,o_shiftout_data_c1,o_shiftout_data_c0};
 assign w_shiftout_data_ctrl_bitcnts = {o_shiftout_data_ctrl_bitcnts_c3,o_shiftout_data_ctrl_bitcnts_c2,o_shiftout_data_ctrl_bitcnts_c1,o_shiftout_data_ctrl_bitcnts_c0};
 assign w_shiftout_data_valid = {wen_shiftout_data_valid_c3_d,wen_shiftout_data_valid_c2_d,wen_shiftout_data_valid_c1_d,wen_shiftout_data_valid_c0_d};
-assign {i_shiftin_data_3,i_shiftin_data_c2,i_shiftin_data_c1,i_shiftin_data_c0} = w_shiftin_data ;
+assign {i_shiftin_data_c3,i_shiftin_data_c2,i_shiftin_data_c1,i_shiftin_data_c0} = w_shiftin_data ;
 assign  w_shiftin_data_ctrl_bitcnts = {o_shiftin_data_ctrl_bitcnts_c3,o_shiftin_data_ctrl_bitcnts_c2,o_shiftin_data_ctrl_bitcnts_c1,o_shiftin_data_ctrl_bitcnts_c0};
 assign {i_shiftin_databits_updated_c3,i_shiftin_databits_updated_c2,i_shiftin_databits_updated_c1,i_shiftin_databits_updated_c0}= w_shiftin_databits_updated;
 
@@ -360,6 +362,7 @@ endgenerate
 
 
 wire w_intrctrl_sreset = o_intrctrl_sreset;//
+wire o_intr_lvl;
 
 intrctrl #(
   .INTR_SRC_WIDTH   ( 32             ), 
@@ -391,3 +394,5 @@ assign o_int = o_intr_lvl;
 
 
 endmodule
+
+`default_nettype wire

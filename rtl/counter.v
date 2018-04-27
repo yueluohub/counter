@@ -1,5 +1,6 @@
 
 `timescale 1ns / 1ps 
+`default_nettype none
 
 module counter(
         i_clk,
@@ -74,75 +75,82 @@ localparam SEL_WIDTH=$clog2(COUNTER_NUM+4+4+2);//innter din+single_trigger+globa
 //parameter SEL_WIDTH=$clog2(COUNTER_NUM+4+4+2);//innter din+single_trigger+global_trigger+external din.
 
  
-input  i_clk;
-input  i_rst_n;
+input wire   i_clk;
+input wire   i_rst_n;
 //sync data & trigger
-input  i_extern_din_a;
-input  i_extern_din_b;
-input  [COUNTER_NUM-1:0] i_inner_din;
-input  i_single_start_trigger;
-input  i_single_stop_trigger;
-input  i_single_clear_trigger;
-input  i_single_reset_trigger;
-input  i_global_start_trigger;
-input  i_global_stop_trigger;
-input  i_global_clear_trigger;
-input  i_global_reset_trigger;
+input wire   i_extern_din_a;
+input wire   i_extern_din_b;
+input wire   [COUNTER_NUM-1:0] i_inner_din;
+input wire   i_single_start_trigger;
+input wire   i_single_stop_trigger;
+input wire   i_single_clear_trigger;
+input wire   i_single_reset_trigger;
+input wire   i_global_start_trigger;
+input wire   i_global_stop_trigger;
+input wire   i_global_clear_trigger;
+input wire   i_global_reset_trigger;
 output o_extern_dout_a;
 output o_extern_dout_a_oen;
 output o_extern_dout_b;
 output o_extern_dout_b_oen;
 //configure register & status.
-input  i_enable;
-input  [7:0] i_soft_trigger_ctrl;   // to control the function of single/global_trigger, as a normal control signal or a softward trigger signal.
-input  [SEL_WIDTH-1:0] i_src_sel_start;
-input  [1:0] i_src_edge_start;
-input  [SEL_WIDTH-1:0] i_src_sel_stop;
-input  [1:0] i_src_edge_stop;
-input  [SEL_WIDTH-1:0] i_src_sel_din0;
-input  [1:0] i_src_edge_din0;
-input  [SEL_WIDTH-1:0] i_src_sel_din1;
-input  [1:0] i_src_edge_din1;
-input  [3:0] i_ctrl_snap;
+input wire   i_enable;
+input wire   [7:0] i_soft_trigger_ctrl;   
+// to control the function of single/global_trigger, as a normal control signal or a softward trigger signal.
+// every bit means the same. 1--> softward trigger signal, 0--> normal control signal. 
+// [0]:set for signal o_global_start_trigger. 
+// [1]:set for signal o_global_stop_trigger. 
+// [2]:set for signal o_global_clear_trigger. 
+// [3]:set for signal o_global_reset_trigger. 
+// [4]:set for signal o_single_start_trigger. 
+input wire   [SEL_WIDTH-1:0] i_src_sel_start;
+input wire   [1:0] i_src_edge_start;
+input wire   [SEL_WIDTH-1:0] i_src_sel_stop;
+input wire   [1:0] i_src_edge_stop;
+input wire   [SEL_WIDTH-1:0] i_src_sel_din0;
+input wire   [1:0] i_src_edge_din0;
+input wire   [SEL_WIDTH-1:0] i_src_sel_din1;
+input wire   [1:0] i_src_edge_din1;
+input wire   [3:0] i_ctrl_snap;
 output [31:0] o_shadow_reg;
-input  [5:0] i_target_reg_ctrl;
+input wire   [5:0] i_target_reg_ctrl;
 //[0]: when counters meet i_target_reg_a2, 1- keep the value,   0- reset the value.
 //[1]: when counters meet i_target_reg_a2, 1- stop the counter, 0- restart the counter.
 //[2]: when counters meet i_target_reg_b2, 1- keep the value,   0- reset the value.
 //[3]: when counters meet i_target_reg_b2, 1- stop the counter, 0- restart the counter.
 //[4]: dout_a reset value.
 //[5]: dout_b reset value.
-input  [31:0] i_target_reg_a0;
-input  [31:0] i_target_reg_a1;
-input  [31:0] i_target_reg_a2;
-input  [31:0] i_target_reg_b0;
-input  [31:0] i_target_reg_b1;
-input  [31:0] i_target_reg_b2;
+input wire   [31:0] i_target_reg_a0;
+input wire   [31:0] i_target_reg_a1;
+input wire   [31:0] i_target_reg_a2;
+input wire   [31:0] i_target_reg_b0;
+input wire   [31:0] i_target_reg_b1;
+input wire   [31:0] i_target_reg_b2;
 output [5:0] o_capture_reg_status;//(a2/a1/a0)bit2-bit0:1-active.(b2/b1/b0)bit5-bit3;
-input  [5:0] i_capture_reg_read_flag;//(a2/a1/a0)bit2-bit0:1-active.(b2/b1/b0)bit5-bit3:
-input  [5:0] i_capture_reg_overflow_ctrl;//bit5~bit0: 1-overwrite,0-discard.
+input wire   [5:0] i_capture_reg_read_flag;//(a2/a1/a0)bit2-bit0:1-active.(b2/b1/b0)bit5-bit3:
+input wire   [5:0] i_capture_reg_overflow_ctrl;//bit5~bit0: 1-overwrite,0-discard.
 output [31:0] o_capture_reg_a0;
 output [31:0] o_capture_reg_a1;
 output [31:0] o_capture_reg_a2;
 output [31:0] o_capture_reg_b0;
 output [31:0] o_capture_reg_b1;
 output [31:0] o_capture_reg_b2;
-input  [2:0] i_mode_sel;
+input wire   [2:0] i_mode_sel;
 //[0]: 0-capture_mode/shitin_mode, 1-waveform_mode/shiftout_mode.
 //[1]: 0-count mode, 1-shift mode.
 //[2]: 0-automatic switch mode disable. 1-enable.
-input  [15:0] i_switch_mode_onebit_cnts;
-input  [7:0] i_waveform_mode_cnts;//waveform/shiftout mode cnts.
-input  [7:0] i_capture_mode_cnts;//capture/shiftin mode cnts.
-input  i_waveform_mode_automatic_sw;//1-automatic switch to waveform mode enable,0-disable.
-input  i_capture_mode_automatic_sw;//1-automatic switch to capture mode enable,0-disable.
-input  i_shiftmode_ctrl;//0-bus_a(din_a/dout_a),1-bus_b(din_b/dout_b).
-input  [31:0] i_shiftout_data;
-input  [4:0] i_shiftout_data_ctrl_bitcnts;//n-> (n+1) bit;
-input   i_shiftout_data_valid;//1->active.
+input wire   [15:0] i_switch_mode_onebit_cnts;
+input wire   [7:0] i_waveform_mode_cnts;//waveform/shiftout mode cnts.
+input wire   [7:0] i_capture_mode_cnts;//capture/shiftin mode cnts.
+input wire   i_waveform_mode_automatic_sw;//1-automatic switch to waveform mode enable,0-disable.
+input wire   i_capture_mode_automatic_sw;//1-automatic switch to capture mode enable,0-disable.
+input wire   i_shiftmode_ctrl;//0-bus_a(din_a/dout_a),1-bus_b(din_b/dout_b).
+input wire   [31:0] i_shiftout_data;
+input wire   [4:0] i_shiftout_data_ctrl_bitcnts;//n-> (n+1) bit;
+input wire    i_shiftout_data_valid;//1->active.
 output [31:0] o_shiftin_data;
 output [31:0] o_shiftin_databits_updated;//1-> new data.
-input  [4:0] i_shiftin_data_ctrl_bitcnts;//n-> (n+1) bit;
+input wire   [4:0] i_shiftin_data_ctrl_bitcnts;//n-> (n+1) bit;
 
 //interrupt.
 output [7:0] o_int;//
@@ -297,12 +305,33 @@ always @(*) begin
     endcase
 end
 
+reg r1_global_start_trigger ;
+reg r1_global_stop_trigger  ;
+reg r1_global_clear_trigger ;
+reg r1_global_reset_trigger ;
+reg r1_single_start_trigger ;
+reg r1_single_stop_trigger  ;
+reg r1_single_clear_trigger ;
+reg r1_single_reset_trigger ;
 
 
-assign soft_start_flag = (i_global_start_trigger && !i_soft_trigger_ctrl[0]) || (i_single_start_trigger && !i_soft_trigger_ctrl[4]);
-assign soft_stop_flag  = (i_global_stop_trigger  && !i_soft_trigger_ctrl[1]) || (i_single_stop_trigger  && !i_soft_trigger_ctrl[5]);
-assign soft_clear_flag = (i_global_clear_trigger && !i_soft_trigger_ctrl[2]) || (i_single_clear_trigger && !i_soft_trigger_ctrl[6]);
-assign soft_reset_flag = (i_global_reset_trigger && !i_soft_trigger_ctrl[3]) || (i_single_reset_trigger && !i_soft_trigger_ctrl[7]);
+always @(posedge i_clk) begin
+     r1_global_start_trigger <= i_global_start_trigger;
+     r1_global_stop_trigger  <= i_global_stop_trigger ;
+     r1_global_clear_trigger <= i_global_clear_trigger;
+     r1_global_reset_trigger <= i_global_reset_trigger;
+     r1_single_start_trigger <= i_single_start_trigger;
+     r1_single_stop_trigger  <= i_single_stop_trigger ;
+     r1_single_clear_trigger <= i_single_clear_trigger;
+     r1_single_reset_trigger <= i_single_reset_trigger;     
+end
+
+assign soft_start_flag = ((i_global_start_trigger^r1_global_start_trigger) && !i_soft_trigger_ctrl[0]) || ((i_single_start_trigger^r1_single_start_trigger) && !i_soft_trigger_ctrl[4]);
+assign soft_stop_flag  = ((i_global_stop_trigger ^r1_global_stop_trigger ) && !i_soft_trigger_ctrl[1]) || ((i_single_stop_trigger ^r1_single_stop_trigger ) && !i_soft_trigger_ctrl[5]);
+assign soft_clear_flag = ((i_global_clear_trigger^r1_global_clear_trigger) && !i_soft_trigger_ctrl[2]) || ((i_single_clear_trigger^r1_single_clear_trigger) && !i_soft_trigger_ctrl[6]);
+assign soft_reset_flag = ((i_global_reset_trigger^r1_global_reset_trigger) && !i_soft_trigger_ctrl[3]) || ((i_single_reset_trigger^r1_single_reset_trigger) && !i_soft_trigger_ctrl[7]);
+
+
 
 always @(posedge i_clk) begin
     counter_start_dly[1:0] <= {counter_start_dly[0],counter_start};
@@ -845,3 +874,4 @@ end
 
 
 endmodule
+`default_nettype wire

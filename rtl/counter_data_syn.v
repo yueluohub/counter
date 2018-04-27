@@ -1,5 +1,6 @@
 
 `timescale 1ns / 1ps 
+`default_nettype none
 
 module counter_data_syn(
         i_clk_din,
@@ -10,13 +11,13 @@ module counter_data_syn(
         o_syn_dout
 );
 //
-input  i_clk_din;
-input  i_rstn_din;
-input  i_din;
-//
-input  i_clk_dout;
-input  i_rstn_dout;
-output o_syn_dout;
+input  wire i_clk_din;
+input  wire i_rstn_din;
+input  wire i_din;
+//     
+input  wire i_clk_dout;
+input  wire i_rstn_dout;
+output wire o_syn_dout;
 
 reg   r1_din_syn;
 reg   r1_dout_ack;
@@ -45,9 +46,10 @@ else if(!r1_din_syn) begin
 end
 
 
-assign o_syn_dout = r1_din_syn;
+assign o_syn_dout = r1_dout_ack;
 
 
 
 
 endmodule
+`default_nettype wire

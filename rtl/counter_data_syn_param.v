@@ -1,5 +1,6 @@
 
 `timescale 1ns / 1ps 
+`default_nettype none
 
 module counter_data_syn_param(
         i_clk_din,
@@ -13,13 +14,13 @@ module counter_data_syn_param(
 parameter BUS_WIDTH=4;
 
 //
-input  i_clk_din;
-input  i_rstn_din;
-input [BUS_WIDTH-1:0] i_din;
-//
-input  i_clk_dout;
-input  i_rstn_dout;
-output [BUS_WIDTH-1:0] o_syn_dout;
+input  wire  i_clk_din;
+input  wire  i_rstn_din;
+input  wire [BUS_WIDTH-1:0] i_din;
+//      
+input  wire  i_clk_dout;
+input  wire  i_rstn_dout;
+output wire  [BUS_WIDTH-1:0] o_syn_dout;
 
 genvar i;
 generate for(i=0;i<BUS_WIDTH;i=i+1) begin:bus_syn_loop
@@ -40,3 +41,4 @@ endgenerate
 
 
 endmodule
+`default_nettype wire

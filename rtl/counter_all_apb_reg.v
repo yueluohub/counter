@@ -8,6 +8,8 @@
 //spyglass disable_block W240, W362, W528
 
 `include "counter_all_apb_reg_v.h"
+//`default_nettype none
+`default_nettype wire
 
 module counter_all_apb_reg
 (
@@ -1820,6 +1822,7 @@ end
 
 
 endmodule
+`default_nettype wire
 
 
 
