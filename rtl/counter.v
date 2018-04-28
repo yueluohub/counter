@@ -226,15 +226,15 @@ wire   [5:0] w_capture_reg_read_flag_posedge;//(a2/a1/a0)bit2-bit0:1-active.(b2/
 
 always @(*) begin
     case(32'h1<<i_src_sel_start) 
-        32'h1<<1:    counter_start = i_extern_din_a;
-        32'h1<<2:    counter_start = i_extern_din_b;
-        32'h1<<3:    counter_start = i_global_start_trigger & i_soft_trigger_ctrl[0];
-        32'h1<<4:    counter_start = i_single_start_trigger & i_soft_trigger_ctrl[4];
-        32'h1<<5:    counter_start = i_global_stop_trigger & i_soft_trigger_ctrl[1];
-        32'h1<<6:    counter_start = i_single_stop_trigger & i_soft_trigger_ctrl[5];
-        32'h1<<7:    counter_start = i_global_clear_trigger & i_soft_trigger_ctrl[2];
-        32'h1<<8:    counter_start = i_single_clear_trigger & i_soft_trigger_ctrl[6];
-        32'h1<<9:    counter_start = i_global_reset_trigger & i_soft_trigger_ctrl[3];
+        32'h1<<1 :   counter_start = i_extern_din_a;
+        32'h1<<2 :   counter_start = i_extern_din_b;
+        32'h1<<3 :   counter_start = i_global_start_trigger & i_soft_trigger_ctrl[0];
+        32'h1<<4 :   counter_start = i_single_start_trigger & i_soft_trigger_ctrl[4];
+        32'h1<<5 :   counter_start = i_global_stop_trigger & i_soft_trigger_ctrl[1];
+        32'h1<<6 :   counter_start = i_single_stop_trigger & i_soft_trigger_ctrl[5];
+        32'h1<<7 :   counter_start = i_global_clear_trigger & i_soft_trigger_ctrl[2];
+        32'h1<<8 :   counter_start = i_single_clear_trigger & i_soft_trigger_ctrl[6];
+        32'h1<<9 :   counter_start = i_global_reset_trigger & i_soft_trigger_ctrl[3];
         32'h1<<10:   counter_start = i_single_reset_trigger & i_soft_trigger_ctrl[7];
         32'h1<<11:   counter_start = i_inner_din[0];
         32'h1<<12:   counter_start = (COUNTER_NUM>1)?i_inner_din[1]:1'b0;
@@ -343,10 +343,10 @@ always @(posedge i_clk) begin
     counter_din1_dly[1:0]  <= {counter_din1_dly[0],counter_din1};
 end
 
-assign start_flag = i_src_edge_start[1] ? (i_src_edge_start[0] ? ^counter_start_dly[1:0] : 1'b0) : (i_src_edge_start[0] ? (!counter_start_dly[0] & counter_start_dly[1]) : (counter_start_dly[0] & !counter_start_dly[1]) );
-assign stop_flag  = i_src_edge_stop[1] ?  (i_src_edge_start[0] ? ^counter_stop_dly[1:0]  : 1'b0) : (i_src_edge_stop[0] ? (!counter_stop_dly[0] & counter_stop_dly[1]) : (counter_stop_dly[0] & !counter_stop_dly[1]) );
-assign din0_flag  = i_src_edge_din0[1] ?  (i_src_edge_start[0] ? ^counter_din0_dly[1:0]  : 1'b0) : (i_src_edge_din0[0] ? (!counter_din0_dly[0] & counter_din0_dly[1]) : (counter_din0_dly[0] & !counter_din0_dly[1]) );
-assign din1_flag  = i_src_edge_din1[1] ?  (i_src_edge_start[0] ? ^counter_din1_dly[1:0]  : 1'b0) : (i_src_edge_din1[0] ? (!counter_din1_dly[0] & counter_din1_dly[1]) : (counter_din1_dly[0] & !counter_din1_dly[1]) );
+assign start_flag = i_src_edge_start[1] ?  (!i_src_edge_start[0] ? (^counter_start_dly[1:0]) : 1'b0) : (i_src_edge_start[0] ? (!counter_start_dly[0] & counter_start_dly[1]) : (counter_start_dly[0] & !counter_start_dly[1]) );
+assign stop_flag  = i_src_edge_stop[1]  ?  (!i_src_edge_stop[0] ? (^counter_stop_dly[1:0])  : 1'b0) : (i_src_edge_stop[0] ? (!counter_stop_dly[0] & counter_stop_dly[1]) : (counter_stop_dly[0] & !counter_stop_dly[1]) );
+assign din0_flag  = i_src_edge_din0[1]  ?  (!i_src_edge_din0[0] ? (^counter_din0_dly[1:0])  : 1'b0) : (i_src_edge_din0[0] ? (!counter_din0_dly[0] & counter_din0_dly[1]) : (counter_din0_dly[0] & !counter_din0_dly[1]) );
+assign din1_flag  = i_src_edge_din1[1]  ?  (!i_src_edge_din1[0] ? (^counter_din1_dly[1:0])  : 1'b0) : (i_src_edge_din1[0] ? (!counter_din1_dly[0] & counter_din1_dly[1]) : (counter_din1_dly[0] & !counter_din1_dly[1]) );
 
 
 
