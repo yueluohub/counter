@@ -253,21 +253,36 @@ initial begin
    `ifdef	TESTCASE_C0_CAPTURE_0
     apb_write_read(base_c0+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
     apb_write_read(base_c0+`MODE_SEL_C0,32'b000,data);
-    apb_write_read(base_c0+`TARGET_REG_CTRL_C0,32'b110110,data);
-    //apb_write_read(base_c0+`TARGET_REG_A0_C0,32'h100,data);
-    //apb_write_read(base_c0+`TARGET_REG_A1_C0,32'h200,data);
-    //apb_write_read(base_c0+`TARGET_REG_A2_C0,32'h300,data);
-    //apb_write_read(base_c0+`TARGET_REG_B0_C0,32'h200,data);
-    //apb_write_read(base_c0+`TARGET_REG_B1_C0,32'h300,data);
-    //apb_write_read(base_c0+`TARGET_REG_B2_C0,32'h400,data);
+    //apb_write_read(base_c0+`TARGET_REG_CTRL_C0,32'b110110,data);
+    apb_write_read(base_c0+`SRC_SEL_EDGE_C0,32'h02110000,data);
+
+
     apb_read (base_c0+`ENABLE_C0,data);
     apb_write(base_c0+`ENABLE_C0,data|32'h0001);//c0,enable.
     //
     apb_write_read(base_c0+`SINGLE_START_TRIGGER_C0,32'b1,data);//start;
     #200_000;
-    apb_read(base_c0+`SINGLE_STOP_TRIGGER_C0,data);//stop;
-    apb_write_read(base_c0+`SINGLE_STOP_TRIGGER_C0,~data,data);//stop;
-    #20_000;
+    //apb_read(base_c0+`SINGLE_STOP_TRIGGER_C0,data);//stop;
+    //apb_write_read(base_c0+`SINGLE_STOP_TRIGGER_C0,~data,data);//stop;
+    //#20_000;
+    //#20_000;
+    wait(i_int);
+    apb_read(base_c0+`INTR_STATUS,data);
+    if(|data[7:0]) begin
+        apb_write_read(base_c0+`INTR_CLR,data,data);
+        //CTRL_SNAP_C0
+        apb_read(base_c0+`CTRL_SNAP_C0,data);
+        apb_write_read(base_c0+`CTRL_SNAP_C0,{data[31:4],~data[3:0]},data);//
+        repeat (2) @(posedge i_pclk);
+        apb_read(base_c0+`CAPTURE_REG_STATUS_C0,data);
+        //if(data[2:0])
+        apb_read(base_c0+`CAPTURE_REG_B0_C0,data);
+        apb_read(base_c0+`CAPTURE_REG_B1_C0,data);
+        apb_read(base_c0+`CAPTURE_REG_B2_C0,data);
+        
+    end
+    
+    
    `endif
     //
     #20_000;

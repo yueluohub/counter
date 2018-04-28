@@ -166,13 +166,14 @@ wire [COUNTER_NUM-1:0]      w_syn_global_reset_trigger;
 wire [COUNTER_NUM-1:0]      w_syn_enable;
 wire [COUNTER_NUM*4-1:0]    w_syn_ctrl_snap;
 wire [COUNTER_NUM-1:0]      w_syn_shiftout_data_valid;
+wire [COUNTER_NUM*6-1:0]    w_syn_capture_reg_read_flag;//(a2/a1/a0)bit2-bit0:1-active.(b2/b1/b0)bit5-bit3:
 
 genvar i;
 generate for(i=0;i<COUNTER_NUM;i=i+1) begin:counter_loop
 
 
 
-counter_data_syn_param #(.BUS_WIDTH(14))    u_syn_bus(
+counter_data_syn_param #(.BUS_WIDTH(20))    u_syn_bus(
         .i_clk_din   (i_pclk),
         .i_rstn_din  (i_prst_n),
         .i_din       ({ i_single_start_trigger[i],
@@ -185,6 +186,7 @@ counter_data_syn_param #(.BUS_WIDTH(14))    u_syn_bus(
                         i_global_reset_trigger,
                         i_enable[i],
                         i_ctrl_snap[(i+1)*4-1:i*4],
+                        i_capture_reg_read_flag[(i+1)*6-1:i*6],
                         i_shiftout_data_valid[i]}
                         ),
         .i_clk_dout  (i_clk[i]),
@@ -199,6 +201,7 @@ counter_data_syn_param #(.BUS_WIDTH(14))    u_syn_bus(
                         w_syn_global_reset_trigger[i],
                         w_syn_enable[i],
                         w_syn_ctrl_snap[(i+1)*4-1:i*4],
+                        w_syn_capture_reg_read_flag[(i+1)*6-1:i*6],
                         w_syn_shiftout_data_valid[i]}
                         )
 );
@@ -246,7 +249,7 @@ counter #(.COUNTER_NUM(COUNTER_NUM)) u_counter(
         .i_target_reg_b1                    (i_target_reg_b1[(i+1)*32-1:i*32]              ),
         .i_target_reg_b2                    (i_target_reg_b2[(i+1)*32-1:i*32]              ),
         .o_capture_reg_status               (o_capture_reg_status[(i+1)*6-1:i*6]           ),
-        .i_capture_reg_read_flag            (i_capture_reg_read_flag[(i+1)*6-1:i*6]        ),
+        .i_capture_reg_read_flag            (w_syn_capture_reg_read_flag[(i+1)*6-1:i*6]    ),
         .i_capture_reg_overflow_ctrl        (i_capture_reg_overflow_ctrl[(i+1)*6-1:i*6]    ),
         .o_capture_reg_a0                   (o_capture_reg_a0[(i+1)*32-1:i*32]             ),
         .o_capture_reg_a1                   (o_capture_reg_a1[(i+1)*32-1:i*32]             ),

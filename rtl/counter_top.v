@@ -123,7 +123,7 @@ end
 //   wire              [ 31 : 0 ] o_target_reg_b0_c0;
 //   wire              [ 31 : 0 ] o_target_reg_b1_c0;
 //   wire              [ 31 : 0 ] o_target_reg_b2_c0;
-//   wire              [  5 : 0 ] o_capture_reg_status_c0;
+//   wire              [  5 : 0 ] i_capture_reg_status_c0;
 //   wire              [  5 : 0 ] o_capture_reg_overflow_ctrl_c0;
 //   wire                         ren_capture_reg_a0_c0;
 //   wire                         ren_capture_reg_a0_c0_d;
@@ -248,7 +248,9 @@ assign w_target_reg_a2  = {o_target_reg_a2_c3,o_target_reg_a2_c2,o_target_reg_a2
 assign w_target_reg_b0  = {o_target_reg_b0_c3,o_target_reg_b0_c2,o_target_reg_b0_c1,o_target_reg_b0_c0};
 assign w_target_reg_b1  = {o_target_reg_b1_c3,o_target_reg_b1_c2,o_target_reg_b1_c1,o_target_reg_b1_c0};
 assign w_target_reg_b2  = {o_target_reg_b2_c3,o_target_reg_b2_c2,o_target_reg_b2_c1,o_target_reg_b2_c0};
-assign w_capture_reg_status = {o_capture_reg_status_c3,o_capture_reg_status_c2,o_capture_reg_status_c1,o_capture_reg_status_c0};
+//assign w_capture_reg_status = {i_capture_reg_status_c3,i_capture_reg_status_c2,i_capture_reg_status_c1,i_capture_reg_status_c0};
+assign {i_capture_reg_status_c3,i_capture_reg_status_c2,i_capture_reg_status_c1,i_capture_reg_status_c0} = w_capture_reg_status ;
+
 assign w_capture_reg_read_flag = {ren_capture_reg_b2_c3_d,ren_capture_reg_b1_c3_d,ren_capture_reg_b0_c3_d,ren_capture_reg_a2_c3_d,ren_capture_reg_a1_c3_d,ren_capture_reg_a0_c3_d,
                                   ren_capture_reg_b2_c2_d,ren_capture_reg_b1_c2_d,ren_capture_reg_b0_c2_d,ren_capture_reg_a2_c2_d,ren_capture_reg_a1_c2_d,ren_capture_reg_a0_c2_d,
                                   ren_capture_reg_b2_c1_d,ren_capture_reg_b1_c1_d,ren_capture_reg_b0_c1_d,ren_capture_reg_a2_c1_d,ren_capture_reg_a1_c1_d,ren_capture_reg_a0_c1_d,

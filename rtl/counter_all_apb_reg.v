@@ -70,7 +70,7 @@ module counter_all_apb_reg
 	output	[31:0]	o_target_reg_b0_c0,
 	output	[31:0]	o_target_reg_b1_c0,
 	output	[31:0]	o_target_reg_b2_c0,
-	input	[5:0]	o_capture_reg_status_c0,
+	input	[5:0]	i_capture_reg_status_c0,
 	output	[5:0]	o_capture_reg_overflow_ctrl_c0,
 	output		ren_capture_reg_a0_c0,
 	output reg 	ren_capture_reg_a0_c0_d,
@@ -134,7 +134,7 @@ module counter_all_apb_reg
 	output	[31:0]	o_target_reg_b0_c1,
 	output	[31:0]	o_target_reg_b1_c1,
 	output	[31:0]	o_target_reg_b2_c1,
-	input	[5:0]	o_capture_reg_status_c1,
+	input	[5:0]	i_capture_reg_status_c1,
 	output	[5:0]	o_capture_reg_overflow_ctrl_c1,
 	output		ren_capture_reg_a0_c1,
 	output reg 	ren_capture_reg_a0_c1_d,
@@ -198,7 +198,7 @@ module counter_all_apb_reg
 	output	[31:0]	o_target_reg_b0_c2,
 	output	[31:0]	o_target_reg_b1_c2,
 	output	[31:0]	o_target_reg_b2_c2,
-	input	[5:0]	o_capture_reg_status_c2,
+	input	[5:0]	i_capture_reg_status_c2,
 	output	[5:0]	o_capture_reg_overflow_ctrl_c2,
 	output		ren_capture_reg_a0_c2,
 	output reg 	ren_capture_reg_a0_c2_d,
@@ -262,7 +262,7 @@ module counter_all_apb_reg
 	output	[31:0]	o_target_reg_b0_c3,
 	output	[31:0]	o_target_reg_b1_c3,
 	output	[31:0]	o_target_reg_b2_c3,
-	input	[5:0]	o_capture_reg_status_c3,
+	input	[5:0]	i_capture_reg_status_c3,
 	output	[5:0]	o_capture_reg_overflow_ctrl_c3,
 	output		ren_capture_reg_a0_c3,
 	output reg 	ren_capture_reg_a0_c3_d,
@@ -1483,7 +1483,7 @@ case ( haddr_11w )
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_B0_C0_ADDR : hrdata_32w = target_reg_b0_c0[31:0];
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_B1_C0_ADDR : hrdata_32w = target_reg_b1_c0[31:0];
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_B2_C0_ADDR : hrdata_32w = target_reg_b2_c0[31:0];
-	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C0_ADDR : hrdata_32w = {26'b 0, o_capture_reg_status_c0};
+	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C0_ADDR : hrdata_32w = {26'b 0, i_capture_reg_status_c0};
 	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_OVERFLOW_CTRL_C0_ADDR : hrdata_32w = {26'b 0, capture_reg_overflow_ctrl_c0[5:0]};
 	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A0_C0_ADDR : hrdata_32w = i_capture_reg_a0_c0;
 	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A1_C0_ADDR : hrdata_32w = i_capture_reg_a1_c0;
@@ -1518,7 +1518,7 @@ case ( haddr_11w )
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_B0_C1_ADDR : hrdata_32w = target_reg_b0_c1[31:0];
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_B1_C1_ADDR : hrdata_32w = target_reg_b1_c1[31:0];
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_B2_C1_ADDR : hrdata_32w = target_reg_b2_c1[31:0];
-	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C1_ADDR : hrdata_32w = {26'b 0, o_capture_reg_status_c1};
+	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C1_ADDR : hrdata_32w = {26'b 0, i_capture_reg_status_c1};
 	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_OVERFLOW_CTRL_C1_ADDR : hrdata_32w = {26'b 0, capture_reg_overflow_ctrl_c1[5:0]};
 	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A0_C1_ADDR : hrdata_32w = i_capture_reg_a0_c1;
 	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A1_C1_ADDR : hrdata_32w = i_capture_reg_a1_c1;
@@ -1553,7 +1553,7 @@ case ( haddr_11w )
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_B0_C2_ADDR : hrdata_32w = target_reg_b0_c2[31:0];
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_B1_C2_ADDR : hrdata_32w = target_reg_b1_c2[31:0];
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_B2_C2_ADDR : hrdata_32w = target_reg_b2_c2[31:0];
-	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C2_ADDR : hrdata_32w = {26'b 0, o_capture_reg_status_c2};
+	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C2_ADDR : hrdata_32w = {26'b 0, i_capture_reg_status_c2};
 	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_OVERFLOW_CTRL_C2_ADDR : hrdata_32w = {26'b 0, capture_reg_overflow_ctrl_c2[5:0]};
 	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A0_C2_ADDR : hrdata_32w = i_capture_reg_a0_c2;
 	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A1_C2_ADDR : hrdata_32w = i_capture_reg_a1_c2;
@@ -1588,7 +1588,7 @@ case ( haddr_11w )
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_B0_C3_ADDR : hrdata_32w = target_reg_b0_c3[31:0];
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_B1_C3_ADDR : hrdata_32w = target_reg_b1_c3[31:0];
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_B2_C3_ADDR : hrdata_32w = target_reg_b2_c3[31:0];
-	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C3_ADDR : hrdata_32w = {26'b 0, o_capture_reg_status_c3};
+	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C3_ADDR : hrdata_32w = {26'b 0, i_capture_reg_status_c3};
 	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_OVERFLOW_CTRL_C3_ADDR : hrdata_32w = {26'b 0, capture_reg_overflow_ctrl_c3[5:0]};
 	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A0_C3_ADDR : hrdata_32w = i_capture_reg_a0_c3;
 	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A1_C3_ADDR : hrdata_32w = i_capture_reg_a1_c3;

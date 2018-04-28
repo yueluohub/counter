@@ -58,7 +58,7 @@
    wire              [ 31 : 0 ] o_target_reg_b0_c0;
    wire              [ 31 : 0 ] o_target_reg_b1_c0;
    wire              [ 31 : 0 ] o_target_reg_b2_c0;
-   wire              [  5 : 0 ] o_capture_reg_status_c0;
+   wire              [  5 : 0 ] i_capture_reg_status_c0;
    wire              [  5 : 0 ] o_capture_reg_overflow_ctrl_c0;
    wire                         ren_capture_reg_a0_c0;
    wire                         ren_capture_reg_a0_c0_d;
@@ -122,7 +122,7 @@
    wire              [ 31 : 0 ] o_target_reg_b0_c1;
    wire              [ 31 : 0 ] o_target_reg_b1_c1;
    wire              [ 31 : 0 ] o_target_reg_b2_c1;
-   wire              [  5 : 0 ] o_capture_reg_status_c1;
+   wire              [  5 : 0 ] i_capture_reg_status_c1;
    wire              [  5 : 0 ] o_capture_reg_overflow_ctrl_c1;
    wire                         ren_capture_reg_a0_c1;
    wire                         ren_capture_reg_a0_c1_d;
@@ -186,7 +186,7 @@
    wire              [ 31 : 0 ] o_target_reg_b0_c2;
    wire              [ 31 : 0 ] o_target_reg_b1_c2;
    wire              [ 31 : 0 ] o_target_reg_b2_c2;
-   wire              [  5 : 0 ] o_capture_reg_status_c2;
+   wire              [  5 : 0 ] i_capture_reg_status_c2;
    wire              [  5 : 0 ] o_capture_reg_overflow_ctrl_c2;
    wire                         ren_capture_reg_a0_c2;
    wire                         ren_capture_reg_a0_c2_d;
@@ -250,7 +250,7 @@
    wire              [ 31 : 0 ] o_target_reg_b0_c3;
    wire              [ 31 : 0 ] o_target_reg_b1_c3;
    wire              [ 31 : 0 ] o_target_reg_b2_c3;
-   wire              [  5 : 0 ] o_capture_reg_status_c3;
+   wire              [  5 : 0 ] i_capture_reg_status_c3;
    wire              [  5 : 0 ] o_capture_reg_overflow_ctrl_c3;
    wire                         ren_capture_reg_a0_c3;
    wire                         ren_capture_reg_a0_c3_d;
@@ -348,7 +348,7 @@
       .o_target_reg_b0_c0                                          ( o_target_reg_b0_c0                                          ),
       .o_target_reg_b1_c0                                          ( o_target_reg_b1_c0                                          ),
       .o_target_reg_b2_c0                                          ( o_target_reg_b2_c0                                          ),
-      .o_capture_reg_status_c0                                     ( o_capture_reg_status_c0                                     ),
+      .i_capture_reg_status_c0                                     ( i_capture_reg_status_c0                                     ),
       .o_capture_reg_overflow_ctrl_c0                              ( o_capture_reg_overflow_ctrl_c0                              ),
       .ren_capture_reg_a0_c0                                       ( ren_capture_reg_a0_c0                                       ),
       .ren_capture_reg_a0_c0_d                                     ( ren_capture_reg_a0_c0_d                                     ),
@@ -412,7 +412,7 @@
       .o_target_reg_b0_c1                                          ( o_target_reg_b0_c1                                          ),
       .o_target_reg_b1_c1                                          ( o_target_reg_b1_c1                                          ),
       .o_target_reg_b2_c1                                          ( o_target_reg_b2_c1                                          ),
-      .o_capture_reg_status_c1                                     ( o_capture_reg_status_c1                                     ),
+      .i_capture_reg_status_c1                                     ( i_capture_reg_status_c1                                     ),
       .o_capture_reg_overflow_ctrl_c1                              ( o_capture_reg_overflow_ctrl_c1                              ),
       .ren_capture_reg_a0_c1                                       ( ren_capture_reg_a0_c1                                       ),
       .ren_capture_reg_a0_c1_d                                     ( ren_capture_reg_a0_c1_d                                     ),
@@ -476,7 +476,7 @@
       .o_target_reg_b0_c2                                          ( o_target_reg_b0_c2                                          ),
       .o_target_reg_b1_c2                                          ( o_target_reg_b1_c2                                          ),
       .o_target_reg_b2_c2                                          ( o_target_reg_b2_c2                                          ),
-      .o_capture_reg_status_c2                                     ( o_capture_reg_status_c2                                     ),
+      .i_capture_reg_status_c2                                     ( i_capture_reg_status_c2                                     ),
       .o_capture_reg_overflow_ctrl_c2                              ( o_capture_reg_overflow_ctrl_c2                              ),
       .ren_capture_reg_a0_c2                                       ( ren_capture_reg_a0_c2                                       ),
       .ren_capture_reg_a0_c2_d                                     ( ren_capture_reg_a0_c2_d                                     ),
@@ -540,7 +540,7 @@
       .o_target_reg_b0_c3                                          ( o_target_reg_b0_c3                                          ),
       .o_target_reg_b1_c3                                          ( o_target_reg_b1_c3                                          ),
       .o_target_reg_b2_c3                                          ( o_target_reg_b2_c3                                          ),
-      .o_capture_reg_status_c3                                     ( o_capture_reg_status_c3                                     ),
+      .i_capture_reg_status_c3                                     ( i_capture_reg_status_c3                                     ),
       .o_capture_reg_overflow_ctrl_c3                              ( o_capture_reg_overflow_ctrl_c3                              ),
       .ren_capture_reg_a0_c3                                       ( ren_capture_reg_a0_c3                                       ),
       .ren_capture_reg_a0_c3_d                                     ( ren_capture_reg_a0_c3_d                                     ),

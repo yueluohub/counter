@@ -565,7 +565,7 @@ register_begin
   description:  capture mode , snap the status from counter 0. 
   field_begin
     name: start
-    rtl_name:o_capture_reg_status_c0
+    rtl_name:i_capture_reg_status_c0
     bit_range:[5:0] 
     field_reset_value: 0x0
     description_begin
@@ -593,7 +593,7 @@ register_begin
     bit_range:[5:0] 
     field_reset_value: 0x0
     description_begin
-        every bit means the same as o_capture_reg_status_c0.
+        every bit means the same as i_capture_reg_status_c0.
         1--> rewrite, o--> discard.
     description_end
   field_end 
@@ -1248,7 +1248,7 @@ register_begin
   description:  capture mode , snap the status from counter 1. 
   field_begin
     name: start
-    rtl_name:o_capture_reg_status_c1
+    rtl_name:i_capture_reg_status_c1
     bit_range:[5:0] 
     field_reset_value: 0x0
     description_begin
@@ -1276,7 +1276,7 @@ register_begin
     bit_range:[5:0] 
     field_reset_value: 0x0
     description_begin
-        every bit means the same as o_capture_reg_status_c1.
+        every bit means the same as i_capture_reg_status_c1.
         1--> rewrite, o--> discard.
     description_end
   field_end 
@@ -1938,7 +1938,7 @@ register_begin
   description:  capture mode , snap the status from counter 2. 
   field_begin
     name: start
-    rtl_name:o_capture_reg_status_c2
+    rtl_name:i_capture_reg_status_c2
     bit_range:[5:0] 
     field_reset_value: 0x0
     description_begin
@@ -1966,7 +1966,7 @@ register_begin
     bit_range:[5:0] 
     field_reset_value: 0x0
     description_begin
-        every bit means the same as o_capture_reg_status_c2.
+        every bit means the same as i_capture_reg_status_c2.
         1--> rewrite, o--> discard.
     description_end
   field_end 
@@ -2622,7 +2622,7 @@ register_begin
   description:  capture mode , snap the status from counter 3. 
   field_begin
     name: start
-    rtl_name:o_capture_reg_status_c3
+    rtl_name:i_capture_reg_status_c3
     bit_range:[5:0] 
     field_reset_value: 0x0
     description_begin
@@ -2650,7 +2650,7 @@ register_begin
     bit_range:[5:0] 
     field_reset_value: 0x0
     description_begin
-        every bit means the same as o_capture_reg_status_c3.
+        every bit means the same as i_capture_reg_status_c3.
         1--> rewrite, o--> discard.
     description_end
   field_end 
