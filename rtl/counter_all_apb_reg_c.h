@@ -210,9 +210,9 @@
 
 #define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C0                                                          (COUNTER_ALL_APB_REG_BASE + 0xcc)
 #define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C0_DEFAULT                                                  0x0
-#define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C0_O_CAPTURE_REG_STATUS_C0                                  (Bit0+Bit1+Bit2+Bit3+Bit4+Bit5)
-#define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C0_O_CAPTURE_REG_STATUS_C0_MASK                             (Bit5+Bit4+Bit3+Bit2+Bit1+Bit0)
-#define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C0_O_CAPTURE_REG_STATUS_C0_SHIFT                            (0)
+#define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C0_I_CAPTURE_REG_STATUS_C0                                  (Bit0+Bit1+Bit2+Bit3+Bit4+Bit5)
+#define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C0_I_CAPTURE_REG_STATUS_C0_MASK                             (Bit5+Bit4+Bit3+Bit2+Bit1+Bit0)
+#define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C0_I_CAPTURE_REG_STATUS_C0_SHIFT                            (0)
 
 
 #define COUNTER_ALL_APB_REG_CAPTURE_REG_OVERFLOW_CTRL_C0                                                   (COUNTER_ALL_APB_REG_BASE + 0xd0)
@@ -470,9 +470,9 @@
 
 #define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C1                                                          (COUNTER_ALL_APB_REG_BASE + 0x1cc)
 #define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C1_DEFAULT                                                  0x0
-#define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C1_O_CAPTURE_REG_STATUS_C1                                  (Bit0+Bit1+Bit2+Bit3+Bit4+Bit5)
-#define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C1_O_CAPTURE_REG_STATUS_C1_MASK                             (Bit5+Bit4+Bit3+Bit2+Bit1+Bit0)
-#define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C1_O_CAPTURE_REG_STATUS_C1_SHIFT                            (0)
+#define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C1_I_CAPTURE_REG_STATUS_C1                                  (Bit0+Bit1+Bit2+Bit3+Bit4+Bit5)
+#define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C1_I_CAPTURE_REG_STATUS_C1_MASK                             (Bit5+Bit4+Bit3+Bit2+Bit1+Bit0)
+#define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C1_I_CAPTURE_REG_STATUS_C1_SHIFT                            (0)
 
 
 #define COUNTER_ALL_APB_REG_CAPTURE_REG_OVERFLOW_CTRL_C1                                                   (COUNTER_ALL_APB_REG_BASE + 0x1d0)
@@ -730,9 +730,9 @@
 
 #define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C2                                                          (COUNTER_ALL_APB_REG_BASE + 0x2cc)
 #define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C2_DEFAULT                                                  0x0
-#define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C2_O_CAPTURE_REG_STATUS_C2                                  (Bit0+Bit1+Bit2+Bit3+Bit4+Bit5)
-#define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C2_O_CAPTURE_REG_STATUS_C2_MASK                             (Bit5+Bit4+Bit3+Bit2+Bit1+Bit0)
-#define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C2_O_CAPTURE_REG_STATUS_C2_SHIFT                            (0)
+#define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C2_I_CAPTURE_REG_STATUS_C2                                  (Bit0+Bit1+Bit2+Bit3+Bit4+Bit5)
+#define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C2_I_CAPTURE_REG_STATUS_C2_MASK                             (Bit5+Bit4+Bit3+Bit2+Bit1+Bit0)
+#define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C2_I_CAPTURE_REG_STATUS_C2_SHIFT                            (0)
 
 
 #define COUNTER_ALL_APB_REG_CAPTURE_REG_OVERFLOW_CTRL_C2                                                   (COUNTER_ALL_APB_REG_BASE + 0x2d0)
@@ -990,9 +990,9 @@
 
 #define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C3                                                          (COUNTER_ALL_APB_REG_BASE + 0x3cc)
 #define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C3_DEFAULT                                                  0x0
-#define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C3_O_CAPTURE_REG_STATUS_C3                                  (Bit0+Bit1+Bit2+Bit3+Bit4+Bit5)
-#define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C3_O_CAPTURE_REG_STATUS_C3_MASK                             (Bit5+Bit4+Bit3+Bit2+Bit1+Bit0)
-#define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C3_O_CAPTURE_REG_STATUS_C3_SHIFT                            (0)
+#define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C3_I_CAPTURE_REG_STATUS_C3                                  (Bit0+Bit1+Bit2+Bit3+Bit4+Bit5)
+#define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C3_I_CAPTURE_REG_STATUS_C3_MASK                             (Bit5+Bit4+Bit3+Bit2+Bit1+Bit0)
+#define COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C3_I_CAPTURE_REG_STATUS_C3_SHIFT                            (0)
 
 
 #define COUNTER_ALL_APB_REG_CAPTURE_REG_OVERFLOW_CTRL_C3                                                   (COUNTER_ALL_APB_REG_BASE + 0x3d0)
