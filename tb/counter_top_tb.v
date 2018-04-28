@@ -50,6 +50,8 @@
 `define     SHIFTIN_DATA_C0 	            `BASE_ADDR+32'h10C
 `define     SHIFTIN_DATABITS_UPDATED_C0 	`BASE_ADDR+32'h110
 
+`include "sim_define.v"
+
 module counter_top_tb(
         //counter clock domain.
         i_clk,
@@ -108,45 +110,47 @@ reg            o_pwrite;
 reg            o_psel;
 reg            o_penable;
 
-assign o_extern_din_a = '0;
-assign o_extern_din_b = '0;
+reg  [COUNTER_NUM-1:0] o_extern_din_a;
+reg  [COUNTER_NUM-1:0] o_extern_din_b;
+//assign o_extern_din_a = '0;
+//assign o_extern_din_b = '0;
 
 task apb_write;
-input [31:0] addr;
-input [31:0] data;
+input [31:0] w_addr;
+input [31:0] w_data;
 begin
     @(posedge i_pclk);
-    o_paddr  <= addr;
-    o_pwdata <= data;
-    o_pwrite <= 1'b1;
-    o_psel   <= 1'b1;
-    o_penable<= 1'b0;
+    o_paddr   = w_addr;
+    o_pwdata  = w_data;
+    o_pwrite  = 1'b1;
+    o_psel    = 1'b1;
+    o_penable = 1'b0;
     @(posedge i_pclk);
-    o_penable<= 1'b1;
+    o_penable = 1'b1;
     @(posedge i_pclk);
-    o_paddr  <= '0;
-    o_pwdata <= '0;
-    o_psel   <= 1'b0;
-    o_penable<= 1'b0;
+    o_paddr   = '0;
+    o_pwdata  = '0;
+    o_psel    = 1'b0;
+    o_penable = 1'b0;
 end
 endtask
 
 task apb_read;
-input  [31:0] addr;
-output [31:0] data;
+input  [31:0] r_addr;
+output [31:0] r_data;
 begin
     @(posedge i_pclk);
-    o_paddr  <= addr;
-    o_pwrite <= 1'b0;
-    o_psel   <= 1'b1;
-    o_penable<= 1'b0;
+    o_paddr   = r_addr;
+    o_pwrite  = 1'b0;
+    o_psel    = 1'b1;
+    o_penable = 1'b0;
     @(posedge i_pclk);
-    o_penable<= 1'b1;
+    o_penable = 1'b1;
     @(posedge i_pclk);
-    o_paddr  <= '0;
-    o_penable<= 1'b0;
-    data     <= i_prdata;
-    o_psel   <= 1'b0;
+    o_paddr   = '0;
+    o_penable = 1'b0;
+    r_data    = i_prdata;
+    o_psel    = 1'b0;
 end
 endtask
 
@@ -181,15 +185,18 @@ initial begin
     #2000;
     apb_write(32'h8,32'hff);
     apb_read(32'h8,data);
-    apb_write(base_c0+`ENABLE_C0,32'h0001);//c0,enable.
     apb_read (base_c0+`ENABLE_C0,data);
-    apb_write(base_c1+`ENABLE_C0,32'h0001);//c1
+    apb_write(base_c0+`ENABLE_C0,data|32'h2000);//c0,enable.
     apb_read (base_c1+`ENABLE_C0,data);
-    apb_write(base_c2+`ENABLE_C0,32'h0001);//c2
+    apb_write(base_c1+`ENABLE_C0,data|32'h2000);//c1
     apb_read (base_c2+`ENABLE_C0,data);
-    apb_write(base_c3+`ENABLE_C0,32'h0001);//c3
+    apb_write(base_c2+`ENABLE_C0,data|32'h2000);//c2
     apb_read (base_c3+`ENABLE_C0,data);
+    apb_write(base_c3+`ENABLE_C0,data|32'h2000);//c3
+    apb_read (base_c3+`ENABLE_C0,data);
+    apb_write_read(base_c0+`INTR_MASK_CLR,32'hffffffff,data);
     //
+   `ifdef	TESTCASE_C0_WAVEFORM_0
     apb_write_read(base_c0+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
     apb_write_read(base_c0+`MODE_SEL_C0,32'b001,data);
     apb_write_read(base_c0+`TARGET_REG_CTRL_C0,32'b000001,data);
@@ -199,10 +206,69 @@ initial begin
     apb_write_read(base_c0+`TARGET_REG_B0_C0,32'h100,data);
     apb_write_read(base_c0+`TARGET_REG_B1_C0,32'h200,data);
     apb_write_read(base_c0+`TARGET_REG_B2_C0,32'h300,data);
+    apb_read (base_c0+`ENABLE_C0,data);
+    apb_write(base_c0+`ENABLE_C0,data|32'h0001);//c0,enable.
     //
     apb_write_read(base_c0+`SINGLE_START_TRIGGER_C0,32'b1,data);//start;
     #200_000;
-    //apb_write_read(base_c0+`SINGLE_STOP_TRIGGER_C0,32'b1,data);//stop;
+    apb_write_read(base_c0+`SINGLE_STOP_TRIGGER_C0,32'b1,data);//stop;
+    #20_000;
+    apb_read(base_c0+`SINGLE_START_TRIGGER_C0,data);//start;
+    apb_write_read(base_c0+`SINGLE_START_TRIGGER_C0,~data,data);//start;
+    #20_000;
+    apb_read(base_c0+`SINGLE_STOP_TRIGGER_C0,data);//stop;
+    apb_write_read(base_c0+`SINGLE_STOP_TRIGGER_C0,~data,data);//stop;
+    #20_000;
+    apb_write_read(base_c0+`SINGLE_CLEAR_TRIGGER_C0,32'h1,data);//clear;
+    #20_000;
+    apb_read(base_c0+`SINGLE_START_TRIGGER_C0,data);//start;
+    apb_write_read(base_c0+`SINGLE_START_TRIGGER_C0,~data,data);//start;
+    #20_000;
+    apb_read(base_c0+`SINGLE_RESET_TRIGGER_C0,data);//start;
+    apb_write_read(base_c0+`SINGLE_RESET_TRIGGER_C0,~data,data);//clear;
+   `endif
+
+   `ifdef	TESTCASE_C0_WAVEFORM_1
+
+    apb_write_read(base_c0+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
+    apb_write_read(base_c0+`MODE_SEL_C0,32'b001,data);
+    apb_write_read(base_c0+`TARGET_REG_CTRL_C0,32'b110110,data);
+    apb_write_read(base_c0+`TARGET_REG_A0_C0,32'h100,data);
+    apb_write_read(base_c0+`TARGET_REG_A1_C0,32'h200,data);
+    apb_write_read(base_c0+`TARGET_REG_A2_C0,32'h300,data);
+    apb_write_read(base_c0+`TARGET_REG_B0_C0,32'h200,data);
+    apb_write_read(base_c0+`TARGET_REG_B1_C0,32'h300,data);
+    apb_write_read(base_c0+`TARGET_REG_B2_C0,32'h400,data);
+    apb_read (base_c0+`ENABLE_C0,data);
+    apb_write(base_c0+`ENABLE_C0,data|32'h0001);//c0,enable.
+    //
+    apb_write_read(base_c0+`SINGLE_START_TRIGGER_C0,32'b1,data);//start;
+    #200_000;
+    apb_read(base_c0+`SINGLE_STOP_TRIGGER_C0,data);//stop;
+    apb_write_read(base_c0+`SINGLE_STOP_TRIGGER_C0,~data,data);//stop;
+    #20_000;
+
+   `endif
+
+   `ifdef	TESTCASE_C0_CAPTURE_0
+    apb_write_read(base_c0+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
+    apb_write_read(base_c0+`MODE_SEL_C0,32'b000,data);
+    apb_write_read(base_c0+`TARGET_REG_CTRL_C0,32'b110110,data);
+    //apb_write_read(base_c0+`TARGET_REG_A0_C0,32'h100,data);
+    //apb_write_read(base_c0+`TARGET_REG_A1_C0,32'h200,data);
+    //apb_write_read(base_c0+`TARGET_REG_A2_C0,32'h300,data);
+    //apb_write_read(base_c0+`TARGET_REG_B0_C0,32'h200,data);
+    //apb_write_read(base_c0+`TARGET_REG_B1_C0,32'h300,data);
+    //apb_write_read(base_c0+`TARGET_REG_B2_C0,32'h400,data);
+    apb_read (base_c0+`ENABLE_C0,data);
+    apb_write(base_c0+`ENABLE_C0,data|32'h0001);//c0,enable.
+    //
+    apb_write_read(base_c0+`SINGLE_START_TRIGGER_C0,32'b1,data);//start;
+    #200_000;
+    apb_read(base_c0+`SINGLE_STOP_TRIGGER_C0,data);//stop;
+    apb_write_read(base_c0+`SINGLE_STOP_TRIGGER_C0,~data,data);//stop;
+    #20_000;
+   `endif
     //
     #20_000;
     $stop;
@@ -212,7 +278,19 @@ end
 
 
 
+//`ifdef CAPTURE
 
+initial begin
+o_extern_din_a = 1'b0;
+o_extern_din_b = 1'b0;
+forever begin
+#20_000;
+o_extern_din_a = $random;
+o_extern_din_b = $random;
+end
+end
+
+//`endif
 
 
 

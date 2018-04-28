@@ -188,7 +188,7 @@ static reg_const_t reg_const_counter_all_apb_reg[NUM_REGS__COUNTER_ALL_APB_REG] 
 };
 
 field_const_t field_const_counter_all_apb_reg__intr_status[]  = {
-  {/* name */ "counter_a", /* range */ "[31:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "count0 -> [7:0] \ncount1 -> [15:8] \ncount2 -> [23:16] \ncount3 -> [31:24] \n\n"}
+  {/* name */ "counter", /* range */ "[31:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "count0 -> [7:0] \ncount1 -> [15:8] \ncount2 -> [23:16] \ncount3 -> [31:24] \n\n"}
 };
 field_const_t field_const_counter_all_apb_reg__intr_mask_status[]  = {
   {/* name */ "counter", /* range */ "[31:0]", /* default */ "0x1", /* access */ "read-only", /* description */ "count0 -> [7:0] \ncount1 -> [15:8] \ncount2 -> [23:16] \ncount3 -> [31:24] \n\n"}
@@ -243,7 +243,7 @@ field_const_t field_const_counter_all_apb_reg__single_reset_trigger_c0[]  = {
 };
 field_const_t field_const_counter_all_apb_reg__enable_c0[]  = {
   {/* name */ "o_enable_c0", /* range */ "[0:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "counter 0 enable signal. \n"}, 
-  {/* name */ "o_clk_ctrl_c0", /* range */ "[15:8]", /* default */ "0x0", /* access */ "read-write", /* description */ "counter 0 clock select and inverse enable. \n"}
+  {/* name */ "o_clk_ctrl_c0", /* range */ "[15:8]", /* default */ "0x0", /* access */ "read-write", /* description */ "counter 0 clock select and inverse enable. & clock enable signal.\n[11:8]-> clock select;\n[12:12]-> clock inverser enable,high active;\n[13:13]-> clock enable,high active;\n\n"}
 };
 field_const_t field_const_counter_all_apb_reg__soft_trigger_ctrl_c0[]  = {
   {/* name */ "o_soft_trigger_ctrl_c0", /* range */ "[7:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "for counter 0 only.\nevery bit means the same. 1--> softward trigger signal, 0--> normal control signal.\n[0]:set for signal o_global_start_trigger.\n[1]:set for signal o_global_stop_trigger.\n[2]:set for signal o_global_clear_trigger.\n[3]:set for signal o_global_reset_trigger.\n[4]:set for signal o_single_start_trigger.\n[5]:set for signal o_single_stop_trigger.\n[6]:set for signal o_single_clear_trigger.\n[7]:set for signal o_single_reset_trigger.\n\n"}

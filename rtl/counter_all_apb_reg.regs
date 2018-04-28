@@ -259,7 +259,12 @@ register_begin
     rtl_name:o_clk_ctrl_c0
     bit_range: [15:8]
     field_reset_value: 0x0
-    description: counter 0 clock select and inverse enable. 
+    description_begin
+	counter 0 clock select and inverse enable. & clock enable signal.
+	[11:8]-> clock select;
+	[12:12]-> clock inverser enable,high active;
+	[13:13]-> clock enable,high active;
+    description_end
   field_end 
 register_end
 

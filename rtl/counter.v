@@ -350,12 +350,10 @@ assign din1_flag  = i_src_edge_din1[1] ?  (i_src_edge_start[0] ? ^counter_din1_d
 always @(posedge i_clk or negedge i_rst_n) begin
     if(!i_rst_n)
         current_counter <= 32'h0;
-    else if(!i_enable || soft_reset_flag)
+    else if(!i_enable || soft_reset_flag || soft_clear_flag)
         current_counter <= 32'h0;
     else if(count_en)
-        if(soft_clear_flag)
-            current_counter <= 32'h0;
-        else if(i_mode_sel[0]&& !i_mode_sel[1]&& (!i_target_reg_ctrl[1]&& (i_target_reg_a2==current_counter)) ||(!i_target_reg_ctrl[3]&&(i_target_reg_b2==current_counter))) //restart the counter,when in counter waveform mode and meets target_reg_a2/b2 .
+        if(i_mode_sel[0]&& !i_mode_sel[1]&& (!i_target_reg_ctrl[1]&& (i_target_reg_a2==current_counter)) ||(!i_target_reg_ctrl[3]&&(i_target_reg_b2==current_counter))) //restart the counter,when in counter waveform mode and meets target_reg_a2/b2 .
             current_counter <= 32'h0;
         else
             current_counter <= current_counter + 1'b1;
@@ -485,7 +483,7 @@ always @(posedge i_clk or negedge i_rst_n) begin
         if(soft_reset_flag||soft_stop_flag||stop_flag) begin
             waveform_mode_en <= 1'b0;
             o_extern_dout_a_oen     <= 1'b1;
-            o_extern_dout_a_oen     <= 1'b1;
+            o_extern_dout_b_oen     <= 1'b1;
         end
         else if(soft_start_flag||start_flag) begin
             if(i_mode_sel[0]&&!i_mode_sel[1]) begin//waveform count mode.
@@ -501,7 +499,7 @@ always @(posedge i_clk or negedge i_rst_n) begin
             else  begin//
                 waveform_mode_en <= 1'b0;
                 o_extern_dout_a_oen     <= 1'b1;
-                o_extern_dout_a_oen     <= 1'b1;
+                o_extern_dout_b_oen     <= 1'b1;
             end
         end
         else if(!i_mode_sel[1]&&i_mode_sel[2]) begin //count mode  & automatic switch mode enable.
@@ -520,7 +518,7 @@ always @(posedge i_clk or negedge i_rst_n) begin
         // else begin //redundant case;?
             // waveform_mode_en <= 1'b0;
             // o_extern_dout_a_oen  <= 1'b1;
-            // o_extern_dout_a_oen  <= 1'b1;
+            // o_extern_dout_b_oen  <= 1'b1;
         // end
     end
     else begin
@@ -824,13 +822,15 @@ always @(posedge i_clk or negedge i_rst_n) begin
 end
 
 
-
+wire w1_waveform_match_reg3;
+assign w1_waveform_match_reg3 = waveform_mode_en && (i_target_reg_ctrl[1]&& (i_target_reg_a2==current_counter)) ||(i_target_reg_ctrl[3]&&(i_target_reg_b2==current_counter));
 
 reg r1_capture_reg_status_dly_a;
 reg r1_capture_reg_status_dly_b;
 reg r1_current_counter_dly;
 reg shiftin_complete_flag_dly;
 reg r1_shiftout_only_onebit_flag_dly;
+reg r1_waveform_match_reg3_dly;
 
 always @(posedge i_clk) begin
     r1_capture_reg_status_dly_a <= &r1_capture_reg_status[2:0];
@@ -838,6 +838,7 @@ always @(posedge i_clk) begin
     r1_current_counter_dly      <= &current_counter[31:0];
     shiftin_complete_flag_dly   <= shiftin_complete_flag;
     r1_shiftout_only_onebit_flag_dly <= w1_shiftout_only_onebit_flag;
+    r1_waveform_match_reg3_dly <= w1_waveform_match_reg3;
 end
 
 always @(posedge i_clk or negedge i_rst_n) begin
@@ -865,6 +866,10 @@ always @(posedge i_clk or negedge i_rst_n) begin
             o_int[4] <= 1'b1;
         else
             o_int[4] <= 1'b0;
+	if(w1_waveform_match_reg3&&!r1_waveform_match_reg3_dly)
+            o_int[5] <= 1'b1;
+        else
+            o_int[5] <= 1'b0;
     end
 end
 

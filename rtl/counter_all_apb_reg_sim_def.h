@@ -466,7 +466,7 @@
 
 // Field locations within each register
 `define COUNTER_ALL_APB_REG_intr_status_RANGE 31:0
-`define COUNTER_ALL_APB_REG_intr_status_counter_a_RANGE 31:0
+`define COUNTER_ALL_APB_REG_intr_status_counter_RANGE 31:0
 `define COUNTER_ALL_APB_REG_intr_mask_status_RANGE 31:0
 `define COUNTER_ALL_APB_REG_intr_mask_status_counter_RANGE 31:0
 `define COUNTER_ALL_APB_REG_intr_clr_RANGE 31:0
@@ -886,7 +886,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //
 //  $Log: counter_all_apb_reg_sim_def.h,v $
-//  Revision 1.0  4/25/2018 0:39:17  register_slave.pl
+//  Revision 1.0  4/27/2018 0:16:35  register_slave.pl
 //  Initial rev
 //
 //

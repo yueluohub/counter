@@ -3,9 +3,9 @@
 /* **************************** */
 #define COUNTER_ALL_APB_REG_INTR_STATUS                                                                    (COUNTER_ALL_APB_REG_BASE + 0x0)
 #define COUNTER_ALL_APB_REG_INTR_STATUS_DEFAULT                                                            0x0
-#define COUNTER_ALL_APB_REG_INTR_STATUS_COUNTER_A                                                          (Bit0+Bit1+Bit2+Bit3+Bit4+Bit5+Bit6+Bit7+Bit8+Bit9+Bit10+Bit11+Bit12+Bit13+Bit14+Bit15+Bit16+Bit17+Bit18+Bit19+Bit20+Bit21+Bit22+Bit23+Bit24+Bit25+Bit26+Bit27+Bit28+Bit29+Bit30+Bit31)
-#define COUNTER_ALL_APB_REG_INTR_STATUS_COUNTER_A_MASK                                                     (Bit31+Bit30+Bit29+Bit28+Bit27+Bit26+Bit25+Bit24+Bit23+Bit22+Bit21+Bit20+Bit19+Bit18+Bit17+Bit16+Bit15+Bit14+Bit13+Bit12+Bit11+Bit10+Bit9+Bit8+Bit7+Bit6+Bit5+Bit4+Bit3+Bit2+Bit1+Bit0)
-#define COUNTER_ALL_APB_REG_INTR_STATUS_COUNTER_A_SHIFT                                                    (0)
+#define COUNTER_ALL_APB_REG_INTR_STATUS_COUNTER                                                            (Bit0+Bit1+Bit2+Bit3+Bit4+Bit5+Bit6+Bit7+Bit8+Bit9+Bit10+Bit11+Bit12+Bit13+Bit14+Bit15+Bit16+Bit17+Bit18+Bit19+Bit20+Bit21+Bit22+Bit23+Bit24+Bit25+Bit26+Bit27+Bit28+Bit29+Bit30+Bit31)
+#define COUNTER_ALL_APB_REG_INTR_STATUS_COUNTER_MASK                                                       (Bit31+Bit30+Bit29+Bit28+Bit27+Bit26+Bit25+Bit24+Bit23+Bit22+Bit21+Bit20+Bit19+Bit18+Bit17+Bit16+Bit15+Bit14+Bit13+Bit12+Bit11+Bit10+Bit9+Bit8+Bit7+Bit6+Bit5+Bit4+Bit3+Bit2+Bit1+Bit0)
+#define COUNTER_ALL_APB_REG_INTR_STATUS_COUNTER_SHIFT                                                      (0)
 
 
 #define COUNTER_ALL_APB_REG_INTR_MASK_STATUS                                                               (COUNTER_ALL_APB_REG_BASE + 0x4)

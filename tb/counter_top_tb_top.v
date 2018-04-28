@@ -125,11 +125,11 @@ counter_clkgen  counter_clkgen(
         .i_clk_inv_en_c0    (w_clk_ctrl[4]),
         .i_clk_inv_en_c1    (w_clk_ctrl[12]),
         .i_clk_inv_en_c2    (w_clk_ctrl[20]),
-        .i_clk_inv_en_c3    (w_clk_ctrl[30]),
-        .i_clk_enable_c0    (w_enable[0]),
-        .i_clk_enable_c1    (w_enable[1]),
-        .i_clk_enable_c2    (w_enable[2]),
-        .i_clk_enable_c3    (w_enable[3]),
+        .i_clk_inv_en_c3    (w_clk_ctrl[28]),
+        .i_clk_enable_c0    (w_clk_ctrl[5]),
+        .i_clk_enable_c1    (w_clk_ctrl[13]),
+        .i_clk_enable_c2    (w_clk_ctrl[21]),
+        .i_clk_enable_c3    (w_clk_ctrl[29]),
         //
         .o_clk              (w_clk),
         .o_rstn             (w_rst_n)
@@ -170,7 +170,8 @@ counter_top counter_top(
 `ifdef NC_SIM
 initial begin
 $shm_open("top.shm");
-$shm_probe(counter_top,"AC");
+//$shm_probe(counter_top,"AC");
+$shm_probe(counter_top_tb_top,"AC");
 end
 `endif
 
