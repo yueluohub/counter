@@ -546,7 +546,7 @@
 `define COUNTER_ALL_APB_REG_target_reg_b2_c0_RANGE 31:0
 `define COUNTER_ALL_APB_REG_target_reg_b2_c0_o_target_reg_b2_c0_RANGE 31:0
 `define COUNTER_ALL_APB_REG_capture_reg_status_c0_RANGE 5:0
-`define COUNTER_ALL_APB_REG_capture_reg_status_c0_o_capture_reg_status_c0_RANGE 5:0
+`define COUNTER_ALL_APB_REG_capture_reg_status_c0_i_capture_reg_status_c0_RANGE 5:0
 `define COUNTER_ALL_APB_REG_capture_reg_status_c0_dummy_field_RANGE 7:6
 `define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c0_RANGE 5:0
 `define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c0_o_capture_reg_overflow_ctrl_c0_RANGE 5:0
@@ -643,7 +643,7 @@
 `define COUNTER_ALL_APB_REG_target_reg_b2_c1_RANGE 31:0
 `define COUNTER_ALL_APB_REG_target_reg_b2_c1_o_target_reg_b2_c1_RANGE 31:0
 `define COUNTER_ALL_APB_REG_capture_reg_status_c1_RANGE 5:0
-`define COUNTER_ALL_APB_REG_capture_reg_status_c1_o_capture_reg_status_c1_RANGE 5:0
+`define COUNTER_ALL_APB_REG_capture_reg_status_c1_i_capture_reg_status_c1_RANGE 5:0
 `define COUNTER_ALL_APB_REG_capture_reg_status_c1_dummy_field_RANGE 7:6
 `define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c1_RANGE 5:0
 `define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c1_o_capture_reg_overflow_ctrl_c1_RANGE 5:0
@@ -740,7 +740,7 @@
 `define COUNTER_ALL_APB_REG_target_reg_b2_c2_RANGE 31:0
 `define COUNTER_ALL_APB_REG_target_reg_b2_c2_o_target_reg_b2_c2_RANGE 31:0
 `define COUNTER_ALL_APB_REG_capture_reg_status_c2_RANGE 5:0
-`define COUNTER_ALL_APB_REG_capture_reg_status_c2_o_capture_reg_status_c2_RANGE 5:0
+`define COUNTER_ALL_APB_REG_capture_reg_status_c2_i_capture_reg_status_c2_RANGE 5:0
 `define COUNTER_ALL_APB_REG_capture_reg_status_c2_dummy_field_RANGE 7:6
 `define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c2_RANGE 5:0
 `define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c2_o_capture_reg_overflow_ctrl_c2_RANGE 5:0
@@ -837,7 +837,7 @@
 `define COUNTER_ALL_APB_REG_target_reg_b2_c3_RANGE 31:0
 `define COUNTER_ALL_APB_REG_target_reg_b2_c3_o_target_reg_b2_c3_RANGE 31:0
 `define COUNTER_ALL_APB_REG_capture_reg_status_c3_RANGE 5:0
-`define COUNTER_ALL_APB_REG_capture_reg_status_c3_o_capture_reg_status_c3_RANGE 5:0
+`define COUNTER_ALL_APB_REG_capture_reg_status_c3_i_capture_reg_status_c3_RANGE 5:0
 `define COUNTER_ALL_APB_REG_capture_reg_status_c3_dummy_field_RANGE 7:6
 `define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c3_RANGE 5:0
 `define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c3_o_capture_reg_overflow_ctrl_c3_RANGE 5:0
@@ -886,7 +886,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //
 //  $Log: counter_all_apb_reg_sim_def.h,v $
-//  Revision 1.0  4/27/2018 0:16:35  register_slave.pl
+//  Revision 1.0  4/28/2018 0:35:12  register_slave.pl
 //  Initial rev
 //
 //

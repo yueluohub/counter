@@ -297,11 +297,11 @@ field_const_t field_const_counter_all_apb_reg__target_reg_b2_c0[]  = {
   {/* name */ "o_target_reg_b2_c0", /* range */ "[31:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "waveform mode , target register b2.\n"}
 };
 field_const_t field_const_counter_all_apb_reg__capture_reg_status_c0[]  = {
-  {/* name */ "o_capture_reg_status_c0", /* range */ "[5:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "every bit means the same, 1--> new data, 0--> old data.\n[0] : for o_capture_reg_a0.\n[1] : for o_capture_reg_a0.\n[2] : for o_capture_reg_a0.\n[0] : for o_capture_reg_b0.\n[1] : for o_capture_reg_b1.\n[2] : for o_capture_reg_b2.\n\n"}, 
+  {/* name */ "i_capture_reg_status_c0", /* range */ "[5:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "every bit means the same, 1--> new data, 0--> old data.\n[0] : for o_capture_reg_a0.\n[1] : for o_capture_reg_a0.\n[2] : for o_capture_reg_a0.\n[0] : for o_capture_reg_b0.\n[1] : for o_capture_reg_b1.\n[2] : for o_capture_reg_b2.\n\n"}, 
   {/* name */ "dummy_field", /* range */ "[7:6]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
 };
 field_const_t field_const_counter_all_apb_reg__capture_reg_overflow_ctrl_c0[]  = {
-  {/* name */ "o_capture_reg_overflow_ctrl_c0", /* range */ "[5:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "every bit means the same as o_capture_reg_status_c0.\n1--> rewrite, o--> discard.\n\n"}, 
+  {/* name */ "o_capture_reg_overflow_ctrl_c0", /* range */ "[5:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "every bit means the same as i_capture_reg_status_c0.\n1--> rewrite, o--> discard.\n\n"}, 
   {/* name */ "dummy_field", /* range */ "[7:6]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
 };
 field_const_t field_const_counter_all_apb_reg__capture_reg_a0_c0[]  = {
@@ -429,11 +429,11 @@ field_const_t field_const_counter_all_apb_reg__target_reg_b2_c1[]  = {
   {/* name */ "o_target_reg_b2_c1", /* range */ "[31:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "waveform mode , target register b2.\n"}
 };
 field_const_t field_const_counter_all_apb_reg__capture_reg_status_c1[]  = {
-  {/* name */ "o_capture_reg_status_c1", /* range */ "[5:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "every bit means the same, 1--> new data, 0--> old data.\n[0] : for o_capture_reg_a0.\n[1] : for o_capture_reg_a0.\n[2] : for o_capture_reg_a0.\n[0] : for o_capture_reg_b0.\n[1] : for o_capture_reg_b1.\n[2] : for o_capture_reg_b2.\n\n"}, 
+  {/* name */ "i_capture_reg_status_c1", /* range */ "[5:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "every bit means the same, 1--> new data, 0--> old data.\n[0] : for o_capture_reg_a0.\n[1] : for o_capture_reg_a0.\n[2] : for o_capture_reg_a0.\n[0] : for o_capture_reg_b0.\n[1] : for o_capture_reg_b1.\n[2] : for o_capture_reg_b2.\n\n"}, 
   {/* name */ "dummy_field", /* range */ "[7:6]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
 };
 field_const_t field_const_counter_all_apb_reg__capture_reg_overflow_ctrl_c1[]  = {
-  {/* name */ "o_capture_reg_overflow_ctrl_c1", /* range */ "[5:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "every bit means the same as o_capture_reg_status_c1.\n1--> rewrite, o--> discard.\n\n"}, 
+  {/* name */ "o_capture_reg_overflow_ctrl_c1", /* range */ "[5:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "every bit means the same as i_capture_reg_status_c1.\n1--> rewrite, o--> discard.\n\n"}, 
   {/* name */ "dummy_field", /* range */ "[7:6]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
 };
 field_const_t field_const_counter_all_apb_reg__capture_reg_a0_c1[]  = {
@@ -561,11 +561,11 @@ field_const_t field_const_counter_all_apb_reg__target_reg_b2_c2[]  = {
   {/* name */ "o_target_reg_b2_c2", /* range */ "[31:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "waveform mode , target register b2.\n"}
 };
 field_const_t field_const_counter_all_apb_reg__capture_reg_status_c2[]  = {
-  {/* name */ "o_capture_reg_status_c2", /* range */ "[5:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "every bit means the same, 1--> new data, 0--> old data.\n[0] : for o_capture_reg_a0.\n[1] : for o_capture_reg_a0.\n[2] : for o_capture_reg_a0.\n[0] : for o_capture_reg_b0.\n[1] : for o_capture_reg_b1.\n[2] : for o_capture_reg_b2.\n\n"}, 
+  {/* name */ "i_capture_reg_status_c2", /* range */ "[5:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "every bit means the same, 1--> new data, 0--> old data.\n[0] : for o_capture_reg_a0.\n[1] : for o_capture_reg_a0.\n[2] : for o_capture_reg_a0.\n[0] : for o_capture_reg_b0.\n[1] : for o_capture_reg_b1.\n[2] : for o_capture_reg_b2.\n\n"}, 
   {/* name */ "dummy_field", /* range */ "[7:6]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
 };
 field_const_t field_const_counter_all_apb_reg__capture_reg_overflow_ctrl_c2[]  = {
-  {/* name */ "o_capture_reg_overflow_ctrl_c2", /* range */ "[5:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "every bit means the same as o_capture_reg_status_c2.\n1--> rewrite, o--> discard.\n\n"}, 
+  {/* name */ "o_capture_reg_overflow_ctrl_c2", /* range */ "[5:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "every bit means the same as i_capture_reg_status_c2.\n1--> rewrite, o--> discard.\n\n"}, 
   {/* name */ "dummy_field", /* range */ "[7:6]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
 };
 field_const_t field_const_counter_all_apb_reg__capture_reg_a0_c2[]  = {
@@ -693,11 +693,11 @@ field_const_t field_const_counter_all_apb_reg__target_reg_b2_c3[]  = {
   {/* name */ "o_target_reg_b2_c3", /* range */ "[31:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "waveform mode , target register b2.\n"}
 };
 field_const_t field_const_counter_all_apb_reg__capture_reg_status_c3[]  = {
-  {/* name */ "o_capture_reg_status_c3", /* range */ "[5:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "every bit means the same, 1--> new data, 0--> old data.\n[0] : for o_capture_reg_a0.\n[1] : for o_capture_reg_a0.\n[2] : for o_capture_reg_a0.\n[0] : for o_capture_reg_b0.\n[1] : for o_capture_reg_b1.\n[2] : for o_capture_reg_b2.\n\n"}, 
+  {/* name */ "i_capture_reg_status_c3", /* range */ "[5:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "every bit means the same, 1--> new data, 0--> old data.\n[0] : for o_capture_reg_a0.\n[1] : for o_capture_reg_a0.\n[2] : for o_capture_reg_a0.\n[0] : for o_capture_reg_b0.\n[1] : for o_capture_reg_b1.\n[2] : for o_capture_reg_b2.\n\n"}, 
   {/* name */ "dummy_field", /* range */ "[7:6]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
 };
 field_const_t field_const_counter_all_apb_reg__capture_reg_overflow_ctrl_c3[]  = {
-  {/* name */ "o_capture_reg_overflow_ctrl_c3", /* range */ "[5:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "every bit means the same as o_capture_reg_status_c3.\n1--> rewrite, o--> discard.\n\n"}, 
+  {/* name */ "o_capture_reg_overflow_ctrl_c3", /* range */ "[5:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "every bit means the same as i_capture_reg_status_c3.\n1--> rewrite, o--> discard.\n\n"}, 
   {/* name */ "dummy_field", /* range */ "[7:6]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
 };
 field_const_t field_const_counter_all_apb_reg__capture_reg_a0_c3[]  = {
