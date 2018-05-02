@@ -33,6 +33,8 @@ module counter(
         i_src_sel_din1,
         i_src_edge_din1,
         i_ctrl_snap,
+        o_snap_status,
+        i_clear_snap,
         o_shadow_reg,
         i_target_reg_ctrl,
         i_target_reg_a0,
@@ -112,6 +114,8 @@ input wire   [1:0] i_src_edge_din0;
 input wire   [SEL_WIDTH-1:0] i_src_sel_din1;
 input wire   [1:0] i_src_edge_din1;
 input wire   [3:0] i_ctrl_snap;
+input reg    [3:0] o_snap_status;
+input wire         i_clear_snap;
 output [31:0] o_shadow_reg;
 input wire   [5:0] i_target_reg_ctrl;
 //[0]: when counters meet i_target_reg_a2, 1- keep the value,   0- reset the value.
@@ -216,6 +220,8 @@ wire soft_clear_flag;
 wire soft_reset_flag;
 reg [3:0]  r1_ctrl_snap_dly;
 wire [3:0] w_ctrl_snap_posedge;
+reg [1:0] r1_clear_snap_dly;
+wire w_clear_snap_posedge;
 reg [1:0] capture_cnts_a,capture_cnts_b;
 reg [31:0] r1_shiftin_data;
 reg [31:0] r1_shiftin_databits_updated;
@@ -543,10 +549,27 @@ end
 
 //assign w_ctrl_snap_posedge = i_ctrl_snap & (~r1_ctrl_snap_dly);
 assign w_ctrl_snap_posedge = i_ctrl_snap ^ (r1_ctrl_snap_dly);
+assign w_clear_snap_posedge = r1_clear_snap_dly[0]&&(!r1_clear_snap_dly[1]);
+//o_snap_status
+//i_clear_snap
+always @(posedge i_clk or negedge i_rst_n) begin
+    if(!i_rst_n) begin
+        o_snap_status <= 32'h0;
+    end
+    else if(|w_ctrl_snap_posedge) begin
+        o_snap_status <= w_ctrl_snap_posedge;
+    end
+    else if(w_clear_snap_posedge) begin
+        o_snap_status <= 32'h0;
+    end
+end
 
-always @(posedge i_clk) 
-    r1_ctrl_snap_dly <= i_ctrl_snap;
 
+always @(posedge i_clk) begin
+    r1_ctrl_snap_dly  <= i_ctrl_snap;
+    r1_clear_snap_dly[1:0] <= {r1_clear_snap_dly[0],i_clear_snap};
+end
+    
 always @(posedge i_clk or negedge i_rst_n) begin
     if(!i_rst_n) begin
         o_shadow_reg     <= 32'h0;

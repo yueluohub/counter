@@ -168,6 +168,7 @@ endtask
 reg [31:0] addr;
 reg [31:0] data,data_1;
 reg [3:0] i;
+reg [31:0] tmp_i;
 localparam  base_c0=32'h000,
             base_c1=32'h100,
             base_c2=32'h200,
@@ -182,6 +183,7 @@ initial begin
     addr        <= '0;
     data        <= '0;
     i           <= '0;
+    tmp_i       <= '0;
     #2000;
     apb_write(32'h8,32'hff);
     apb_read(32'h8,data);
@@ -249,24 +251,46 @@ initial begin
     #20_000;
 
    `endif
-
-   `ifdef	TESTCASE_C0_CAPTURE_0
+   
+    `ifdef	TESTCASE_C0_CAPTURE_0
+        apb_write_read(base_c0+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
+        apb_write_read(base_c0+`MODE_SEL_C0,32'b000,data);
+        apb_write_read(base_c0+`SRC_SEL_EDGE_C0,32'h01220000,data);
+        // apb_write_read(base_c0+`SRC_SEL_EDGE_C0,32'h12210000,data);
+    
+    
+        apb_read (base_c0+`ENABLE_C0,data);
+        apb_write(base_c0+`ENABLE_C0,data|32'h0001);//c0,enable.
+        //
+        //apb_write_read(base_c0+`CAPTURE_REG_OVERFLOW_CTRL_C0,32'h3f,data);//overflow,control.
+        apb_read(base_c0+`SINGLE_START_TRIGGER_C0,data);//start;
+        apb_write_read(base_c0+`SINGLE_START_TRIGGER_C0,~data,data);//start;
+        #1000_000;
+        apb_read(base_c0+`SINGLE_STOP_TRIGGER_C0,data);//stop;
+        apb_write_read(base_c0+`SINGLE_STOP_TRIGGER_C0,~data,data);//stop;
+        #20_000;
+        //#20_000;
+        // tmp_i = 10;
+    `endif
+   
+    `ifdef	TESTCASE_C0_CAPTURE_1
     apb_write_read(base_c0+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
     apb_write_read(base_c0+`MODE_SEL_C0,32'b000,data);
-    //apb_write_read(base_c0+`TARGET_REG_CTRL_C0,32'b110110,data);
-    //apb_write_read(base_c0+`SRC_SEL_EDGE_C0,32'h02110000,data);
-    apb_write_read(base_c0+`SRC_SEL_EDGE_C0,32'h12210000,data);
+    apb_write_read(base_c0+`SRC_SEL_EDGE_C0,32'h02110000,data);
+    // apb_write_read(base_c0+`SRC_SEL_EDGE_C0,32'h12210000,data);
 
 
     apb_read (base_c0+`ENABLE_C0,data);
     apb_write(base_c0+`ENABLE_C0,data|32'h0001);//c0,enable.
     //
-    apb_write_read(base_c0+`SINGLE_START_TRIGGER_C0,32'b1,data);//start;
+    //apb_write_read(base_c0+`CAPTURE_REG_OVERFLOW_CTRL_C0,32'h3f,data);//overflow,control.
+    apb_read(base_c0+`SINGLE_START_TRIGGER_C0,data);//start;
+    apb_write_read(base_c0+`SINGLE_START_TRIGGER_C0,~data,data);//start;
     #200_000;
     //apb_read(base_c0+`SINGLE_STOP_TRIGGER_C0,data);//stop;
     //apb_write_read(base_c0+`SINGLE_STOP_TRIGGER_C0,~data,data);//stop;
     //#20_000;
-    //#20_000;
+    // tmp_i = 10;
     while(1) begin
       wait(i_int);
       apb_read(base_c0+`INTR_STATUS,data_1);
@@ -288,6 +312,60 @@ initial begin
               apb_read(base_c0+`CAPTURE_REG_B2_C0,data);
           end
       end
+    end
+    
+   `endif
+
+   `ifdef	TESTCASE_C0_CAPTURE_2
+    apb_write_read(base_c0+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
+    apb_write_read(base_c0+`MODE_SEL_C0,32'b000,data);
+    //apb_write_read(base_c0+`TARGET_REG_CTRL_C0,32'b110110,data);
+    //apb_write_read(base_c0+`SRC_SEL_EDGE_C0,32'h02110000,data);
+    apb_write_read(base_c0+`SRC_SEL_EDGE_C0,32'h12210000,data);
+
+
+    apb_read (base_c0+`ENABLE_C0,data);
+    apb_write(base_c0+`ENABLE_C0,data|32'h0001);//c0,enable.
+    //
+    apb_write_read(base_c0+`CAPTURE_REG_OVERFLOW_CTRL_C0,32'h3f,data);//overflow,control.
+    apb_read(base_c0+`SINGLE_START_TRIGGER_C0,data);//start;
+    apb_write_read(base_c0+`SINGLE_START_TRIGGER_C0,~data,data);//start;
+    #200_000;
+    //apb_read(base_c0+`SINGLE_STOP_TRIGGER_C0,data);//stop;
+    //apb_write_read(base_c0+`SINGLE_STOP_TRIGGER_C0,~data,data);//stop;
+    //#20_000;
+    //#20_000;
+    tmp_i = 10;
+    while(tmp_i--) begin
+      wait(i_int);
+      apb_read(base_c0+`INTR_STATUS,data_1);
+      if(|data_1[7:0]) begin
+          apb_write_read(base_c0+`INTR_CLR,data_1,data);
+          //CTRL_SNAP_C0
+          apb_read(base_c0+`CTRL_SNAP_C0,data);
+          apb_write_read(base_c0+`CTRL_SNAP_C0,{data[31:4],~data[3:0]},data);//
+          repeat (2) @(posedge i_pclk);
+          apb_read(base_c0+`CAPTURE_REG_STATUS_C0,data_1);
+          if(&data_1[2:0]) begin
+              apb_read(base_c0+`CAPTURE_REG_A0_C0,data);
+              apb_read(base_c0+`CAPTURE_REG_A1_C0,data);
+              apb_read(base_c0+`CAPTURE_REG_A2_C0,data); 
+          end
+          if(&data_1[5:3]) begin
+              apb_read(base_c0+`CAPTURE_REG_B0_C0,data);
+              apb_read(base_c0+`CAPTURE_REG_B1_C0,data);
+              apb_read(base_c0+`CAPTURE_REG_B2_C0,data);
+          end
+      end
+    end
+        apb_read(base_c0+`CAPTURE_REG_OVERFLOW_CTRL_C0,data);//overflow,control.
+        apb_write_read(base_c0+`CAPTURE_REG_OVERFLOW_CTRL_C0,{data[30:0],1'b0},data);//overflow,control.
+        #500_000;
+    repeat (6) begin
+        apb_read(base_c0+`CAPTURE_REG_OVERFLOW_CTRL_C0,data);//overflow,control.
+        apb_write_read(base_c0+`CAPTURE_REG_OVERFLOW_CTRL_C0,{data[30:0],1'h1},data);//overflow,control.
+        #500_000;
+    
     end
     
    `endif
