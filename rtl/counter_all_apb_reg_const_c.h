@@ -31,8 +31,8 @@ typedef struct {
 } field_const_array_t;
 #endif // __REG_CONST_T
 
-#define NUM_REGS__COUNTER_ALL_APB_REG  151
-/* { reg_const_counter_all_apb_reg, 151, "counter_all_apb_reg"},  */ 
+#define NUM_REGS__COUNTER_ALL_APB_REG  155
+/* { reg_const_counter_all_apb_reg, 155, "counter_all_apb_reg"},  */ 
 static reg_const_t reg_const_counter_all_apb_reg[NUM_REGS__COUNTER_ALL_APB_REG] = {
   {/* name */ "intr_status", /* address */ 0x44108000, /* default */ 0x00000000, /* description */ "Interrupt status register bits. \n"}, 
   {/* name */ "intr_mask_status", /* address */ 0x44108004, /* default */ 0x00000001, /* description */ "Interrupt mask status register\n"}, 
@@ -52,7 +52,8 @@ static reg_const_t reg_const_counter_all_apb_reg[NUM_REGS__COUNTER_ALL_APB_REG] 
   {/* name */ "enable_c0", /* address */ 0x44108090, /* default */ 0x00000000, /* description */ "counter 0 enable_c0 signal. \n"}, 
   {/* name */ "soft_trigger_ctrl_c0", /* address */ 0x44108094, /* default */ 0x00000000, /* description */ "control the function of single/global_trigger. \n"}, 
   {/* name */ "mux_sel_c0", /* address */ 0x44108098, /* default */ 0x00000000, /* description */ "select counter 0 inner input data from other counters. \n"}, 
-  {/* name */ "src_sel_edge_c0", /* address */ 0x441080a0, /* default */ 0x00000000, /* description */ "select the valid input and edge for start/stop/din0/din1. \n"}, 
+  {/* name */ "src_sel_edge_c0", /* address */ 0x4410809c, /* default */ 0x00000000, /* description */ "select the valid input and edge for start/stop/din0/din1. \n"}, 
+  {/* name */ "snap_status_c0", /* address */ 0x441080a0, /* default */ 0x00000000, /* description */ "the status of snapping the status or data from counter 0  \n"}, 
   {/* name */ "ctrl_snap_c0", /* address */ 0x441080a4, /* default */ 0x00000000, /* description */ "snap the status or data from counter 0. \n"}, 
   {/* name */ "shadow_reg_c0", /* address */ 0x441080a8, /* default */ 0x00000000, /* description */ "snap the current value from counter. \n"}, 
   {/* name */ "mode_sel_c0", /* address */ 0x441080ac, /* default */ 0x00000000, /* description */ "working mode select for counter 0. \n"}, 
@@ -87,7 +88,8 @@ static reg_const_t reg_const_counter_all_apb_reg[NUM_REGS__COUNTER_ALL_APB_REG] 
   {/* name */ "enable_c1", /* address */ 0x44108190, /* default */ 0x00000000, /* description */ "counter 1 enable_c1 signal. \n"}, 
   {/* name */ "soft_trigger_ctrl_c1", /* address */ 0x44108194, /* default */ 0x00000000, /* description */ "control the function of single/global_trigger. \n"}, 
   {/* name */ "mux_sel_c1", /* address */ 0x44108198, /* default */ 0x00000000, /* description */ "select count 1 inner input data from other counters. \n"}, 
-  {/* name */ "src_sel_edge_c1", /* address */ 0x441081a0, /* default */ 0x00000000, /* description */ "select the  valid input and edge for start/stop/din0/din1. \n"}, 
+  {/* name */ "src_sel_edge_c1", /* address */ 0x4410819c, /* default */ 0x00000000, /* description */ "select the  valid input and edge for start/stop/din0/din1. \n"}, 
+  {/* name */ "snap_status_c1", /* address */ 0x441081a0, /* default */ 0x00000000, /* description */ "the status of snapping the status or data from counter 1  \n"}, 
   {/* name */ "ctrl_snap_c1", /* address */ 0x441081a4, /* default */ 0x00000000, /* description */ "snap the status or data from counter 1. \n"}, 
   {/* name */ "shadow_reg_c1", /* address */ 0x441081a8, /* default */ 0x00000000, /* description */ "snap the current value from counter. \n"}, 
   {/* name */ "mode_sel_c1", /* address */ 0x441081ac, /* default */ 0x00000000, /* description */ "working mode select for counter 1. \n"}, 
@@ -122,7 +124,8 @@ static reg_const_t reg_const_counter_all_apb_reg[NUM_REGS__COUNTER_ALL_APB_REG] 
   {/* name */ "enable_c2", /* address */ 0x44108290, /* default */ 0x00000000, /* description */ "counter 2 enable_c2 signal. \n"}, 
   {/* name */ "soft_trigger_ctrl_c2", /* address */ 0x44108294, /* default */ 0x00000000, /* description */ "control the function of single/global_trigger. \n"}, 
   {/* name */ "mux_sel_c2", /* address */ 0x44108298, /* default */ 0x00000000, /* description */ "select count 2 inner input data from other counters. \n"}, 
-  {/* name */ "src_sel_edge_c2", /* address */ 0x441082a0, /* default */ 0x00000000, /* description */ "select the  valid input and edge for start/stop/din0/din1. \n"}, 
+  {/* name */ "src_sel_edge_c2", /* address */ 0x4410829c, /* default */ 0x00000000, /* description */ "select the  valid input and edge for start/stop/din0/din1. \n"}, 
+  {/* name */ "snap_status_c2", /* address */ 0x441082a0, /* default */ 0x00000000, /* description */ "the status of snapping the status or data from counter 2  \n"}, 
   {/* name */ "ctrl_snap_c2", /* address */ 0x441082a4, /* default */ 0x00000000, /* description */ "snap the status or data from counter 2. \n"}, 
   {/* name */ "shadow_reg_c2", /* address */ 0x441082a8, /* default */ 0x00000000, /* description */ "snap the current value from counter. \n"}, 
   {/* name */ "mode_sel_c2", /* address */ 0x441082ac, /* default */ 0x00000000, /* description */ "working mode select for counter 2. \n"}, 
@@ -157,7 +160,8 @@ static reg_const_t reg_const_counter_all_apb_reg[NUM_REGS__COUNTER_ALL_APB_REG] 
   {/* name */ "enable_c3", /* address */ 0x44108390, /* default */ 0x00000000, /* description */ "counter 3 enable_c3 signal. \n"}, 
   {/* name */ "soft_trigger_ctrl_c3", /* address */ 0x44108394, /* default */ 0x00000000, /* description */ "control the function of single/global_trigger. \n"}, 
   {/* name */ "mux_sel_c3", /* address */ 0x44108398, /* default */ 0x00000000, /* description */ "select counter 3 inner input data from other counters. \n"}, 
-  {/* name */ "src_sel_edge_c3", /* address */ 0x441083a0, /* default */ 0x00000000, /* description */ "select the  valid input and edge for start/stop/din0/din1. \n"}, 
+  {/* name */ "src_sel_edge_c3", /* address */ 0x4410839c, /* default */ 0x00000000, /* description */ "select the  valid input and edge for start/stop/din0/din1. \n"}, 
+  {/* name */ "snap_status_c3", /* address */ 0x441083a0, /* default */ 0x00000000, /* description */ "the status of snapping the status or data from counter 3. \n"}, 
   {/* name */ "ctrl_snap_c3", /* address */ 0x441083a4, /* default */ 0x00000000, /* description */ "snap the status or data from counter 3. \n"}, 
   {/* name */ "shadow_reg_c3", /* address */ 0x441083a8, /* default */ 0x00000000, /* description */ "snap the current value from counter. \n"}, 
   {/* name */ "mode_sel_c3", /* address */ 0x441083ac, /* default */ 0x00000000, /* description */ "working mode select for counter 3. \n"}, 
@@ -263,9 +267,14 @@ field_const_t field_const_counter_all_apb_reg__src_sel_edge_c0[]  = {
   {/* name */ "o_src_edge_din1_c0", /* range */ "[29:28]", /* default */ "0x0", /* access */ "read-write", /* description */ "select the valid edge for din1 signal.\n"}, 
   {/* name */ "dummy_field", /* range */ "[31:30]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
 };
+field_const_t field_const_counter_all_apb_reg__snap_status_c0[]  = {
+  {/* name */ "i_snap_status_c0", /* range */ "[3:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "the status of snapping the status or data from counter 0. \n"}, 
+  {/* name */ "dummy_field", /* range */ "[7:4]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
+};
 field_const_t field_const_counter_all_apb_reg__ctrl_snap_c0[]  = {
   {/* name */ "o_ctrl_snap_c0", /* range */ "[3:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "snap the status or data from counter 0. \n"}, 
-  {/* name */ "dummy_field", /* range */ "[7:4]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
+  {/* name */ "o_clear_snap_c0", /* range */ "[16:16]", /* default */ "0x0", /* access */ "read-write", /* description */ "clear the status of snap the status or data from counter 0. \n"}, 
+  {/* name */ "dummy_field", /* range */ "[23:17]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
 };
 field_const_t field_const_counter_all_apb_reg__shadow_reg_c0[]  = {
   {/* name */ "i_shadow_reg_c0", /* range */ "[31:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "snap the current value from counter.\n"}
@@ -395,9 +404,14 @@ field_const_t field_const_counter_all_apb_reg__src_sel_edge_c1[]  = {
   {/* name */ "o_src_edge_din1_c1", /* range */ "[29:28]", /* default */ "0x0", /* access */ "read-write", /* description */ "select the valid edge for din1 signal.\n"}, 
   {/* name */ "dummy_field", /* range */ "[31:30]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
 };
+field_const_t field_const_counter_all_apb_reg__snap_status_c1[]  = {
+  {/* name */ "i_snap_status_c1", /* range */ "[3:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "the status of snapping the status or data from counter 1. \n"}, 
+  {/* name */ "dummy_field", /* range */ "[7:4]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
+};
 field_const_t field_const_counter_all_apb_reg__ctrl_snap_c1[]  = {
   {/* name */ "o_ctrl_snap_c1", /* range */ "[3:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "snap the status or data from counter 1. \n"}, 
-  {/* name */ "dummy_field", /* range */ "[7:4]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
+  {/* name */ "o_clear_snap_c1", /* range */ "[16:16]", /* default */ "0x0", /* access */ "read-write", /* description */ "clear the status of snap the status or data from counter 1. \n"}, 
+  {/* name */ "dummy_field", /* range */ "[23:17]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
 };
 field_const_t field_const_counter_all_apb_reg__shadow_reg_c1[]  = {
   {/* name */ "i_shadow_reg_c1", /* range */ "[31:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "snap the current value from counter.\n"}
@@ -527,9 +541,14 @@ field_const_t field_const_counter_all_apb_reg__src_sel_edge_c2[]  = {
   {/* name */ "o_src_edge_din1_c2", /* range */ "[29:28]", /* default */ "0x0", /* access */ "read-write", /* description */ "select the valid edge for din1 signal.\n"}, 
   {/* name */ "dummy_field", /* range */ "[31:30]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
 };
+field_const_t field_const_counter_all_apb_reg__snap_status_c2[]  = {
+  {/* name */ "i_snap_status_c2", /* range */ "[3:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "the status of snapping the status or data from counter 2. \n"}, 
+  {/* name */ "dummy_field", /* range */ "[7:4]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
+};
 field_const_t field_const_counter_all_apb_reg__ctrl_snap_c2[]  = {
   {/* name */ "o_ctrl_snap_c2", /* range */ "[3:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "snap the status or data from counter 2. \n"}, 
-  {/* name */ "dummy_field", /* range */ "[7:4]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
+  {/* name */ "o_clear_snap_c2", /* range */ "[16:16]", /* default */ "0x0", /* access */ "read-write", /* description */ "clear the status of snap the status or data from counter 2. \n"}, 
+  {/* name */ "dummy_field", /* range */ "[23:17]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
 };
 field_const_t field_const_counter_all_apb_reg__shadow_reg_c2[]  = {
   {/* name */ "i_shadow_reg_c2", /* range */ "[31:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "snap the current value from counter.\n"}
@@ -659,9 +678,14 @@ field_const_t field_const_counter_all_apb_reg__src_sel_edge_c3[]  = {
   {/* name */ "o_src_edge_din1_c3", /* range */ "[29:28]", /* default */ "0x0", /* access */ "read-write", /* description */ "select the valid edge for din1 signal.\n"}, 
   {/* name */ "dummy_field", /* range */ "[31:30]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
 };
+field_const_t field_const_counter_all_apb_reg__snap_status_c3[]  = {
+  {/* name */ "i_snap_status_c3", /* range */ "[3:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "the status of snapping the status or data from counter 3. \n"}, 
+  {/* name */ "dummy_field", /* range */ "[7:4]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
+};
 field_const_t field_const_counter_all_apb_reg__ctrl_snap_c3[]  = {
   {/* name */ "o_ctrl_snap_c3", /* range */ "[3:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "snap the status or data from counter 3. \n"}, 
-  {/* name */ "dummy_field", /* range */ "[7:4]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
+  {/* name */ "o_clear_snap_c3", /* range */ "[16:16]", /* default */ "0x0", /* access */ "read-write", /* description */ "clear the status of snap the status or data from counter 3. \n"}, 
+  {/* name */ "dummy_field", /* range */ "[23:17]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
 };
 field_const_t field_const_counter_all_apb_reg__shadow_reg_c3[]  = {
   {/* name */ "i_shadow_reg_c3", /* range */ "[31:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "snap the current value from counter.\n"}
@@ -774,7 +798,8 @@ field_const_array_t reg_pnt_list__counter_all_apb_reg[NUM_REGS__COUNTER_ALL_APB_
   { /* pfield */ field_const_counter_all_apb_reg__soft_trigger_ctrl_c0, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__mux_sel_c0, /* size */ 2}, 
   { /* pfield */ field_const_counter_all_apb_reg__src_sel_edge_c0, /* size */ 9}, 
-  { /* pfield */ field_const_counter_all_apb_reg__ctrl_snap_c0, /* size */ 2}, 
+  { /* pfield */ field_const_counter_all_apb_reg__snap_status_c0, /* size */ 2}, 
+  { /* pfield */ field_const_counter_all_apb_reg__ctrl_snap_c0, /* size */ 3}, 
   { /* pfield */ field_const_counter_all_apb_reg__shadow_reg_c0, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__mode_sel_c0, /* size */ 2}, 
   { /* pfield */ field_const_counter_all_apb_reg__target_reg_ctrl_c0, /* size */ 2}, 
@@ -809,7 +834,8 @@ field_const_array_t reg_pnt_list__counter_all_apb_reg[NUM_REGS__COUNTER_ALL_APB_
   { /* pfield */ field_const_counter_all_apb_reg__soft_trigger_ctrl_c1, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__mux_sel_c1, /* size */ 2}, 
   { /* pfield */ field_const_counter_all_apb_reg__src_sel_edge_c1, /* size */ 9}, 
-  { /* pfield */ field_const_counter_all_apb_reg__ctrl_snap_c1, /* size */ 2}, 
+  { /* pfield */ field_const_counter_all_apb_reg__snap_status_c1, /* size */ 2}, 
+  { /* pfield */ field_const_counter_all_apb_reg__ctrl_snap_c1, /* size */ 3}, 
   { /* pfield */ field_const_counter_all_apb_reg__shadow_reg_c1, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__mode_sel_c1, /* size */ 2}, 
   { /* pfield */ field_const_counter_all_apb_reg__target_reg_ctrl_c1, /* size */ 2}, 
@@ -844,7 +870,8 @@ field_const_array_t reg_pnt_list__counter_all_apb_reg[NUM_REGS__COUNTER_ALL_APB_
   { /* pfield */ field_const_counter_all_apb_reg__soft_trigger_ctrl_c2, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__mux_sel_c2, /* size */ 2}, 
   { /* pfield */ field_const_counter_all_apb_reg__src_sel_edge_c2, /* size */ 9}, 
-  { /* pfield */ field_const_counter_all_apb_reg__ctrl_snap_c2, /* size */ 2}, 
+  { /* pfield */ field_const_counter_all_apb_reg__snap_status_c2, /* size */ 2}, 
+  { /* pfield */ field_const_counter_all_apb_reg__ctrl_snap_c2, /* size */ 3}, 
   { /* pfield */ field_const_counter_all_apb_reg__shadow_reg_c2, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__mode_sel_c2, /* size */ 2}, 
   { /* pfield */ field_const_counter_all_apb_reg__target_reg_ctrl_c2, /* size */ 2}, 
@@ -879,7 +906,8 @@ field_const_array_t reg_pnt_list__counter_all_apb_reg[NUM_REGS__COUNTER_ALL_APB_
   { /* pfield */ field_const_counter_all_apb_reg__soft_trigger_ctrl_c3, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__mux_sel_c3, /* size */ 2}, 
   { /* pfield */ field_const_counter_all_apb_reg__src_sel_edge_c3, /* size */ 9}, 
-  { /* pfield */ field_const_counter_all_apb_reg__ctrl_snap_c3, /* size */ 2}, 
+  { /* pfield */ field_const_counter_all_apb_reg__snap_status_c3, /* size */ 2}, 
+  { /* pfield */ field_const_counter_all_apb_reg__ctrl_snap_c3, /* size */ 3}, 
   { /* pfield */ field_const_counter_all_apb_reg__shadow_reg_c3, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__mode_sel_c3, /* size */ 2}, 
   { /* pfield */ field_const_counter_all_apb_reg__target_reg_ctrl_c3, /* size */ 2}, 

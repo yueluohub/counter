@@ -114,7 +114,7 @@ input wire   [1:0] i_src_edge_din0;
 input wire   [SEL_WIDTH-1:0] i_src_sel_din1;
 input wire   [1:0] i_src_edge_din1;
 input wire   [3:0] i_ctrl_snap;
-input reg    [3:0] o_snap_status;
+output reg   [3:0] o_snap_status;
 input wire         i_clear_snap;
 output [31:0] o_shadow_reg;
 input wire   [5:0] i_target_reg_ctrl;
