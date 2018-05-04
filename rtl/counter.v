@@ -409,14 +409,14 @@ always @(posedge i_clk or negedge i_rst_n) begin
     end
     else if(i_shiftout_data_valid&&!r1_shiftout_data_valid_dly) begin
         r1_shiftout_data[63:32] <= i_shiftout_data[31:0];
-        r1_shiftout_databits_valid[63:32] <= ~(32'hfffe<<i_shiftout_data_ctrl_bitcnts);
+        r1_shiftout_databits_valid[63:32] <= ~(32'hfffffffe<<i_shiftout_data_ctrl_bitcnts);
     end
 end
 
 always @(posedge i_clk or negedge i_rst_n) begin
     if(!i_rst_n) begin
         r1_shiftout_data[31:0] <= 32'h0;
-        r1_shiftout_databits_valid[31:0] <= 32'hffff;
+        r1_shiftout_databits_valid[31:0] <= 32'hffffffff;
     end
     else if(soft_start_flag||start_flag) begin
         if(i_mode_sel[0] && i_mode_sel[1]) begin// shiftout mode.
@@ -505,8 +505,10 @@ always @(posedge i_clk or negedge i_rst_n) begin
             end 
             else if(i_mode_sel[0] && i_mode_sel[1]) begin// shiftout mode.
                 waveform_mode_en <= 1'b0;
-                o_extern_dout_a_oen     <= 1'b0;
-                o_extern_dout_b_oen     <= 1'b0;    
+                if(!i_shiftmode_ctrl)
+                    o_extern_dout_a_oen     <= 1'b0;
+                else
+                    o_extern_dout_b_oen     <= 1'b0;    
             end
             else  begin//
                 waveform_mode_en <= 1'b0;
@@ -549,7 +551,7 @@ end
 
 //assign w_ctrl_snap_posedge = i_ctrl_snap & (~r1_ctrl_snap_dly);
 assign w_ctrl_snap_posedge = i_ctrl_snap ^ (r1_ctrl_snap_dly);
-assign w_clear_snap_posedge = r1_clear_snap_dly[0]&&(!r1_clear_snap_dly[1]);
+assign w_clear_snap_posedge = r1_clear_snap_dly[0]^(r1_clear_snap_dly[1]);
 //o_snap_status
 //i_clear_snap
 always @(posedge i_clk or negedge i_rst_n) begin
@@ -587,15 +589,30 @@ always @(posedge i_clk or negedge i_rst_n) begin
         if(w_ctrl_snap_posedge[0]) begin
             o_shadow_reg     <= current_counter;
         end
-        if(w_ctrl_snap_posedge[1]) begin
+        if((&r1_capture_reg_status[5:3])) begin
             o_capture_reg_status <= r1_capture_reg_status;
-            o_capture_reg_a0 <= r1_capture_reg_a0;
-            o_capture_reg_a1 <= r1_capture_reg_a1;
-            o_capture_reg_a2 <= r1_capture_reg_a2;
             o_capture_reg_b0 <= r1_capture_reg_b0;
             o_capture_reg_b1 <= r1_capture_reg_b1;
             o_capture_reg_b2 <= r1_capture_reg_b2;
         end
+        else if(w_ctrl_snap_posedge[1]) begin
+            o_capture_reg_status <= r1_capture_reg_status;
+            o_capture_reg_b0 <= r1_capture_reg_b0;
+            o_capture_reg_b1 <= r1_capture_reg_b1;
+            o_capture_reg_b2 <= r1_capture_reg_b2;
+        end
+        if((&r1_capture_reg_status[2:0])) begin
+            o_capture_reg_status <= r1_capture_reg_status;
+            o_capture_reg_a0 <= r1_capture_reg_a0;
+            o_capture_reg_a1 <= r1_capture_reg_a1;
+            o_capture_reg_a2 <= r1_capture_reg_a2;        
+        end
+        else if(w_ctrl_snap_posedge[1]) begin
+            o_capture_reg_status <= r1_capture_reg_status;
+            o_capture_reg_a0 <= r1_capture_reg_a0;
+            o_capture_reg_a1 <= r1_capture_reg_a1;
+            o_capture_reg_a2 <= r1_capture_reg_a2;
+        end        
         if(shiftin_complete_flag) begin
             o_shiftin_data              <= r1_shiftin_data;
             o_shiftin_databits_updated  <= r1_shiftin_databits_updated;
@@ -799,9 +816,9 @@ always @(posedge i_clk or negedge i_rst_n) begin
 end
 
 
-assign i_shiftin_data_ctrl_bitmap=32'hfffe<<i_shiftin_data_ctrl_bitcnts;
+assign i_shiftin_data_ctrl_bitmap=32'hfffffffe<<i_shiftin_data_ctrl_bitcnts;
 assign counter_shiftin_din= i_shiftmode_ctrl ? counter_din1 : counter_din0 ;
-assign shiftin_complete_flag= &(r1_shiftin_databits_updated&i_shiftin_data_ctrl_bitmap);
+assign shiftin_complete_flag= &(r1_shiftin_databits_updated|i_shiftin_data_ctrl_bitmap);
 
 always @(posedge i_clk or negedge i_rst_n) begin
     if(!i_rst_n) begin
