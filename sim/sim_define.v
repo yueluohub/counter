@@ -11,9 +11,9 @@
  // `define TESTCASE_C0_SHIFTIN_1
  // `define TESTCASE_C0_SHIFTIN_2
 
-`define TESTCASE_C0_SHIFTOUT_0
+// `define TESTCASE_C0_SHIFTOUT_0
 // `define TESTCASE_C0_SHIFTOUT_1
-
+`define TESTCASE_C0_SHIFTOUT_2
 
 //
 //

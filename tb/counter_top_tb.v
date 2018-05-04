@@ -472,7 +472,7 @@ initial begin
     // apb_write_read(base_c0+`SHIFTIN_DATA_CTRL_BITCNTS_C0,32'h3,data);
      // apb_write_read(base_c0+`SHIFTIN_DATA_CTRL_BITCNTS_C0,32'h1,data);
      // apb_write_read(base_c0+`SHIFTIN_DATA_CTRL_BITCNTS_C0,32'h0,data);
-    //
+    apb_write_read(base_c0+`SHIFTMODE_CTRL_C0,32'h1,data);
     apb_write_read(base_c0+`SRC_SEL_EDGE_C0,32'h12210000,data);
     //
     apb_read (base_c0+`ENABLE_C0,data);
@@ -491,7 +491,7 @@ initial begin
           apb_read(base_c0+`CTRL_SNAP_C0,data);
           apb_write_read(base_c0+`CTRL_SNAP_C0,{data[31:4],~data[3:0]},data);//
           repeat (2) @(posedge i_pclk);
-          apb_read(base_c0+`CAPTURE_REG_STATUS_C0,data_1);
+          // apb_read(base_c0+`CAPTURE_REG_STATUS_C0,data_1);
           if(data_1[3]) begin
               apb_read(base_c0+`SHIFTIN_DATA_C0,data);
               apb_read(base_c0+`SHIFTIN_DATABITS_UPDATED_C0,data_1);
@@ -557,6 +557,130 @@ initial begin
     #500_000;
    `endif   
    
+   `ifdef TESTCASE_C0_SHIFTOUT_1
+    apb_write_read(base_c0+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
+    apb_write_read(base_c0+`MODE_SEL_C0,32'b011,data);//shift out mode.
+    //apb_write_read(base_c0+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,32'd31,data);
+      apb_write_read(base_c0+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,32'd15,data);
+     // apb_write_read(base_c0+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,32'h7,data);
+     // apb_write_read(base_c0+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,32'h3,data);
+     // apb_write_read(base_c0+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,32'h1,data);
+     // apb_write_read(base_c0+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,32'h0,data);
+    apb_write_read(base_c0+`SHIFTMODE_CTRL_C0,32'h1,data);
+    
+    apb_write_read(base_c0+`SHIFTOUT_DATA_C0,32'h55aa55aa,data);
+ 	apb_write(base_c0+`SHIFTOUT_DATA_VALID_C0,32'h0);
+    //
+    //apb_write_read(base_c0+`TARGET_REG_CTRL_C0,32'b110110,data);
+    //apb_write_read(base_c0+`SRC_SEL_EDGE_C0,32'h02110000,data);
+    apb_write_read(base_c0+`SRC_SEL_EDGE_C0,32'h12210000,data);
+    //
+    apb_read (base_c0+`ENABLE_C0,data);
+    apb_write(base_c0+`ENABLE_C0,data|32'h0001);//c0,enable.
+    //
+    //CTRL_SNAP_C0
+    apb_read(base_c0+`CTRL_SNAP_C0,data);
+    apb_write_read(base_c0+`CTRL_SNAP_C0,{data[31:4],~data[3:0]},data);//
+    apb_read(base_c0+`SNAP_STATUS_C0,data);
+    while(!(|data)) apb_read(base_c0+`SNAP_STATUS_C0,data);
+    apb_read(base_c0+`CTRL_SNAP_C0,data);
+    apb_write_read(base_c0+`CTRL_SNAP_C0,{~data[31:16],data[15:0]},data);//
+    apb_read(base_c0+`SNAP_STATUS_C0,data);
+    while((|data)) apb_read(base_c0+`SNAP_STATUS_C0,data);
+    //$display("capture register status clear");
+    //
+    apb_read(base_c0+`SINGLE_START_TRIGGER_C0,data);//start;
+    apb_write_read(base_c0+`SINGLE_START_TRIGGER_C0,~data,data);//start;
+    //
+    apb_write_read(base_c0+`SHIFTOUT_DATA_C0,32'h00ff00ff,data);
+ 	apb_write(base_c0+`SHIFTOUT_DATA_VALID_C0,32'h0);
+    while(1) begin
+      wait(i_int);
+      apb_read(base_c0+`INTR_STATUS,data_1);
+      if(|data_1[7:0]) begin
+          data_1 = data_1>>8*0;
+          apb_write_read(base_c0+`INTR_CLR,data_1,data);
+          // CTRL_SNAP_C0
+          // apb_read(base_c0+`CTRL_SNAP_C0,data);
+          // apb_write_read(base_c0+`CTRL_SNAP_C0,{data[31:4],~data[3:0]},data);//
+          repeat (2) @(posedge i_pclk);
+          if(data_1[4]) begin
+              data=$random;
+              apb_write_read(base_c0+`SHIFTOUT_DATA_C0,data,data);
+              apb_write(base_c0+`SHIFTOUT_DATA_VALID_C0,32'h0);
+              $display("new shiftout data = %h",data);
+          end
+          else begin
+              $display("int number is wrong,shiftout mode");            
+          end
+      end
+    end
+    
+    //
+    // #500_000;
+   `endif      
+   
+    `ifdef TESTCASE_C0_SHIFTOUT_2
+    apb_write_read(base_c0+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
+    apb_write_read(base_c0+`MODE_SEL_C0,32'b011,data);//shift out mode.
+    apb_write_read(base_c0+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,32'd31,data);
+      // apb_write_read(base_c0+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,32'd15,data);
+     // apb_write_read(base_c0+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,32'h7,data);
+     // apb_write_read(base_c0+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,32'h3,data);
+     // apb_write_read(base_c0+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,32'h1,data);
+     // apb_write_read(base_c0+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,32'h0,data);
+    // apb_write_read(base_c0+`SHIFTMODE_CTRL_C0,32'h1,data);
+    
+    apb_write_read(base_c0+`SHIFTOUT_DATA_C0,32'h55aa55aa,data);
+ 	apb_write(base_c0+`SHIFTOUT_DATA_VALID_C0,32'h0);
+    //
+    //apb_write_read(base_c0+`TARGET_REG_CTRL_C0,32'b110110,data);
+    //apb_write_read(base_c0+`SRC_SEL_EDGE_C0,32'h02110000,data);
+    apb_write_read(base_c0+`SRC_SEL_EDGE_C0,32'h12210000,data);
+    //
+    apb_read (base_c0+`ENABLE_C0,data);
+    apb_write(base_c0+`ENABLE_C0,data|32'h0001);//c0,enable.
+    //
+    //CTRL_SNAP_C0
+    apb_read(base_c0+`CTRL_SNAP_C0,data);
+    apb_write_read(base_c0+`CTRL_SNAP_C0,{data[31:4],~data[3:0]},data);//
+    apb_read(base_c0+`SNAP_STATUS_C0,data);
+    while(!(|data)) apb_read(base_c0+`SNAP_STATUS_C0,data);
+    apb_read(base_c0+`CTRL_SNAP_C0,data);
+    apb_write_read(base_c0+`CTRL_SNAP_C0,{~data[31:16],data[15:0]},data);//
+    apb_read(base_c0+`SNAP_STATUS_C0,data);
+    while((|data)) apb_read(base_c0+`SNAP_STATUS_C0,data);
+    //$display("capture register status clear");
+    //
+    apb_read(base_c0+`SINGLE_START_TRIGGER_C0,data);//start;
+    apb_write_read(base_c0+`SINGLE_START_TRIGGER_C0,~data,data);//start;
+    //
+    apb_write_read(base_c0+`SHIFTOUT_DATA_C0,32'h00ff00ff,data);
+ 	apb_write(base_c0+`SHIFTOUT_DATA_VALID_C0,32'h0);
+    tmp_i=32'd31;
+    while(1) begin
+      wait(i_int);
+      apb_read(base_c0+`INTR_STATUS,data_1);
+      if(|data_1[7:0]) begin
+          data_1 = data_1>>8*0;
+          apb_write_read(base_c0+`INTR_CLR,data_1,data);
+          // CTRL_SNAP_C0
+          // apb_read(base_c0+`CTRL_SNAP_C0,data);
+          // apb_write_read(base_c0+`CTRL_SNAP_C0,{data[31:4],~data[3:0]},data);//
+          repeat (2) @(posedge i_pclk);
+          if(data_1[4]) begin
+              data_1=$random;
+              apb_write_read(base_c0+`SHIFTOUT_DATA_C0,data_1,data);
+              apb_write(base_c0+`SHIFTOUT_DATA_VALID_C0,32'h0);
+              apb_write_read(base_c0+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,tmp_i--,data);
+              $display("new shiftout data = %h,bits=%d",data_1,tmp_i[4:0]);
+          end
+          else begin
+              $display("int number is wrong,shiftout mode");            
+          end
+      end
+    end
+    `endif
    
     //
     #500_000;

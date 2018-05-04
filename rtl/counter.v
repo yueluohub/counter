@@ -488,59 +488,80 @@ end
 always @(posedge i_clk or negedge i_rst_n) begin
     if(!i_rst_n) begin
         waveform_mode_en <= 1'b0;
-        o_extern_dout_a_oen <= 1'b1;
-        o_extern_dout_b_oen <= 1'b1;
+        //o_extern_dout_a_oen <= 1'b1;
+        //o_extern_dout_b_oen <= 1'b1;
     end
     else if(i_enable) begin
         if(soft_reset_flag||soft_stop_flag||stop_flag) begin
             waveform_mode_en <= 1'b0;
-            o_extern_dout_a_oen     <= 1'b1;
-            o_extern_dout_b_oen     <= 1'b1;
+            //o_extern_dout_a_oen     <= 1'b1;
+            //o_extern_dout_b_oen     <= 1'b1;
         end
         else if(soft_start_flag||start_flag) begin
             if(i_mode_sel[0]&&!i_mode_sel[1]) begin//waveform count mode.
                 waveform_mode_en <= 1'b1;
-                o_extern_dout_a_oen     <= 1'b0;
-                o_extern_dout_b_oen     <= 1'b0;            
+                //o_extern_dout_a_oen     <= 1'b0;
+                //o_extern_dout_b_oen     <= 1'b0;            
             end 
-            else if(i_mode_sel[0] && i_mode_sel[1]) begin// shiftout mode.
-                waveform_mode_en <= 1'b0;
-                if(!i_shiftmode_ctrl)
-                    o_extern_dout_a_oen     <= 1'b0;
-                else
-                    o_extern_dout_b_oen     <= 1'b0;    
-            end
+            //else if(i_mode_sel[0] && i_mode_sel[1]) begin// shiftout mode.
+            //    waveform_mode_en <= 1'b0;
+            //    //if(!i_shiftmode_ctrl)
+            //    //    //o_extern_dout_a_oen     <= 1'b0;
+            //    //else
+            //    //    //o_extern_dout_b_oen     <= 1'b0;    
+            //end
             else  begin//
                 waveform_mode_en <= 1'b0;
-                o_extern_dout_a_oen     <= 1'b1;
-                o_extern_dout_b_oen     <= 1'b1;
+                //o_extern_dout_a_oen     <= 1'b1;
+                //o_extern_dout_b_oen     <= 1'b1;
             end
         end
         else if(!i_mode_sel[1]&&i_mode_sel[2]) begin //count mode  & automatic switch mode enable.
             if(data_sends_bits_cnts==i_waveform_mode_cnts && i_capture_mode_automatic_sw && waveform_mode_en) begin
                 waveform_mode_en <= 1'b0;
-                o_extern_dout_a_oen     <= 1'b1;
-                o_extern_dout_b_oen     <= 1'b1;
+                //o_extern_dout_a_oen     <= 1'b1;
+                //o_extern_dout_b_oen     <= 1'b1;
             end
             else if(data_recs_bits_cnts==i_capture_mode_cnts && i_waveform_mode_automatic_sw && !waveform_mode_en) begin
                 waveform_mode_en <= 1'b1;
-                o_extern_dout_a_oen     <= 1'b0;
-                o_extern_dout_b_oen     <= 1'b0;                
+                //o_extern_dout_a_oen     <= 1'b0;
+                //o_extern_dout_b_oen     <= 1'b0;                
             end
                 
         end
         // else begin //redundant case;?
             // waveform_mode_en <= 1'b0;
-            // o_extern_dout_a_oen  <= 1'b1;
-            // o_extern_dout_b_oen  <= 1'b1;
+            // //o_extern_dout_a_oen  <= 1'b1;
+            // //o_extern_dout_b_oen  <= 1'b1;
         // end
     end
     else begin
         waveform_mode_en <= 1'b0;
-        o_extern_dout_a_oen <= 1'b1;
-        o_extern_dout_b_oen <= 1'b1;    
+        //o_extern_dout_a_oen <= 1'b1;
+        //o_extern_dout_b_oen <= 1'b1;    
     end
     
+end
+
+always @(posedge i_clk or negedge i_rst_n) begin
+    if(!i_rst_n) begin
+        o_extern_dout_a_oen <= 1'b1;
+        o_extern_dout_b_oen <= 1'b1;
+    end
+    else if(waveform_mode_en) begin
+        o_extern_dout_a_oen <= 1'b0;
+        o_extern_dout_b_oen <= 1'b0;    
+    end
+    else if(shiftout_mode_en) begin
+        if(!i_shiftmode_ctrl)
+            o_extern_dout_a_oen     <= 1'b0;
+        else
+            o_extern_dout_b_oen     <= 1'b0;    
+    end
+    else begin
+        o_extern_dout_a_oen <= 1'b1;
+        o_extern_dout_b_oen <= 1'b1;
+    end
 end
 
 //----------------------------------------------//
@@ -915,7 +936,7 @@ always @(posedge i_clk or negedge i_rst_n) begin
             o_int[4] <= 1'b1;
         else
             o_int[4] <= 1'b0;
-	if(w1_waveform_match_reg3&&!r1_waveform_match_reg3_dly)
+        if(w1_waveform_match_reg3&&!r1_waveform_match_reg3_dly)
             o_int[5] <= 1'b1;
         else
             o_int[5] <= 1'b0;
