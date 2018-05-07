@@ -165,7 +165,7 @@ begin
 end
 endtask
 
-
+reg stop_event;
 reg [31:0] addr;
 reg [31:0] data,data_1;
 reg [3:0] i;
@@ -185,6 +185,7 @@ initial begin
     data        <= '0;
     i           <= '0;
     tmp_i       <= '0;
+    stop_event  <= '0;
     #2000;
     apb_write(32'h8,32'hff);
     apb_read(32'h8,data);
@@ -248,11 +249,36 @@ initial begin
     //
     apb_write_read(base_c0+`SINGLE_START_TRIGGER_C0,32'b1,data);//start;
     #200_000;
-    apb_read(base_c0+`SINGLE_STOP_TRIGGER_C0,data);//stop;
-    apb_write_read(base_c0+`SINGLE_STOP_TRIGGER_C0,~data,data);//stop;
-    #20_000;
+    //apb_read(base_c0+`SINGLE_STOP_TRIGGER_C0,data);//stop;
+    //apb_write_read(base_c0+`SINGLE_STOP_TRIGGER_C0,~data,data);//stop;
+    //#20_000;
 
    `endif
+   
+      `ifdef	TESTCASE_C0_WAVEFORM_2
+
+    apb_write_read(base_c0+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
+    apb_write_read(base_c0+`MODE_SEL_C0,32'b001,data);
+    apb_write_read(base_c0+`TARGET_REG_CTRL_C0,32'b110010,data);
+    apb_write_read(base_c0+`TARGET_REG_A0_C0,32'h10,data);
+    apb_write_read(base_c0+`TARGET_REG_A1_C0,32'h20,data);
+    apb_write_read(base_c0+`TARGET_REG_A2_C0,32'h50,data);
+    apb_write_read(base_c0+`TARGET_REG_B0_C0,32'h0,data);
+    // apb_write_read(base_c0+`TARGET_REG_B1_C0,32'h20,data);
+    // apb_write_read(base_c0+`TARGET_REG_B2_C0,32'h3f,data);
+    apb_write_read(base_c0+`TARGET_REG_B1_C0,32'h1,data);
+    apb_write_read(base_c0+`TARGET_REG_B2_C0,32'h1,data);//divide by 2,    
+    apb_read (base_c0+`ENABLE_C0,data);
+    apb_write(base_c0+`ENABLE_C0,data|32'h0001);//c0,enable.
+    //
+    apb_write_read(base_c0+`SINGLE_START_TRIGGER_C0,32'b1,data);//start;
+    #200_000;
+    //apb_read(base_c0+`SINGLE_STOP_TRIGGER_C0,data);//stop;
+    //apb_write_read(base_c0+`SINGLE_STOP_TRIGGER_C0,~data,data);//stop;
+    //#20_000;
+
+   `endif
+   
    
     `ifdef	TESTCASE_C0_CAPTURE_0
         apb_write_read(base_c0+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
@@ -684,6 +710,7 @@ initial begin
    
     //
     #500_000;
+    stop_event  <= '1;
     $stop;
 
 end

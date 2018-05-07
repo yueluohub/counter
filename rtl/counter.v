@@ -517,7 +517,7 @@ always @(posedge i_clk or negedge i_rst_n) begin
             end
         end
         else if(!i_mode_sel[1]&&i_mode_sel[2]) begin //count mode  & automatic switch mode enable.
-            if(data_sends_bits_cnts==i_waveform_mode_cnts && i_capture_mode_automatic_sw && waveform_mode_en) begin
+            if(data_sends_bits_cnts==i_waveform_mode_cnts && waveform_mode_en) begin //&& i_capture_mode_automatic_sw 
                 waveform_mode_en <= 1'b0;
                 //o_extern_dout_a_oen     <= 1'b1;
                 //o_extern_dout_b_oen     <= 1'b1;
@@ -663,7 +663,7 @@ always @(posedge i_clk or negedge i_rst_n) begin
             if(data_sends_bits_cnts==i_waveform_mode_cnts && i_capture_mode_automatic_sw && !capture_mode_en) begin
                 capture_mode_en <= 1'b1;
             end
-            else if(data_recs_bits_cnts==i_capture_mode_cnts && i_waveform_mode_automatic_sw && capture_mode_en) begin
+            else if(data_recs_bits_cnts==i_capture_mode_cnts  && capture_mode_en) begin //&& i_waveform_mode_automatic_sw
                 capture_mode_en <= 1'b0;                
             end
                 
@@ -700,11 +700,11 @@ always @(posedge i_clk or negedge i_rst_n) begin
         end
         if(din0_flag) begin
             r1_capture_reg_status[2:0] <= r1_capture_reg_status[2:0] & (~w_capture_reg_read_flag_posedge[2:0]) | (3'h1<<capture_cnts_a);
-            if(capture_cnts_a==2'h0 && (!r1_capture_reg_status[0] || (r1_capture_reg_status[0]&&i_capture_reg_overflow_ctrl[0]))) // overflow overwrite. and a new edge.
+            if(capture_cnts_a==2'h0 && (!r1_capture_reg_status[0] || w_capture_reg_read_flag_posedge[0] || (r1_capture_reg_status[0]&&i_capture_reg_overflow_ctrl[0]))) // overflow overwrite. and a new edge.
                 r1_capture_reg_a0 <= current_counter;
-            else if(capture_cnts_a==2'h1 && (!r1_capture_reg_status[1] || (r1_capture_reg_status[1]&&i_capture_reg_overflow_ctrl[1])))
+            else if(capture_cnts_a==2'h1 && (!r1_capture_reg_status[1] || w_capture_reg_read_flag_posedge[1] || (r1_capture_reg_status[1]&&i_capture_reg_overflow_ctrl[1])))
                 r1_capture_reg_a1 <= current_counter;
-            else if(capture_cnts_a==2'h2 && (!r1_capture_reg_status[2] || (r1_capture_reg_status[2]&&i_capture_reg_overflow_ctrl[2])))
+            else if(capture_cnts_a==2'h2 && (!r1_capture_reg_status[2] || w_capture_reg_read_flag_posedge[2] || (r1_capture_reg_status[2]&&i_capture_reg_overflow_ctrl[2])))
                 r1_capture_reg_a2 <= current_counter;
         end
         
@@ -739,11 +739,11 @@ always @(posedge i_clk or negedge i_rst_n) begin
         end
         if(din1_flag) begin
             r1_capture_reg_status[5:3] <= r1_capture_reg_status[5:3] & (~w_capture_reg_read_flag_posedge[5:3]) | (3'h1<<capture_cnts_b);
-            if(capture_cnts_b==2'h0 && (!r1_capture_reg_status[3] || (r1_capture_reg_status[3]&&i_capture_reg_overflow_ctrl[3])))
+            if(capture_cnts_b==2'h0 && (!r1_capture_reg_status[3] || w_capture_reg_read_flag_posedge[3] || (r1_capture_reg_status[3]&&i_capture_reg_overflow_ctrl[3])))
                 r1_capture_reg_b0 <= current_counter;
-            else if(capture_cnts_b==2'h1 && (!r1_capture_reg_status[4] || (r1_capture_reg_status[4]&&i_capture_reg_overflow_ctrl[4])))
+            else if(capture_cnts_b==2'h1 && (!r1_capture_reg_status[4] || w_capture_reg_read_flag_posedge[4] || (r1_capture_reg_status[4]&&i_capture_reg_overflow_ctrl[4])))
                 r1_capture_reg_b1 <= current_counter;
-            else if(capture_cnts_b==2'h2 && (!r1_capture_reg_status[5] || (r1_capture_reg_status[5]&&i_capture_reg_overflow_ctrl[5])))
+            else if(capture_cnts_b==2'h2 && (!r1_capture_reg_status[5] || w_capture_reg_read_flag_posedge[5] || (r1_capture_reg_status[5]&&i_capture_reg_overflow_ctrl[5])))
                 r1_capture_reg_b2 <= current_counter;
         end
         
@@ -775,15 +775,15 @@ always @(posedge i_clk or negedge i_rst_n) begin
         data_recs_bits_cnts  <= 8'h0;
         lastbit_current_counter <= 32'h0;
     end
-    else if(!i_mode_sel[1]&&i_mode_sel[2]) begin
-        if(waveform_mode_en) begin
+    else if(i_mode_sel[2]) begin//!i_mode_sel[1]&&
+        if(waveform_mode_en||shiftout_mode_en) begin
             data_recs_bits_cnts  <= 8'h0;
             if(current_counter==(lastbit_current_counter+i_switch_mode_onebit_cnts)) begin//overflow ?
                 lastbit_current_counter <= current_counter;
                 data_sends_bits_cnts <= data_sends_bits_cnts +1'b1;
             end
         end
-        else if(capture_mode_en) begin
+        else if(capture_mode_en||shiftin_mode_en) begin
             data_sends_bits_cnts <= 8'h0;
             if(current_counter==(lastbit_current_counter+i_switch_mode_onebit_cnts)) begin//overflow ?
                 lastbit_current_counter <= current_counter;
@@ -822,15 +822,15 @@ always @(posedge i_clk or negedge i_rst_n) begin
             else 
                 shiftin_mode_en <= 1'h0;
         end
-        //else if(i_mode_sel[1]&&i_mode_sel[2]) begin //count mode  & automatic switch mode enable.
-        //    if(data_sends_bits_cnts==i_waveform_mode_cnts && i_capture_mode_automatic_sw && !shiftin_mode_en) begin
-        //        shiftin_mode_en <= 1'b1;
-        //    end
-        //    else if(data_recs_bits_cnts==i_capture_mode_cnts && i_waveform_mode_automatic_sw && shiftin_mode_en) begin
-        //        shiftin_mode_en <= 1'b0;                
-        //    end
-        //        
-        //end
+        else if(i_mode_sel[1]&&i_mode_sel[2]) begin //shift mode  & automatic switch mode enable.
+            if(data_sends_bits_cnts==i_waveform_mode_cnts && i_capture_mode_automatic_sw && !shiftin_mode_en) begin
+                shiftin_mode_en <= 1'b1;
+            end
+            else if(data_recs_bits_cnts==i_capture_mode_cnts  && shiftin_mode_en) begin //&& i_waveform_mode_automatic_sw
+                shiftin_mode_en <= 1'b0;                
+            end
+                
+        end
     end
     else 
         shiftin_mode_en <= 1'h0;
@@ -877,15 +877,15 @@ always @(posedge i_clk or negedge i_rst_n) begin
             else 
                 shiftout_mode_en <= 1'h0;
         end
-        //else if(!i_mode_sel[1]&&i_mode_sel[2]) begin //count mode  & automatic switch mode enable.
-        //    if(data_sends_bits_cnts==i_waveform_mode_cnts && i_capture_mode_automatic_sw && !shiftout_mode_en) begin
-        //        shiftout_mode_en <= 1'b1;
-        //    end
-        //    else if(data_recs_bits_cnts==i_capture_mode_cnts && i_waveform_mode_automatic_sw && shiftout_mode_en) begin
-        //        shiftout_mode_en <= 1'b0;                
-        //    end
-        //        
-        //end
+        else if(i_mode_sel[1]&&i_mode_sel[2]) begin //shift mode  & automatic switch mode enable.
+            if(data_sends_bits_cnts==i_waveform_mode_cnts  && shiftout_mode_en) begin //&& i_capture_mode_automatic_sw
+                shiftout_mode_en <= 1'b0;
+            end
+            else if(data_recs_bits_cnts==i_capture_mode_cnts && i_waveform_mode_automatic_sw && !shiftout_mode_en) begin
+                shiftout_mode_en <= 1'b1;                
+            end
+                
+        end
     end
     else 
         shiftout_mode_en <= 1'h0;
@@ -932,14 +932,23 @@ always @(posedge i_clk or negedge i_rst_n) begin
             o_int[3] <= 1'b1;
         else
             o_int[3] <= 1'b0;
-        if(w1_shiftout_only_onebit_flag && !r1_shiftout_only_onebit_flag_dly)   
+        if(w1_shiftout_only_onebit_flag && !r1_shiftout_only_onebit_flag_dly) //shiftout data ,need new data.   
             o_int[4] <= 1'b1;
         else
             o_int[4] <= 1'b0;
-        if(w1_waveform_match_reg3&&!r1_waveform_match_reg3_dly)
+        if(w1_waveform_match_reg3&&!r1_waveform_match_reg3_dly) //waveform, when counters meet i_target_reg_a2/b2, and stop the counter, generate interrupt. 
             o_int[5] <= 1'b1;
         else
             o_int[5] <= 1'b0;
+        if(i_mode_sel[2]&& data_recs_bits_cnts==i_capture_mode_cnts )//shift in & capture mode, with automatic switch mode enable. when this mode end. generate interrupt.
+            o_int[6] <= 1'b1;
+        else
+            o_int[6] <= 1'b0;
+        if(i_mode_sel[2]&& data_sends_bits_cnts==i_waveform_mode_cnts )//shift out & waveform mode, with automatic switch mode enable. when this mode end. generate interrupt.
+            o_int[7] <= 1'b1;
+        else
+            o_int[7] <= 1'b0;            
+        
     end
 end
 
