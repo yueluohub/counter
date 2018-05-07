@@ -259,15 +259,15 @@ initial begin
 
     apb_write_read(base_c0+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
     apb_write_read(base_c0+`MODE_SEL_C0,32'b001,data);
-    apb_write_read(base_c0+`TARGET_REG_CTRL_C0,32'b110010,data);
+    apb_write_read(base_c0+`TARGET_REG_CTRL_C0,32'b010010,data);
     apb_write_read(base_c0+`TARGET_REG_A0_C0,32'h10,data);
     apb_write_read(base_c0+`TARGET_REG_A1_C0,32'h20,data);
-    apb_write_read(base_c0+`TARGET_REG_A2_C0,32'h50,data);
-    apb_write_read(base_c0+`TARGET_REG_B0_C0,32'h0,data);
+    apb_write_read(base_c0+`TARGET_REG_A2_C0,32'h10,data);
+    apb_write_read(base_c0+`TARGET_REG_B0_C0,32'h1,data);
     // apb_write_read(base_c0+`TARGET_REG_B1_C0,32'h20,data);
     // apb_write_read(base_c0+`TARGET_REG_B2_C0,32'h3f,data);
     apb_write_read(base_c0+`TARGET_REG_B1_C0,32'h1,data);
-    apb_write_read(base_c0+`TARGET_REG_B2_C0,32'h1,data);//divide by 2,    
+    apb_write_read(base_c0+`TARGET_REG_B2_C0,32'h1,data);//  
     apb_read (base_c0+`ENABLE_C0,data);
     apb_write(base_c0+`ENABLE_C0,data|32'h0001);//c0,enable.
     //

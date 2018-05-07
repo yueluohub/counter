@@ -197,7 +197,11 @@ reg capture_mode_en;
 reg shiftin_mode_en,shiftout_mode_en;//
 reg [7:0] data_sends_bits_cnts;
 reg [7:0] data_recs_bits_cnts;
-reg [31:0] lastbit_current_counter;
+reg [32:0] lastbit_current_counter;
+reg [32:0] last_current_counter_a;
+reg [32:0] last_current_counter_b;
+reg [5:0]   r1_target_reg_status;
+
 reg  [63:0] r1_shiftout_data;
 reg  [63:0] r1_shiftout_databits_valid;
 reg  r1_shiftout_data_valid_dly;
@@ -362,9 +366,9 @@ always @(posedge i_clk or negedge i_rst_n) begin
     else if(!i_enable || soft_reset_flag || soft_clear_flag)
         current_counter <= 32'h0;
     else if(count_en)
-        if(i_mode_sel[0]&& !i_mode_sel[1]&& ((!i_target_reg_ctrl[1]&& (i_target_reg_a2==current_counter)) ||(!i_target_reg_ctrl[3]&&(i_target_reg_b2==current_counter)))) //restart the counter,when in counter waveform mode and meets target_reg_a2/b2 .
-            current_counter <= 32'h0;
-        else
+        //if(i_mode_sel[0]&& !i_mode_sel[1]&& ((!i_target_reg_ctrl[1]&& (i_target_reg_a2==current_counter)) ||(!i_target_reg_ctrl[3]&&(i_target_reg_b2==current_counter)))) //restart the counter,when in counter waveform mode and meets target_reg_a2/b2 .
+        //    current_counter <= 32'h0;
+        //else
             current_counter <= current_counter + 1'b1;
 
 end
@@ -377,12 +381,51 @@ always @(posedge i_clk or negedge i_rst_n) begin
             count_en <= 1'h0;
         else if(soft_start_flag||start_flag)
             count_en <= 1'h1;
-        else if(i_mode_sel[0]&& !i_mode_sel[1] && ((i_target_reg_ctrl[1]&& (i_target_reg_a2==current_counter)) ||(i_target_reg_ctrl[3]&&(i_target_reg_b2==current_counter)))) //stop the counter,when in counter mode and meets target_reg_a2/b2 .
-            count_en <= 1'h0;
+        //else if(i_mode_sel[0]&& !i_mode_sel[1] && ((i_target_reg_ctrl[1]&& (i_target_reg_a2==current_counter)) ||(i_target_reg_ctrl[3]&&(i_target_reg_b2==current_counter)))) //stop the counter,when in counter mode and meets target_reg_a2/b2 .
+        //    count_en <= 1'h0;
     end
     else 
         count_en <= 1'h0;
 end
+
+wire w_count_overflow_flag;
+assign w_count_overflow_flag = &current_counter[31:0];
+
+reg r1_count_overflow_flag_target_reg_a;
+reg r1_count_overflow_flag_target_reg_b;
+reg r1_count_overflow_flag_automatic;
+reg [5:0] r1_target_reg_status_dly;
+reg r1_count_flag_automatic_update;
+reg r1_count_flag_automatic_update_dly;
+
+always @(posedge i_clk or negedge i_rst_n) begin
+    if(!i_rst_n) begin
+        r1_count_overflow_flag_target_reg_a <= 1'b0;
+        r1_count_overflow_flag_target_reg_b <= 1'b0;
+        r1_count_overflow_flag_automatic    <= 1'b0;
+    end
+    else begin
+        if(w_count_overflow_flag)
+            r1_count_overflow_flag_target_reg_a <= 1'b1;
+        else if(|(r1_target_reg_status[2:0]^r1_target_reg_status_dly[2:0])) 
+            r1_count_overflow_flag_target_reg_a <= 1'b0;
+        if(w_count_overflow_flag)
+            r1_count_overflow_flag_target_reg_b <= 1'b1;
+        else if(|(r1_target_reg_status[5:3]^r1_target_reg_status_dly[5:3])) 
+            r1_count_overflow_flag_target_reg_b <= 1'b0;
+        if(w_count_overflow_flag)
+            r1_count_overflow_flag_automatic    <= 1'b1;
+        else if(r1_count_flag_automatic_update^r1_count_flag_automatic_update_dly) 
+            r1_count_overflow_flag_automatic    <= 1'b0;
+    end
+end
+        
+always @(posedge i_clk) begin
+    r1_target_reg_status_dly <= r1_target_reg_status;
+    r1_count_flag_automatic_update_dly <= r1_count_flag_automatic_update;
+end
+        
+        
 
 //----------------------------------------------//
 //----------------------------------------------//
@@ -436,44 +479,95 @@ always @(posedge i_clk or negedge i_rst_n) begin
     end
 end
 
+wire [32:0] current_counter_target_reg_a;
+wire [32:0] current_counter_target_reg_b;
+assign current_counter_target_reg_a = {r1_count_overflow_flag_target_reg_a,current_counter};
+assign current_counter_target_reg_b = {r1_count_overflow_flag_target_reg_b,current_counter};
+
 always @(posedge i_clk or negedge i_rst_n) begin
     if(!i_rst_n) begin
         o_extern_dout_a     <= 1'b0;
         o_extern_dout_b     <= 1'b0;
+        r1_target_reg_status <= 6'b0;
+        last_current_counter_a <= 32'h0;
+        last_current_counter_b <= 32'h0;
     end
-    else if(i_enable) begin
-        if(!i_mode_sel[0]&&!i_mode_sel[2]) begin//automatic switch mode disable , and output mode.
+    else if(!i_enable) begin
+        o_extern_dout_a     <= 1'b0;
+        o_extern_dout_b     <= 1'b0;
+        r1_target_reg_status <= 6'b0; 
+        last_current_counter_a <= 32'h0;
+        last_current_counter_b <= 32'h0;        
+    end
+    else begin
+        if(!i_mode_sel[0]&&!i_mode_sel[2]) begin//automatic switch mode disable , and input mode.
             o_extern_dout_a     <= 1'b0;
             o_extern_dout_b     <= 1'b0;
+            r1_target_reg_status <= 6'b0; 
+            last_current_counter_a <= 32'h0;
+            last_current_counter_b <= 32'h0;            
         end 
         else if(soft_start_flag||start_flag) begin
             if(i_mode_sel[0]) begin//counter waveform mode&shiftout mode//&&!i_mode_sel[1]
                 o_extern_dout_a     <= i_target_reg_ctrl[4];//reset value.
                 o_extern_dout_b     <= i_target_reg_ctrl[5];//reset value.
+                r1_target_reg_status <= 6'b0; 
+                last_current_counter_a <= 32'h0;
+                last_current_counter_b <= 32'h0;                
             end
         end
-        else if(waveform_mode_en) begin //???,counter waveform mode.
-            if(i_target_reg_a0==current_counter) 
-                o_extern_dout_a <= 1'b0;
-            else if(i_target_reg_a1==current_counter) 
+        else if(data_recs_bits_cnts==i_capture_mode_cnts && i_waveform_mode_automatic_sw && !waveform_mode_en && capture_mode_en) begin
+                o_extern_dout_a     <= i_target_reg_ctrl[4];//reset value.
+                o_extern_dout_b     <= i_target_reg_ctrl[5];//reset value.
+                r1_target_reg_status <= 6'b0; 
+                last_current_counter_a <= current_counter;
+                last_current_counter_b <= current_counter;
+        end 
+        else if(waveform_mode_en) begin //counter waveform mode.
+            if(((i_target_reg_a0+last_current_counter_a)==current_counter_target_reg_a) && (!r1_target_reg_status[0])) begin //how to deal with count overflow?
+                o_extern_dout_a         <= 1'b0;
+                r1_target_reg_status[0] <= 1'b1;  
+                last_current_counter_a <= current_counter;
+            end
+            else if(((i_target_reg_a1+last_current_counter_a)==current_counter_target_reg_a) && (!r1_target_reg_status[1])) begin
                 o_extern_dout_a <= 1'b1;
-            else if(i_target_reg_a2==current_counter) begin
+                r1_target_reg_status[1] <= 1'b1;  
+                last_current_counter_a <= current_counter;                
+            end
+            else if(((i_target_reg_a2+last_current_counter_a)==current_counter_target_reg_a) && (!r1_target_reg_status[2])) begin
+                last_current_counter_a <= current_counter;
+                if(i_target_reg_ctrl[1])
+                    r1_target_reg_status[2] <= 1'b1;  //stop wave. control signal.
+                else
+                    r1_target_reg_status[2:0] <= 3'b000; //periodic signal. etc ,clock signal.
                 if(i_target_reg_ctrl[0])
                     o_extern_dout_a <= o_extern_dout_a;//keep the value.
                 else
                     o_extern_dout_a <= i_target_reg_ctrl[4];//reset value.
             end
-            if(i_target_reg_b0==current_counter) 
+            //
+            if(((i_target_reg_b0+last_current_counter_b)==current_counter_target_reg_b) && (!r1_target_reg_status[3])) begin
                 o_extern_dout_b <= 1'b0;
-            else if(i_target_reg_b1==current_counter) 
+                r1_target_reg_status[3] <= 1'b1;
+                last_current_counter_b <= current_counter;
+            end
+            else if(((i_target_reg_b1+last_current_counter_b)==current_counter_target_reg_b) && (!r1_target_reg_status[4])) begin
                 o_extern_dout_b <= 1'b1;
-            else if(i_target_reg_b2==current_counter) begin
+                r1_target_reg_status[4] <= 1'b1;
+                last_current_counter_b <= current_counter;
+            end
+            else if(((i_target_reg_b2+last_current_counter_b)==current_counter_target_reg_b) && (!r1_target_reg_status[5])) begin
+                last_current_counter_b <= current_counter;
+                if(i_target_reg_ctrl[3])
+                    r1_target_reg_status[5] <= 1'b1;  //stop wave. control signal.
+                else
+                    r1_target_reg_status[5:3] <= 3'b000; //periodic signal. etc ,clock signal.
                 if(i_target_reg_ctrl[2])
                     o_extern_dout_b <= o_extern_dout_b;//keep the value.
                 else
                     o_extern_dout_b <= i_target_reg_ctrl[5];//reset value.
             end
-                        
+            //            
         end
         else if(shiftout_mode_en) begin
             if(i_shiftmode_ctrl)
@@ -759,16 +853,21 @@ end
 //-----------automatic switch mode counter  ----//
 //----------------------------------------------//
 //----------------------------------------------//
+wire [32:0] current_counter_automatic;
+assign current_counter_automatic = {r1_count_overflow_flag_automatic,current_counter};
+
 always @(posedge i_clk or negedge i_rst_n) begin
     if(!i_rst_n) begin
         data_sends_bits_cnts <= 8'h0;
         data_recs_bits_cnts  <= 8'h0;
         lastbit_current_counter <= 32'h0;
+        r1_count_flag_automatic_update <= 1'b0;
     end
     else if(!i_enable) begin
         data_sends_bits_cnts <= 8'h0;
         data_recs_bits_cnts  <= 8'h0;
         lastbit_current_counter <= 32'h0;
+        //r1_count_flag_automatic_update <= 1'b0;
     end
     else if(soft_reset_flag||soft_stop_flag||stop_flag) begin
         data_sends_bits_cnts <= 8'h0;
@@ -778,16 +877,18 @@ always @(posedge i_clk or negedge i_rst_n) begin
     else if(i_mode_sel[2]) begin//!i_mode_sel[1]&&
         if(waveform_mode_en||shiftout_mode_en) begin
             data_recs_bits_cnts  <= 8'h0;
-            if(current_counter==(lastbit_current_counter+i_switch_mode_onebit_cnts)) begin//overflow ?
+            if(current_counter_automatic==(lastbit_current_counter+i_switch_mode_onebit_cnts)) begin//overflow ?
                 lastbit_current_counter <= current_counter;
                 data_sends_bits_cnts <= data_sends_bits_cnts +1'b1;
+                r1_count_flag_automatic_update <= ~r1_count_flag_automatic_update;
             end
         end
         else if(capture_mode_en||shiftin_mode_en) begin
             data_sends_bits_cnts <= 8'h0;
-            if(current_counter==(lastbit_current_counter+i_switch_mode_onebit_cnts)) begin//overflow ?
+            if(current_counter_automatic==(lastbit_current_counter+i_switch_mode_onebit_cnts)) begin//overflow ?
                 lastbit_current_counter <= current_counter;
                 data_recs_bits_cnts <= data_recs_bits_cnts +1'b1;
+                r1_count_flag_automatic_update <= ~r1_count_flag_automatic_update;
             end         
         end
         else begin
