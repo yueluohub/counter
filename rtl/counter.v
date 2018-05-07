@@ -407,11 +407,11 @@ always @(posedge i_clk or negedge i_rst_n) begin
     else begin
         if(w_count_overflow_flag)
             r1_count_overflow_flag_target_reg_a <= 1'b1;
-        else if(|(r1_target_reg_status[2:0]^r1_target_reg_status_dly[2:0])) 
+        else if(|((~r1_target_reg_status[1:0])&r1_target_reg_status_dly[1:0])) 
             r1_count_overflow_flag_target_reg_a <= 1'b0;
         if(w_count_overflow_flag)
             r1_count_overflow_flag_target_reg_b <= 1'b1;
-        else if(|(r1_target_reg_status[5:3]^r1_target_reg_status_dly[5:3])) 
+        else if(|((~r1_target_reg_status[4:3])&r1_target_reg_status_dly[4:3])) 
             r1_count_overflow_flag_target_reg_b <= 1'b0;
         if(w_count_overflow_flag)
             r1_count_overflow_flag_automatic    <= 1'b1;
@@ -527,41 +527,45 @@ always @(posedge i_clk or negedge i_rst_n) begin
             if(((i_target_reg_a0+last_current_counter_a)==current_counter_target_reg_a) && (!r1_target_reg_status[0])) begin //how to deal with count overflow?
                 o_extern_dout_a         <= 1'b0;
                 r1_target_reg_status[0] <= 1'b1;  
-                last_current_counter_a <= current_counter;
+                // last_current_counter_a <= current_counter;
             end
             else if(((i_target_reg_a1+last_current_counter_a)==current_counter_target_reg_a) && (!r1_target_reg_status[1])) begin
                 o_extern_dout_a <= 1'b1;
                 r1_target_reg_status[1] <= 1'b1;  
-                last_current_counter_a <= current_counter;                
+                // last_current_counter_a <= current_counter;                
             end
             else if(((i_target_reg_a2+last_current_counter_a)==current_counter_target_reg_a) && (!r1_target_reg_status[2])) begin
-                last_current_counter_a <= current_counter;
+                // last_current_counter_a <= current_counter;
                 if(i_target_reg_ctrl[1])
                     r1_target_reg_status[2] <= 1'b1;  //stop wave. control signal.
-                else
+                else begin
                     r1_target_reg_status[2:0] <= 3'b000; //periodic signal. etc ,clock signal.
+					last_current_counter_a <= current_counter;
+				end
                 if(i_target_reg_ctrl[0])
                     o_extern_dout_a <= o_extern_dout_a;//keep the value.
-                else
+                else 
                     o_extern_dout_a <= i_target_reg_ctrl[4];//reset value.
             end
             //
             if(((i_target_reg_b0+last_current_counter_b)==current_counter_target_reg_b) && (!r1_target_reg_status[3])) begin
                 o_extern_dout_b <= 1'b0;
                 r1_target_reg_status[3] <= 1'b1;
-                last_current_counter_b <= current_counter;
+                // last_current_counter_b <= current_counter;
             end
             else if(((i_target_reg_b1+last_current_counter_b)==current_counter_target_reg_b) && (!r1_target_reg_status[4])) begin
                 o_extern_dout_b <= 1'b1;
                 r1_target_reg_status[4] <= 1'b1;
-                last_current_counter_b <= current_counter;
+                // last_current_counter_b <= current_counter;
             end
             else if(((i_target_reg_b2+last_current_counter_b)==current_counter_target_reg_b) && (!r1_target_reg_status[5])) begin
-                last_current_counter_b <= current_counter;
+                
                 if(i_target_reg_ctrl[3])
                     r1_target_reg_status[5] <= 1'b1;  //stop wave. control signal.
-                else
+                else begin
                     r1_target_reg_status[5:3] <= 3'b000; //periodic signal. etc ,clock signal.
+					last_current_counter_b <= current_counter;
+				end
                 if(i_target_reg_ctrl[2])
                     o_extern_dout_b <= o_extern_dout_b;//keep the value.
                 else

@@ -190,8 +190,8 @@ initial begin
     apb_write(32'h8,32'hff);
     apb_read(32'h8,data);
     apb_read (base_c0+`ENABLE_C0,data);
-    //apb_write(base_c0+`ENABLE_C0,data|32'h2000);//c0,enable.,32m.
-    apb_write(base_c0+`ENABLE_C0,data|32'h2100);//c0,enable.//32k
+    apb_write(base_c0+`ENABLE_C0,data|32'h2000);//c0,enable.,32m.
+    // apb_write(base_c0+`ENABLE_C0,data|32'h2100);//c0,enable.//32k
     apb_read (base_c1+`ENABLE_C0,data);
     apb_write(base_c1+`ENABLE_C0,data|32'h2000);//c1
     apb_read (base_c2+`ENABLE_C0,data);
@@ -255,19 +255,19 @@ initial begin
 
    `endif
    
-      `ifdef	TESTCASE_C0_WAVEFORM_2
+    `ifdef	TESTCASE_C0_WAVEFORM_2
 
     apb_write_read(base_c0+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
     apb_write_read(base_c0+`MODE_SEL_C0,32'b001,data);
-    apb_write_read(base_c0+`TARGET_REG_CTRL_C0,32'b010010,data);
-    apb_write_read(base_c0+`TARGET_REG_A0_C0,32'h10,data);
-    apb_write_read(base_c0+`TARGET_REG_A1_C0,32'h20,data);
-    apb_write_read(base_c0+`TARGET_REG_A2_C0,32'h10,data);
-    apb_write_read(base_c0+`TARGET_REG_B0_C0,32'h1,data);
+    apb_write_read(base_c0+`TARGET_REG_CTRL_C0,32'b010001,data);
+    apb_write_read(base_c0+`TARGET_REG_A0_C0,32'h100,data);
+    apb_write_read(base_c0+`TARGET_REG_A1_C0,32'h200,data);
+    apb_write_read(base_c0+`TARGET_REG_A2_C0,32'h300,data);
+    apb_write_read(base_c0+`TARGET_REG_B0_C0,32'h0,data);
     // apb_write_read(base_c0+`TARGET_REG_B1_C0,32'h20,data);
     // apb_write_read(base_c0+`TARGET_REG_B2_C0,32'h3f,data);
     apb_write_read(base_c0+`TARGET_REG_B1_C0,32'h1,data);
-    apb_write_read(base_c0+`TARGET_REG_B2_C0,32'h1,data);//  
+    apb_write_read(base_c0+`TARGET_REG_B2_C0,32'h2,data);//  
     apb_read (base_c0+`ENABLE_C0,data);
     apb_write(base_c0+`ENABLE_C0,data|32'h0001);//c0,enable.
     //
@@ -278,6 +278,38 @@ initial begin
     //#20_000;
 
    `endif
+
+    `ifdef	TESTCASE_C0_WAVEFORM_3
+
+    apb_write_read(base_c0+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
+    apb_write_read(base_c0+`MODE_SEL_C0,32'b001,data);
+    apb_write_read(base_c0+`TARGET_REG_CTRL_C0,32'b010001,data);
+    apb_write_read(base_c0+`TARGET_REG_A0_C0,32'h1000,data);
+    apb_write_read(base_c0+`TARGET_REG_A1_C0,32'h2000,data);
+    apb_write_read(base_c0+`TARGET_REG_A2_C0,32'h3000,data);
+    apb_write_read(base_c0+`TARGET_REG_B0_C0,32'h5000,data);
+    // apb_write_read(base_c0+`TARGET_REG_B1_C0,32'h20,data);
+    // apb_write_read(base_c0+`TARGET_REG_B2_C0,32'h3f,data);
+    apb_write_read(base_c0+`TARGET_REG_B1_C0,32'h10000,data);
+    apb_write_read(base_c0+`TARGET_REG_B2_C0,32'h20000,data);//  
+    apb_read (base_c0+`ENABLE_C0,data);
+    apb_write(base_c0+`ENABLE_C0,data|32'h0001);//c0,enable.
+    //
+    apb_write_read(base_c0+`SINGLE_START_TRIGGER_C0,32'b1,data);//start;
+    #200_000;
+    //apb_read(base_c0+`SINGLE_STOP_TRIGGER_C0,data);//stop;
+    //apb_write_read(base_c0+`SINGLE_STOP_TRIGGER_C0,~data,data);//stop;
+    //#20_000;
+	#10_000_000;
+	//force -freeze {sim:/counter_top_tb_top/counter_top/u_counter_all/counter_loop[0]/u_counter/current_counter} 11111111111100000101001110011111 0
+	//force -freeze {sim:/counter_top_tb_top/counter_top/u_counter_all/counter_loop[0]/u_counter/last_current_counter_a} 11111111111100000101000000000000 0
+	//force -freeze {sim:/counter_top_tb_top/counter_top/u_counter_all/counter_loop[0]/u_counter/last_current_counter_b} 11111111111100000000000000000000 0
+	#2_000;
+	//noforce {sim:/counter_top_tb_top/counter_top/u_counter_all/counter_loop[0]/u_counter/current_counter}
+	//noforce {sim:/counter_top_tb_top/counter_top/u_counter_all/counter_loop[0]/u_counter/last_current_counter_a}
+	//noforce {sim:/counter_top_tb_top/counter_top/u_counter_all/counter_loop[0]/u_counter/last_current_counter_b}
+	
+   `endif   
    
    
     `ifdef	TESTCASE_C0_CAPTURE_0
