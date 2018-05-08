@@ -484,19 +484,26 @@ always @(posedge i_clk or negedge i_rst_n) begin
     end
 end
 
+reg r1_shiftout_mode_en_dly;
+reg r1_shiftin_mode_en_dly;
+always @(posedge i_clk) begin
+    r1_shiftout_mode_en_dly <= shiftout_mode_en;
+    r1_shiftin_mode_en_dly  <= shiftin_mode_en;
+end
+
 always @(posedge i_clk or negedge i_rst_n) begin
     if(!i_rst_n) begin
         r1_shiftout_data[31:0] <= 32'h0;
         r1_shiftout_databits_valid[31:0] <= 32'hffffffff;
     end
-    else if(soft_start_flag||start_flag) begin
-        if(i_mode_sel[0] && i_mode_sel[1]) begin// shiftout mode.
-            r1_shiftout_data[31:0] <= r1_shiftout_data[63:32];
-            r1_shiftout_databits_valid[31:0]  <= r1_shiftout_databits_valid[63:32];     
-        end
-    end
+    //else if(soft_start_flag||start_flag) begin
+    //    if(i_mode_sel[0] && i_mode_sel[1]) begin// shiftout mode.
+    //        r1_shiftout_data[31:0] <= r1_shiftout_data[63:32];
+    //        r1_shiftout_databits_valid[31:0]  <= r1_shiftout_databits_valid[63:32];     
+    //    end
+    //end
     else if(shiftout_mode_en) begin
-        if(w1_shiftout_only_onebit_flag) begin//only one bit.
+        if(w1_shiftout_only_onebit_flag||!r1_shiftout_mode_en_dly) begin//only one bit.
             r1_shiftout_data[31:0] <= r1_shiftout_data[63:32];
             r1_shiftout_databits_valid[31:0]  <= r1_shiftout_databits_valid[63:32];         
         end
@@ -977,7 +984,7 @@ always @(posedge i_clk or negedge i_rst_n) begin
         r1_shiftin_databits_updated <= 32'h0;
     end
     else if(shiftin_mode_en) begin
-        if(shiftin_complete_flag) begin
+        if(shiftin_complete_flag||!r1_shiftin_mode_en_dly) begin
             r1_shiftin_databits_updated <= 32'b1; 
             r1_shiftin_data[31:0] <= {r1_shiftin_data[30:0],counter_shiftin_din};
         end

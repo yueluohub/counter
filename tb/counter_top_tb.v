@@ -190,8 +190,8 @@ initial begin
     apb_write(32'h8,32'hff);
     apb_read(32'h8,data);
     apb_read (base_c0+`ENABLE_C0,data);
-    apb_write(base_c0+`ENABLE_C0,data|32'h2000);//c0,enable.,32m.
-    // apb_write(base_c0+`ENABLE_C0,data|32'h2100);//c0,enable.//32k
+    // apb_write(base_c0+`ENABLE_C0,data|32'h2000);//c0,enable.,32m.
+    apb_write(base_c0+`ENABLE_C0,data|32'h2100);//c0,enable.//32k
     apb_read (base_c1+`ENABLE_C0,data);
     apb_write(base_c1+`ENABLE_C0,data|32'h2000);//c1
     apb_read (base_c2+`ENABLE_C0,data);
@@ -310,7 +310,75 @@ initial begin
     release counter_top_tb_top.counter_top.u_counter_all.counter_loop[0].u_counter.last_current_counter_b ; 
     
    `endif   
-   
+ 
+    `ifdef	TESTCASE_C0_SW_COUNTMODE_0
+
+    apb_write_read(base_c0+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
+    apb_write_read(base_c0+`MODE_SEL_C0,32'b101,data);//count switch 
+    apb_write_read(base_c0+`TARGET_REG_CTRL_C0,32'b010001,data);
+    apb_write_read(base_c0+`TARGET_REG_A0_C0,32'h10,data);
+    apb_write_read(base_c0+`TARGET_REG_A1_C0,32'h20,data);
+    apb_write_read(base_c0+`TARGET_REG_A2_C0,32'h30,data);
+    apb_write_read(base_c0+`TARGET_REG_B0_C0,32'h0,data);
+    // apb_write_read(base_c0+`TARGET_REG_B1_C0,32'h20,data);
+    // apb_write_read(base_c0+`TARGET_REG_B2_C0,32'h3f,data);
+    apb_write_read(base_c0+`TARGET_REG_B1_C0,32'h1,data);
+    apb_write_read(base_c0+`TARGET_REG_B2_C0,32'h2,data);//  
+//
+    apb_write_read(base_c0+`SRC_SEL_EDGE_C0,32'h01220000,data);
+    apb_write_read(base_c0+`SWITCH_MODE_ONEBIT_CNTS_C0,32'h1,data);//one bit represent how many cycle.
+    apb_write_read(base_c0+`WAVEFORM_MODE_AUTOMATIC_C0,32'h01010208,data);//enable switch to waveform and capture mode.
+//        
+    apb_read (base_c0+`ENABLE_C0,data);
+    apb_write(base_c0+`ENABLE_C0,data|32'h0001);//c0,enable.
+    //
+    apb_write_read(base_c0+`SINGLE_START_TRIGGER_C0,32'b1,data);//start;
+    #200_000;
+    //apb_read(base_c0+`SINGLE_STOP_TRIGGER_C0,data);//stop;
+    //apb_write_read(base_c0+`SINGLE_STOP_TRIGGER_C0,~data,data);//stop;
+    //#20_000;
+
+   `endif 
+
+    `ifdef	TESTCASE_C0_SW_SHIFTMODE_0
+
+    apb_write_read(base_c0+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
+    apb_write_read(base_c0+`MODE_SEL_C0,32'b111,data);//shift switch .
+    //
+    apb_write_read(base_c0+`SHIFTIN_DATA_CTRL_BITCNTS_C0,32'h7,data);
+    // apb_write_read(base_c0+`SHIFTIN_DATA_CTRL_BITCNTS_C0,32'h3,data);
+     // apb_write_read(base_c0+`SHIFTIN_DATA_CTRL_BITCNTS_C0,32'h1,data);
+     // apb_write_read(base_c0+`SHIFTIN_DATA_CTRL_BITCNTS_C0,32'h0,data);
+    //
+    apb_write_read(base_c0+`SRC_SEL_EDGE_C0,32'h12210000,data);
+
+    //apb_write_read(base_c0+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,32'd31,data);
+      // apb_write_read(base_c0+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,32'd15,data);
+     apb_write_read(base_c0+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,32'h7,data);
+     // apb_write_read(base_c0+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,32'h3,data);
+     // apb_write_read(base_c0+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,32'h1,data);
+     // apb_write_read(base_c0+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,32'h0,data);
+    apb_write_read(base_c0+`SHIFTMODE_CTRL_C0,32'h1,data);
+    
+    apb_write_read(base_c0+`SHIFTOUT_DATA_C0,32'h55aa55aa,data);
+ 	apb_write(base_c0+`SHIFTOUT_DATA_VALID_C0,32'h0);    
+    
+
+//
+    apb_write_read(base_c0+`SRC_SEL_EDGE_C0,32'h01220000,data);
+    apb_write_read(base_c0+`SWITCH_MODE_ONEBIT_CNTS_C0,32'h1,data);//one bit represent how many cycle.
+    apb_write_read(base_c0+`WAVEFORM_MODE_AUTOMATIC_C0,32'h01010808,data);//enable switch to shiftin and shiftout mode.
+//        
+    apb_read (base_c0+`ENABLE_C0,data);
+    apb_write(base_c0+`ENABLE_C0,data|32'h0001);//c0,enable.
+    //
+    apb_write_read(base_c0+`SINGLE_START_TRIGGER_C0,32'b1,data);//start;
+    #200_000;
+    //apb_read(base_c0+`SINGLE_STOP_TRIGGER_C0,data);//stop;
+    //apb_write_read(base_c0+`SINGLE_STOP_TRIGGER_C0,~data,data);//stop;
+    //#20_000;
+
+   `endif    
    
     `ifdef	TESTCASE_C0_CAPTURE_0
         apb_write_read(base_c0+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
