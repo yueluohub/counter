@@ -301,14 +301,14 @@ initial begin
     //apb_write_read(base_c0+`SINGLE_STOP_TRIGGER_C0,~data,data);//stop;
     //#20_000;
 	#10_000_000;
-	//force -freeze {sim:/counter_top_tb_top/counter_top/u_counter_all/counter_loop[0]/u_counter/current_counter} 11111111111100000101001110011111 0
-	//force -freeze {sim:/counter_top_tb_top/counter_top/u_counter_all/counter_loop[0]/u_counter/last_current_counter_a} 11111111111100000101000000000000 0
-	//force -freeze {sim:/counter_top_tb_top/counter_top/u_counter_all/counter_loop[0]/u_counter/last_current_counter_b} 11111111111100000000000000000000 0
+	force counter_top_tb_top.counter_top.u_counter_all.counter_loop[0].u_counter.current_counter        = 32'b11111111111100000101001110011111;
+	force counter_top_tb_top.counter_top.u_counter_all.counter_loop[0].u_counter.last_current_counter_a = 33'b011111111111100000101000000000000;
+	force counter_top_tb_top.counter_top.u_counter_all.counter_loop[0].u_counter.last_current_counter_b = 33'b011111111111100000000000000000000;
 	#2_000;
-	//noforce {sim:/counter_top_tb_top/counter_top/u_counter_all/counter_loop[0]/u_counter/current_counter}
-	//noforce {sim:/counter_top_tb_top/counter_top/u_counter_all/counter_loop[0]/u_counter/last_current_counter_a}
-	//noforce {sim:/counter_top_tb_top/counter_top/u_counter_all/counter_loop[0]/u_counter/last_current_counter_b}
-	
+	release counter_top_tb_top.counter_top.u_counter_all.counter_loop[0].u_counter.current_counter        ; 
+    release counter_top_tb_top.counter_top.u_counter_all.counter_loop[0].u_counter.last_current_counter_a ; 
+    release counter_top_tb_top.counter_top.u_counter_all.counter_loop[0].u_counter.last_current_counter_b ; 
+    
    `endif   
    
    

@@ -201,6 +201,8 @@ reg [32:0] lastbit_current_counter;
 reg [32:0] last_current_counter_a;
 reg [32:0] last_current_counter_b;
 reg [5:0]   r1_target_reg_status;
+wire [32:0] current_counter_target_reg_a;
+wire [32:0] current_counter_target_reg_b;
 
 reg  [63:0] r1_shiftout_data;
 reg  [63:0] r1_shiftout_databits_valid;
@@ -231,6 +233,9 @@ reg [31:0] r1_shiftin_data;
 reg [31:0] r1_shiftin_databits_updated;
 reg    [5:0] r1_capture_reg_read_flag_dly;//(a2/a1/a0)bit2-bit0:1-active.(b2/b1/b0)bit5-bit3:
 wire   [5:0] w_capture_reg_read_flag_posedge;//(a2/a1/a0)bit2-bit0:1-active.(b2/b1/b0)bit5-bit3:
+wire w_count_overflow_flag;
+wire [32:0] current_counter_automatic;
+wire w1_waveform_match_reg3;
 
 //assign inner_din_shift = i_inner_din>>COUNTER_NUM-1;
 
@@ -388,7 +393,8 @@ always @(posedge i_clk or negedge i_rst_n) begin
         count_en <= 1'h0;
 end
 
-wire w_count_overflow_flag;
+
+
 assign w_count_overflow_flag = &current_counter[31:0];
 
 reg r1_count_overflow_flag_target_reg_a;
@@ -404,19 +410,41 @@ always @(posedge i_clk or negedge i_rst_n) begin
         r1_count_overflow_flag_target_reg_b <= 1'b0;
         r1_count_overflow_flag_automatic    <= 1'b0;
     end
+    else if(!i_enable) begin
+        r1_count_overflow_flag_target_reg_a <= 1'b0;
+        r1_count_overflow_flag_target_reg_b <= 1'b0;
+        r1_count_overflow_flag_automatic    <= 1'b0;    
+    end
+    else if(soft_reset_flag) begin
+        r1_count_overflow_flag_target_reg_a <= 1'b0;
+        r1_count_overflow_flag_target_reg_b <= 1'b0;
+        r1_count_overflow_flag_automatic    <= 1'b0;    
+    end
+    else if(soft_start_flag||start_flag) begin
+        r1_count_overflow_flag_target_reg_a <= 1'b0;
+        r1_count_overflow_flag_target_reg_b <= 1'b0;
+        r1_count_overflow_flag_automatic    <= 1'b0;    
+    end
     else begin
+    if(waveform_mode_en||i_mode_sel[2]) begin
         if(w_count_overflow_flag)
             r1_count_overflow_flag_target_reg_a <= 1'b1;
-        else if(|((~r1_target_reg_status[1:0])&r1_target_reg_status_dly[1:0])) 
+        // else if(|((~r1_target_reg_status[1:0])&r1_target_reg_status_dly[1:0])) 
+        else if(((i_target_reg_a2+last_current_counter_a)==current_counter_target_reg_a) && (!r1_target_reg_status[2])&&(!i_target_reg_ctrl[1])) 
             r1_count_overflow_flag_target_reg_a <= 1'b0;
         if(w_count_overflow_flag)
             r1_count_overflow_flag_target_reg_b <= 1'b1;
-        else if(|((~r1_target_reg_status[4:3])&r1_target_reg_status_dly[4:3])) 
+        // else if(|((~r1_target_reg_status[4:3])&r1_target_reg_status_dly[4:3])) 
+        else if(((i_target_reg_b2+last_current_counter_b)==current_counter_target_reg_b) && (!r1_target_reg_status[5])&&(!i_target_reg_ctrl[3]))        
             r1_count_overflow_flag_target_reg_b <= 1'b0;
+    end
+    if(i_mode_sel[2]) begin//automatic switch enable.
         if(w_count_overflow_flag)
             r1_count_overflow_flag_automatic    <= 1'b1;
-        else if(r1_count_flag_automatic_update^r1_count_flag_automatic_update_dly) 
+        // else if(r1_count_flag_automatic_update^r1_count_flag_automatic_update_dly) 
+        else if(current_counter_automatic==(lastbit_current_counter+i_switch_mode_onebit_cnts)) 
             r1_count_overflow_flag_automatic    <= 1'b0;
+    end
     end
 end
         
@@ -479,8 +507,7 @@ always @(posedge i_clk or negedge i_rst_n) begin
     end
 end
 
-wire [32:0] current_counter_target_reg_a;
-wire [32:0] current_counter_target_reg_b;
+
 assign current_counter_target_reg_a = {r1_count_overflow_flag_target_reg_a,current_counter};
 assign current_counter_target_reg_b = {r1_count_overflow_flag_target_reg_b,current_counter};
 
@@ -524,18 +551,15 @@ always @(posedge i_clk or negedge i_rst_n) begin
                 last_current_counter_b <= current_counter;
         end 
         else if(waveform_mode_en) begin //counter waveform mode.
-            if(((i_target_reg_a0+last_current_counter_a)==current_counter_target_reg_a) && (!r1_target_reg_status[0])) begin //how to deal with count overflow?
+            if(((i_target_reg_a0+last_current_counter_a)==current_counter_target_reg_a) && (!r1_target_reg_status[0])) begin //
                 o_extern_dout_a         <= 1'b0;
                 r1_target_reg_status[0] <= 1'b1;  
-                // last_current_counter_a <= current_counter;
             end
             else if(((i_target_reg_a1+last_current_counter_a)==current_counter_target_reg_a) && (!r1_target_reg_status[1])) begin
                 o_extern_dout_a <= 1'b1;
                 r1_target_reg_status[1] <= 1'b1;  
-                // last_current_counter_a <= current_counter;                
             end
             else if(((i_target_reg_a2+last_current_counter_a)==current_counter_target_reg_a) && (!r1_target_reg_status[2])) begin
-                // last_current_counter_a <= current_counter;
                 if(i_target_reg_ctrl[1])
                     r1_target_reg_status[2] <= 1'b1;  //stop wave. control signal.
                 else begin
@@ -551,12 +575,10 @@ always @(posedge i_clk or negedge i_rst_n) begin
             if(((i_target_reg_b0+last_current_counter_b)==current_counter_target_reg_b) && (!r1_target_reg_status[3])) begin
                 o_extern_dout_b <= 1'b0;
                 r1_target_reg_status[3] <= 1'b1;
-                // last_current_counter_b <= current_counter;
             end
             else if(((i_target_reg_b1+last_current_counter_b)==current_counter_target_reg_b) && (!r1_target_reg_status[4])) begin
                 o_extern_dout_b <= 1'b1;
                 r1_target_reg_status[4] <= 1'b1;
-                // last_current_counter_b <= current_counter;
             end
             else if(((i_target_reg_b2+last_current_counter_b)==current_counter_target_reg_b) && (!r1_target_reg_status[5])) begin
                 
@@ -857,7 +879,6 @@ end
 //-----------automatic switch mode counter  ----//
 //----------------------------------------------//
 //----------------------------------------------//
-wire [32:0] current_counter_automatic;
 assign current_counter_automatic = {r1_count_overflow_flag_automatic,current_counter};
 
 always @(posedge i_clk or negedge i_rst_n) begin
@@ -997,7 +1018,6 @@ always @(posedge i_clk or negedge i_rst_n) begin
 end
 
 
-wire w1_waveform_match_reg3;
 assign w1_waveform_match_reg3 = waveform_mode_en && (i_target_reg_ctrl[1]&& (i_target_reg_a2==current_counter)) ||(i_target_reg_ctrl[3]&&(i_target_reg_b2==current_counter));
 
 reg r1_capture_reg_status_dly_a;
