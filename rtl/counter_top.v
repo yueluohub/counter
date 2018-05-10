@@ -224,10 +224,10 @@ assign w_global_stop_trigger   = o_global_stop_trigger;
 assign w_global_clear_trigger  = o_global_clear_trigger;
 assign w_global_reset_trigger  = o_global_reset_trigger;
 
-assign w_single_start_trigger  = o_single_start_trigger_c0;
-assign w_single_stop_trigger   = o_single_stop_trigger_c0;
-assign w_single_clear_trigger  = o_single_clear_trigger_c0;
-assign w_single_reset_trigger  = o_single_reset_trigger_c0;
+assign w_single_start_trigger  = {o_single_start_trigger_c3,o_single_start_trigger_c2,o_single_start_trigger_c1,o_single_start_trigger_c0};
+assign w_single_stop_trigger   = {o_single_stop_trigger_c3,o_single_stop_trigger_c2,o_single_stop_trigger_c1,o_single_stop_trigger_c0};
+assign w_single_clear_trigger  = {o_single_clear_trigger_c3,o_single_clear_trigger_c2,o_single_clear_trigger_c1,o_single_clear_trigger_c0};
+assign w_single_reset_trigger  = {o_single_reset_trigger_c3,o_single_reset_trigger_c2,o_single_reset_trigger_c1,o_single_reset_trigger_c0};
 
 assign o_enable     = {o_enable_c3,o_enable_c2,o_enable_c1,o_enable_c0};
 assign o_clk_ctrl   = {o_clk_ctrl_c3,o_clk_ctrl_c2,o_clk_ctrl_c1,o_clk_ctrl_c0};//
