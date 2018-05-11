@@ -1107,17 +1107,118 @@ initial begin
     `endif
    
     //
-    #500_000;
+    
     stop_event  <= '1;
+    #500_000;
     $stop;
 
 end
 
+`ifdef  TESTCASE_ALL_SHIFTMODE_0
+
+initial begin
+wait (stop_event) ;
+for(i=0;i<4;i++) begin
+    addr_base=base_c1*i;
+    apb_write_read(addr_base+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
+    if(i==0)
+        apb_write_read(addr_base+`MODE_SEL_C0,32'b011,data);//shift out .
+    else if(i==1)
+        apb_write_read(addr_base+`MODE_SEL_C0,32'b010,data);//shift in .    
+    else if(i==2)
+        apb_write_read(addr_base+`MODE_SEL_C0,32'b011,data);//shift out.
+    else if(i==3)
+        apb_write_read(addr_base+`MODE_SEL_C0,32'b010,data);//shift in .
+    
+    //
+    apb_write_read(addr_base+`SHIFTIN_DATA_CTRL_BITCNTS_C0,32'd31,data);
+    //
+    apb_write_read(addr_base+`SRC_SEL_EDGE_C0,32'h12210000,data);
+    apb_write_read(addr_base+`SHIFTMODE_CTRL_C0,32'h0,data);
+    
+    apb_write_read(addr_base+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,32'd31,data);
+    apb_write_read(addr_base+`SHIFTOUT_DATA_C0,32'h55aa55aa,data);
+ 	apb_write(addr_base+`SHIFTOUT_DATA_VALID_C0,32'h0);    
+    if(i==0||i==3)
+    $display("new shiftout data = %h,bits=%d,counter num=%d",count_reverse(data,5'd31),5'd31,i);
+//
+    apb_write_read(addr_base+`SWITCH_MODE_ONEBIT_CNTS_C0,32'h1,data);//one bit represent how many cycle.
+    //apb_write_read(addr_base+`WAVEFORM_MODE_AUTOMATIC_C0,32'h01010808,data);//enable switch to shiftin and shiftout mode.
+    // apb_write_read(addr_base+`WAVEFORM_MODE_AUTOMATIC_C0,32'h01010802,data);//enable switch to shiftin and shiftout mode.
+    // apb_write_read(addr_base+`WAVEFORM_MODE_AUTOMATIC_C0,32'h00010801,data);//enable switch to shiftin and shiftout mode.
+    
+    apb_read (addr_base+`ENABLE_C0,data);
+    apb_write(addr_base+`ENABLE_C0,data|32'h0001);//c0,enable.
+//
+  
+end    
+    //
+    apb_read(`GLOBAL_START_TRIGGER,data);//start;
+    apb_write_read(`GLOBAL_START_TRIGGER,~data,data);//start;
+    //i=0;
+
+        addr_base=base_c1*0;
+        apb_read(addr_base+`CTRL_SNAP_C0,data);
+        apb_write_read(addr_base+`CTRL_SNAP_C0,{data[31:4],~data[3:0]},data);//
+        apb_read(addr_base+`SNAP_STATUS_C0,data);
+        while(!(|data)) apb_read(addr_base+`SNAP_STATUS_C0,data);
+        apb_read(addr_base+`CTRL_SNAP_C0,data);
+        apb_write_read(addr_base+`CTRL_SNAP_C0,{~data[31:16],data[15:0]},data);//
+        apb_read(addr_base+`SNAP_STATUS_C0,data);
+        while((|data)) apb_read(addr_base+`SNAP_STATUS_C0,data);  
+        //
+    for(i=0;i<4;i++) begin
+        // $display("new shiftout counter num=%d",i);        
+        apb_write_read(addr_base+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,32'd30,data);
+        apb_write_read(addr_base+`SHIFTOUT_DATA_C0,32'hff0000ff,data);
+        apb_write(addr_base+`SHIFTOUT_DATA_VALID_C0,32'h0);  
+        if(i==0||i==3)
+        $display("new shiftout data = %h,bits=%d,counter num=%d",count_reverse(data,5'd30),5'd30,i);
+    end    
+    int_flag_en = 1;
+    while(1) begin
+    wait(i_int);
+    tmp_i=32'h1f;
+    wait(!i_int);
+    end
+    #200_000;
+    //apb_read(`GLOBAL_STOP_TRIGGER,data);//stop;
+    //apb_write_read(`GLOBAL_STOP_TRIGGER,~data,data);//stop;
+    //#20_000;
+
+
+end
+`endif
 
 
 
-//`ifdef CAPTURE
-
+`ifdef CAPTURE_DATA_CASECADE
+always @* begin
+//0-》1-》2-》3-》0 。
+for(i=0;i<4;i++) begin
+if(!i_extern_dout_a_oen[i])
+    if(i!=3)
+        o_extern_din_a[i+1] = i_extern_dout_a[i];
+    else
+        o_extern_din_a[0] = i_extern_dout_a[i];
+else 
+    if(i!=3)
+        o_extern_din_a[i+1] = 1'b1;
+    else
+        o_extern_din_a[0] = 1'b1;
+if(!i_extern_dout_b_oen[i])
+    if(i!=3)
+        o_extern_din_b[i+1] = i_extern_dout_b[i];
+    else
+        o_extern_din_b[0] = i_extern_dout_b[i];
+else 
+    if(i!=3)
+        o_extern_din_b[i+1] = 1'b1;
+    else
+        o_extern_din_b[0] = 1'b1;
+end
+end
+`else 
 initial begin
 o_extern_din_a = 1'b0;
 o_extern_din_b = 1'b0;
@@ -1140,11 +1241,15 @@ o_extern_din_b = ~o_extern_din_b;
 end
 end
 
-//`endif
+`endif
+
+
+
 
 // `ifdef INT_HAND
 
-reg [31:0] int_status;
+reg [31:0] int_status,int_status0;
+reg [31:0] base_addr_int;
 
 initial begin
     apb_write_read(`INTR_MASK_CLR,32'hffffffff,data);
@@ -1154,80 +1259,85 @@ initial begin
     // $display("interrupt process ,stage 2");
     wait(i_int);
     // $display("interrupt process ,stage 3");
-      apb_read(`INTR_STATUS,int_status);
+      apb_read(`INTR_STATUS,int_status0);
+    if(|int_status0)  begin
+      apb_write_read(`INTR_CLR,int_status0,data);
+    for(i=0;i<4;i++) begin    
+      int_status = int_status0>>8*i;
+      base_addr_int=base_c1*i;
       if(|int_status[7:0]) begin
-          apb_write_read(`INTR_CLR,int_status,data);
-          int_status = int_status>>8*0;
-          //apb_read(base_c0+`CTRL_SNAP_C0,data);
-          //apb_write_read(base_c0+`CTRL_SNAP_C0,{data[31:4],~data[3:0]},data);//
-          //apb_read(base_c0+`SNAP_STATUS_C0,data);
+
+          //apb_read(base_addr_int+`CTRL_SNAP_C0,data);
+          //apb_write_read(base_addr_int+`CTRL_SNAP_C0,{data[31:4],~data[3:0]},data);//
+          //apb_read(base_addr_int+`SNAP_STATUS_C0,data);
           //if(|data) begin
           //  $display("new capture register comes");
           //end 
           //else begin
-          //while(!(|data)) apb_read(base_c0+`SNAP_STATUS_C0,data);
+          //while(!(|data)) apb_read(base_addr_int+`SNAP_STATUS_C0,data);
           //  $display("new capture register don't come,please wait and read");
           //end
-          //apb_read(base_c0+`CTRL_SNAP_C0,data);
-          //apb_write_read(base_c0+`CTRL_SNAP_C0,{~data[31:16],data[15:0]},data);//
-          //apb_read(base_c0+`SNAP_STATUS_C0,data);
-          //while((|data)) apb_read(base_c0+`SNAP_STATUS_C0,data);
+          //apb_read(base_addr_int+`CTRL_SNAP_C0,data);
+          //apb_write_read(base_addr_int+`CTRL_SNAP_C0,{~data[31:16],data[15:0]},data);//
+          //apb_read(base_addr_int+`SNAP_STATUS_C0,data);
+          //while((|data)) apb_read(base_addr_int+`SNAP_STATUS_C0,data);
           //$display("capture register status clear");
           //
           //repeat (2) @(posedge i_pclk);
           if(|int_status[1:0]) begin
-            apb_read(base_c0+`CAPTURE_REG_STATUS_C0,data_1);
+            apb_read(base_addr_int+`CAPTURE_REG_STATUS_C0,data_1);
             if(&data_1[2:0]) begin
-                apb_read(base_c0+`CAPTURE_REG_A0_C0,data);
-                $display("in bus a ,new capture edge time = %h",data);
-                apb_read(base_c0+`CAPTURE_REG_A1_C0,data);
-                $display("in bus a ,new capture edge time = %h",data);
-                apb_read(base_c0+`CAPTURE_REG_A2_C0,data); 
-                $display("in bus a ,new capture edge time = %h",data);
+                apb_read(base_addr_int+`CAPTURE_REG_A0_C0,data);
+                $display("in bus a ,new capture edge time = %h,counter num=%d",data,i);
+                apb_read(base_addr_int+`CAPTURE_REG_A1_C0,data);
+                $display("in bus a ,new capture edge time = %h,counter num=%d",data,i);
+                apb_read(base_addr_int+`CAPTURE_REG_A2_C0,data); 
+                $display("in bus a ,new capture edge time = %h,counter num=%d",data,i);
             end
             if(&data_1[5:3]) begin
-                apb_read(base_c0+`CAPTURE_REG_B0_C0,data);
-                $display("in bus b ,new capture edge time = %h",data);
-                apb_read(base_c0+`CAPTURE_REG_B1_C0,data);
-                $display("in bus b ,new capture edge time = %h",data);
-                apb_read(base_c0+`CAPTURE_REG_B2_C0,data);
-                $display("in bus b ,new capture edge time = %h",data);
+                apb_read(base_addr_int+`CAPTURE_REG_B0_C0,data);
+                $display("in bus b ,new capture edge time = %h,counter num=%d",data,i);
+                apb_read(base_addr_int+`CAPTURE_REG_B1_C0,data);
+                $display("in bus b ,new capture edge time = %h,counter num=%d",data,i);
+                apb_read(base_addr_int+`CAPTURE_REG_B2_C0,data);
+                $display("in bus b ,new capture edge time = %h,counter num=%d",data,i);
             end
             data_1 = '0;
           end
           //
           if(int_status[2]) begin
-              $display("counter overflow data");
+              $display("counter overflow data,counter num=%d",i);
           end
           if(int_status[3]) begin
-              apb_read(base_c0+`SHIFTIN_DATA_C0,data);
-              apb_read(base_c0+`SHIFTIN_DATABITS_UPDATED_C0,data_1);
-              $display("new shiftin data = %h",data&data_1);
+              apb_read(base_addr_int+`SHIFTIN_DATA_C0,data);
+              apb_read(base_addr_int+`SHIFTIN_DATABITS_UPDATED_C0,data_1);
+              $display("new shiftin data = %h,bits=%0d,counter num=%d",data,count_valid_cnts(data_1),i);
               data_1 = '0;
           end
           //
           if(int_status[4]) begin
               data_1=$random;
-              apb_write_read(base_c0+`SHIFTOUT_DATA_C0,data_1,data);
-              apb_write(base_c0+`SHIFTOUT_DATA_VALID_C0,32'h0);
-              if(tmp_i!=31)
-                tmp_i--;               
-              apb_write_read(base_c0+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,tmp_i,data);
-              $display("new shiftout data = %h,bits=%d",data_1,tmp_i[4:0]);
+              apb_write_read(base_addr_int+`SHIFTOUT_DATA_C0,data_1,data);
+              apb_write(base_addr_int+`SHIFTOUT_DATA_VALID_C0,32'h0);
+              //if(tmp_i!=31)
+              //  tmp_i--;               
+              apb_write_read(base_addr_int+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,tmp_i,data);
+              $display("new shiftout data = %h,bits=%d,counter num=%d",count_reverse(data_1,tmp_i[4:0]),tmp_i[4:0],i);
               data_1 = '0;
           end
           if(int_status[5]) begin
-              $display("counter waveform mode reach target register 3");
+              $display("counter waveform mode reach target register 3,counter num=%d",i);
           end
           if(int_status[6]) begin
-              $display("counter automatic switch to shiftout/waveform mode");
+              $display("counter automatic switch to shiftout/waveform mode,counter num=%d",i);
           end
           if(int_status[7]) begin
-              $display("counter automatic switch to shiftin/capture mode");
+              $display("counter automatic switch to shiftin/capture mode,counter num=%d",i);
           end
           //
       end
       //
+      /*
       if(|int_status[15:8]) begin
           apb_write_read(`INTR_CLR,int_status,data);
           int_status = int_status>>8*1;
@@ -1393,7 +1503,10 @@ initial begin
           end       
       end      
       //
+      */
     end
+   end
+   end
 
 end
 // `endif
@@ -1404,9 +1517,31 @@ initial begin
 $stop;
 end
 
+function unsigned [31:0] count_reverse;
+input [31:0] data_in;
+input [31:0] bit_cnts;
+//output [31:0] data_out;
+integer i;
+begin
+count_reverse = 32'h0;
+for(i=0;i<=bit_cnts;i++) begin
+    count_reverse[bit_cnts-i]=data_in[i];
+end
+end
+endfunction
 
-
-
+function unsigned [31:0] count_valid_cnts;
+input [31:0] data_in;
+//output [31:0] data_out;
+integer i;
+begin
+count_valid_cnts = 32'h0;
+for(i=0;i<=31;i++) begin
+    count_valid_cnts+=data_in[i];
+end
+count_valid_cnts-=1;
+end
+endfunction
 
 
 
