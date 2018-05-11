@@ -383,16 +383,17 @@ initial begin
     //apb_read(addr_base+`SINGLE_STOP_TRIGGER_C0,data);//stop;
     //apb_write_read(addr_base+`SINGLE_STOP_TRIGGER_C0,~data,data);//stop;
     //#20_000;
-	#10_000_000;
-    for(i=0,i<4,i++) begin
-	force counter_top_tb_top.counter_top.u_counter_all.counter_loop[i].u_counter.current_counter        = 32'b11111111111100000000000000000000;
-	force counter_top_tb_top.counter_top.u_counter_all.counter_loop[i].u_counter.last_current_counter_a = 33'b011111111111100000000000000000000;
-	force counter_top_tb_top.counter_top.u_counter_all.counter_loop[i].u_counter.last_current_counter_b = 33'b011111111111100000000000000000000;
+	#5_000_000;
+    //for(i=0;i<4;i++) begin
+    //if(`COUNTER_NUM)
+	force counter_top_tb_top.counter_top.u_counter_all.counter_loop[`COUNTER_NUM].u_counter.current_counter        = 32'b11111111111100000000000000000000;
+	force counter_top_tb_top.counter_top.u_counter_all.counter_loop[`COUNTER_NUM].u_counter.last_current_counter_a = 33'b011111111111100000000000000000000;
+	force counter_top_tb_top.counter_top.u_counter_all.counter_loop[`COUNTER_NUM].u_counter.last_current_counter_b = 33'b011111111111100000000000000000000;
 	#2_000;
-	release counter_top_tb_top.counter_top.u_counter_all.counter_loop[i].u_counter.current_counter        ; 
-    release counter_top_tb_top.counter_top.u_counter_all.counter_loop[i].u_counter.last_current_counter_a ; 
-    release counter_top_tb_top.counter_top.u_counter_all.counter_loop[i].u_counter.last_current_counter_b ; 
-    end
+	release counter_top_tb_top.counter_top.u_counter_all.counter_loop[`COUNTER_NUM].u_counter.current_counter        ; 
+    release counter_top_tb_top.counter_top.u_counter_all.counter_loop[`COUNTER_NUM].u_counter.last_current_counter_a ; 
+    release counter_top_tb_top.counter_top.u_counter_all.counter_loop[`COUNTER_NUM].u_counter.last_current_counter_b ; 
+    //end
     
    `endif   
  
@@ -651,6 +652,11 @@ initial begin
     //
     apb_write_read(addr_base+`SINGLE_START_TRIGGER_C0,32'b1,data);//start;
     int_flag_en = 1;
+    while(1) begin
+    wait(i_int);
+    tmp_i=32'h7;
+    wait(!i_int);
+    end
     #200_000;
     //apb_read(addr_base+`SINGLE_STOP_TRIGGER_C0,data);//stop;
     //apb_write_read(addr_base+`SINGLE_STOP_TRIGGER_C0,~data,data);//stop;
@@ -1260,8 +1266,8 @@ initial begin
               data_1=$random;
               apb_write_read(base_c1+`SHIFTOUT_DATA_C0,data_1,data);
               apb_write(base_c1+`SHIFTOUT_DATA_VALID_C0,32'h0);
-              if(tmp_i!=31)
-                tmp_i--;               
+              // if(tmp_i!=31)
+                // tmp_i--;               
               apb_write_read(base_c1+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,tmp_i,data);
               $display("new shiftout data = %h,bits=%d",data_1,tmp_i[4:0]);
               data_1 = '0;
@@ -1315,8 +1321,8 @@ initial begin
               data_1=$random;
               apb_write_read(base_c2+`SHIFTOUT_DATA_C0,data_1,data);
               apb_write(base_c2+`SHIFTOUT_DATA_VALID_C0,32'h0);
-              if(tmp_i!=31)
-                tmp_i--;               
+              // if(tmp_i!=31)
+                // tmp_i--;               
               apb_write_read(base_c2+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,tmp_i,data);
               $display("new shiftout data = %h,bits=%d",data_1,tmp_i[4:0]);
               data_1 = '0;
@@ -1370,9 +1376,9 @@ initial begin
               data_1=$random;
               apb_write_read(base_c3+`SHIFTOUT_DATA_C0,data_1,data);
               apb_write(base_c3+`SHIFTOUT_DATA_VALID_C0,32'h0);
-              if(tmp_i!=31)
-                tmp_i--;               
               apb_write_read(base_c3+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,tmp_i,data);
+              //if(tmp_i!=31)
+              //  tmp_i--;  
               $display("new shiftout data = %h,bits=%d",data_1,tmp_i[4:0]);
               data_1 = '0;
           end
