@@ -38,6 +38,8 @@ module counter_all(
         i_src_sel_din1,
         i_src_edge_din1,
         i_ctrl_snap,
+        o_snap_status,
+        i_clear_snap,        
         o_shadow_reg,
         i_target_reg_ctrl,
         i_target_reg_a0,
@@ -110,6 +112,8 @@ input  wire [COUNTER_NUM*2-1:0] i_src_edge_din0;
 input  wire [COUNTER_NUM*SEL_WIDTH-1:0] i_src_sel_din1;
 input  wire [COUNTER_NUM*2-1:0] i_src_edge_din1;
 input  wire [COUNTER_NUM*4-1:0] i_ctrl_snap;
+output wire [COUNTER_NUM*4-1:0] o_snap_status;
+input  wire [COUNTER_NUM-1:0]   i_clear_snap;
 output wire [COUNTER_NUM*32-1:0] o_shadow_reg;
 input  wire [COUNTER_NUM*6-1:0] i_target_reg_ctrl;
 //[0]: when counters meet i_target_reg_a2, 1- keep the value,   0- reset the value.
@@ -166,13 +170,19 @@ wire [COUNTER_NUM-1:0]      w_syn_global_reset_trigger;
 wire [COUNTER_NUM-1:0]      w_syn_enable;
 wire [COUNTER_NUM*4-1:0]    w_syn_ctrl_snap;
 wire [COUNTER_NUM-1:0]      w_syn_shiftout_data_valid;
+wire [COUNTER_NUM*6-1:0]    w_syn_capture_reg_read_flag;//(a2/a1/a0)bit2-bit0:1-active.(b2/b1/b0)bit5-bit3:
+
+//wire [COUNTER_NUM*4-1:0] w_syn_ctrl_snap;
+wire [COUNTER_NUM*4-1:0] w_syn_snap_status;
+wire [COUNTER_NUM-1:0]   w_syn_clear_snap;
+
 
 genvar i;
 generate for(i=0;i<COUNTER_NUM;i=i+1) begin:counter_loop
 
 
 
-counter_data_syn_param #(.BUS_WIDTH(14))    u_syn_bus(
+counter_data_syn_param #(.BUS_WIDTH(21))    u_syn_bus(
         .i_clk_din   (i_pclk),
         .i_rstn_din  (i_prst_n),
         .i_din       ({ i_single_start_trigger[i],
@@ -185,6 +195,8 @@ counter_data_syn_param #(.BUS_WIDTH(14))    u_syn_bus(
                         i_global_reset_trigger,
                         i_enable[i],
                         i_ctrl_snap[(i+1)*4-1:i*4],
+                        i_clear_snap[i],
+                        i_capture_reg_read_flag[(i+1)*6-1:i*6],
                         i_shiftout_data_valid[i]}
                         ),
         .i_clk_dout  (i_clk[i]),
@@ -199,6 +211,8 @@ counter_data_syn_param #(.BUS_WIDTH(14))    u_syn_bus(
                         w_syn_global_reset_trigger[i],
                         w_syn_enable[i],
                         w_syn_ctrl_snap[(i+1)*4-1:i*4],
+                        w_syn_clear_snap[i],
+                        w_syn_capture_reg_read_flag[(i+1)*6-1:i*6],
                         w_syn_shiftout_data_valid[i]}
                         )
 );
@@ -237,6 +251,8 @@ counter #(.COUNTER_NUM(COUNTER_NUM)) u_counter(
         .i_src_sel_din1                     (i_src_sel_din1[(i+1)*SEL_WIDTH-1:i*SEL_WIDTH] ),       
         .i_src_edge_din1                    (i_src_edge_din1[(i+1)*2-1:i*2]                ),
         .i_ctrl_snap                        (w_syn_ctrl_snap[(i+1)*4-1:i*4]                ),
+        .o_snap_status                      (o_snap_status[(i+1)*4-1:i*4]                  ),
+        .i_clear_snap                       (w_syn_clear_snap[i]                           ),
         .o_shadow_reg                       (o_shadow_reg[(i+1)*32-1:i*32]                 ),
         .i_target_reg_ctrl                  (i_target_reg_ctrl[(i+1)*6-1:i*6]              ),
         .i_target_reg_a0                    (i_target_reg_a0[(i+1)*32-1:i*32]              ),
@@ -246,7 +262,7 @@ counter #(.COUNTER_NUM(COUNTER_NUM)) u_counter(
         .i_target_reg_b1                    (i_target_reg_b1[(i+1)*32-1:i*32]              ),
         .i_target_reg_b2                    (i_target_reg_b2[(i+1)*32-1:i*32]              ),
         .o_capture_reg_status               (o_capture_reg_status[(i+1)*6-1:i*6]           ),
-        .i_capture_reg_read_flag            (i_capture_reg_read_flag[(i+1)*6-1:i*6]        ),
+        .i_capture_reg_read_flag            (w_syn_capture_reg_read_flag[(i+1)*6-1:i*6]    ),
         .i_capture_reg_overflow_ctrl        (i_capture_reg_overflow_ctrl[(i+1)*6-1:i*6]    ),
         .o_capture_reg_a0                   (o_capture_reg_a0[(i+1)*32-1:i*32]             ),
         .o_capture_reg_a1                   (o_capture_reg_a1[(i+1)*32-1:i*32]             ),

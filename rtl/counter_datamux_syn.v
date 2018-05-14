@@ -31,7 +31,7 @@ wire [COUNTER_NUM-1:0] w1_inner_din;
 genvar i;
 generate for(i=0;i<COUNTER_NUM;i=i+1) begin:mux_syn_loop
 
-assign w1_inner_din[i] =  i_mux_sel[i] ? i_inner_din_b[i] : i_inner_din_a;
+assign w1_inner_din[i] =  i_mux_sel[i] ? i_inner_din_b[i] : i_inner_din_a[i];
 
 counter_data_syn    u0_syn(
         .i_clk_din   (i_clk_din[i]),

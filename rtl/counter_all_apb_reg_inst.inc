@@ -44,9 +44,13 @@
    wire              [  1 : 0 ] o_src_edge_din0_c0;
    wire              [  3 : 0 ] o_src_sel_din1_c0;
    wire              [  1 : 0 ] o_src_edge_din1_c0;
+   wire                         ren_snap_status_c0;
+   wire                         ren_snap_status_c0_d;
+   wire              [  3 : 0 ] i_snap_status_c0;
    wire                         wen_ctrl_snap_c0;
    wire                         wen_ctrl_snap_c0_d;
    wire              [  3 : 0 ] o_ctrl_snap_c0;
+   wire                         o_clear_snap_c0;
    wire              [ 31 : 0 ] i_shadow_reg_c0;
    wire              [  2 : 0 ] o_mode_sel_c0;
    wire              [  5 : 0 ] o_target_reg_ctrl_c0;
@@ -58,7 +62,7 @@
    wire              [ 31 : 0 ] o_target_reg_b0_c0;
    wire              [ 31 : 0 ] o_target_reg_b1_c0;
    wire              [ 31 : 0 ] o_target_reg_b2_c0;
-   wire              [  5 : 0 ] o_capture_reg_status_c0;
+   wire              [  5 : 0 ] i_capture_reg_status_c0;
    wire              [  5 : 0 ] o_capture_reg_overflow_ctrl_c0;
    wire                         ren_capture_reg_a0_c0;
    wire                         ren_capture_reg_a0_c0_d;
@@ -108,9 +112,13 @@
    wire              [  1 : 0 ] o_src_edge_din0_c1;
    wire              [  3 : 0 ] o_src_sel_din1_c1;
    wire              [  1 : 0 ] o_src_edge_din1_c1;
+   wire                         ren_snap_status_c1;
+   wire                         ren_snap_status_c1_d;
+   wire              [  3 : 0 ] i_snap_status_c1;
    wire                         wen_ctrl_snap_c1;
    wire                         wen_ctrl_snap_c1_d;
    wire              [  3 : 0 ] o_ctrl_snap_c1;
+   wire                         o_clear_snap_c1;
    wire              [ 31 : 0 ] i_shadow_reg_c1;
    wire              [  2 : 0 ] o_mode_sel_c1;
    wire              [  5 : 0 ] o_target_reg_ctrl_c1;
@@ -122,7 +130,7 @@
    wire              [ 31 : 0 ] o_target_reg_b0_c1;
    wire              [ 31 : 0 ] o_target_reg_b1_c1;
    wire              [ 31 : 0 ] o_target_reg_b2_c1;
-   wire              [  5 : 0 ] o_capture_reg_status_c1;
+   wire              [  5 : 0 ] i_capture_reg_status_c1;
    wire              [  5 : 0 ] o_capture_reg_overflow_ctrl_c1;
    wire                         ren_capture_reg_a0_c1;
    wire                         ren_capture_reg_a0_c1_d;
@@ -172,9 +180,13 @@
    wire              [  1 : 0 ] o_src_edge_din0_c2;
    wire              [  3 : 0 ] o_src_sel_din1_c2;
    wire              [  1 : 0 ] o_src_edge_din1_c2;
+   wire                         ren_snap_status_c2;
+   wire                         ren_snap_status_c2_d;
+   wire              [  3 : 0 ] i_snap_status_c2;
    wire                         wen_ctrl_snap_c2;
    wire                         wen_ctrl_snap_c2_d;
    wire              [  3 : 0 ] o_ctrl_snap_c2;
+   wire                         o_clear_snap_c2;
    wire              [ 31 : 0 ] i_shadow_reg_c2;
    wire              [  2 : 0 ] o_mode_sel_c2;
    wire              [  5 : 0 ] o_target_reg_ctrl_c2;
@@ -186,7 +198,7 @@
    wire              [ 31 : 0 ] o_target_reg_b0_c2;
    wire              [ 31 : 0 ] o_target_reg_b1_c2;
    wire              [ 31 : 0 ] o_target_reg_b2_c2;
-   wire              [  5 : 0 ] o_capture_reg_status_c2;
+   wire              [  5 : 0 ] i_capture_reg_status_c2;
    wire              [  5 : 0 ] o_capture_reg_overflow_ctrl_c2;
    wire                         ren_capture_reg_a0_c2;
    wire                         ren_capture_reg_a0_c2_d;
@@ -236,9 +248,13 @@
    wire              [  1 : 0 ] o_src_edge_din0_c3;
    wire              [  3 : 0 ] o_src_sel_din1_c3;
    wire              [  1 : 0 ] o_src_edge_din1_c3;
+   wire                         ren_snap_status_c3;
+   wire                         ren_snap_status_c3_d;
+   wire              [  3 : 0 ] i_snap_status_c3;
    wire                         wen_ctrl_snap_c3;
    wire                         wen_ctrl_snap_c3_d;
    wire              [  3 : 0 ] o_ctrl_snap_c3;
+   wire                         o_clear_snap_c3;
    wire              [ 31 : 0 ] i_shadow_reg_c3;
    wire              [  2 : 0 ] o_mode_sel_c3;
    wire              [  5 : 0 ] o_target_reg_ctrl_c3;
@@ -250,7 +266,7 @@
    wire              [ 31 : 0 ] o_target_reg_b0_c3;
    wire              [ 31 : 0 ] o_target_reg_b1_c3;
    wire              [ 31 : 0 ] o_target_reg_b2_c3;
-   wire              [  5 : 0 ] o_capture_reg_status_c3;
+   wire              [  5 : 0 ] i_capture_reg_status_c3;
    wire              [  5 : 0 ] o_capture_reg_overflow_ctrl_c3;
    wire                         ren_capture_reg_a0_c3;
    wire                         ren_capture_reg_a0_c3_d;
@@ -334,9 +350,13 @@
       .o_src_edge_din0_c0                                          ( o_src_edge_din0_c0                                          ),
       .o_src_sel_din1_c0                                           ( o_src_sel_din1_c0                                           ),
       .o_src_edge_din1_c0                                          ( o_src_edge_din1_c0                                          ),
+      .ren_snap_status_c0                                          ( ren_snap_status_c0                                          ),
+      .ren_snap_status_c0_d                                        ( ren_snap_status_c0_d                                        ),
+      .i_snap_status_c0                                            ( i_snap_status_c0                                            ),
       .wen_ctrl_snap_c0                                            ( wen_ctrl_snap_c0                                            ),
       .wen_ctrl_snap_c0_d                                          ( wen_ctrl_snap_c0_d                                          ),
       .o_ctrl_snap_c0                                              ( o_ctrl_snap_c0                                              ),
+      .o_clear_snap_c0                                             ( o_clear_snap_c0                                             ),
       .i_shadow_reg_c0                                             ( i_shadow_reg_c0                                             ),
       .o_mode_sel_c0                                               ( o_mode_sel_c0                                               ),
       .o_target_reg_ctrl_c0                                        ( o_target_reg_ctrl_c0                                        ),
@@ -348,7 +368,7 @@
       .o_target_reg_b0_c0                                          ( o_target_reg_b0_c0                                          ),
       .o_target_reg_b1_c0                                          ( o_target_reg_b1_c0                                          ),
       .o_target_reg_b2_c0                                          ( o_target_reg_b2_c0                                          ),
-      .o_capture_reg_status_c0                                     ( o_capture_reg_status_c0                                     ),
+      .i_capture_reg_status_c0                                     ( i_capture_reg_status_c0                                     ),
       .o_capture_reg_overflow_ctrl_c0                              ( o_capture_reg_overflow_ctrl_c0                              ),
       .ren_capture_reg_a0_c0                                       ( ren_capture_reg_a0_c0                                       ),
       .ren_capture_reg_a0_c0_d                                     ( ren_capture_reg_a0_c0_d                                     ),
@@ -398,9 +418,13 @@
       .o_src_edge_din0_c1                                          ( o_src_edge_din0_c1                                          ),
       .o_src_sel_din1_c1                                           ( o_src_sel_din1_c1                                           ),
       .o_src_edge_din1_c1                                          ( o_src_edge_din1_c1                                          ),
+      .ren_snap_status_c1                                          ( ren_snap_status_c1                                          ),
+      .ren_snap_status_c1_d                                        ( ren_snap_status_c1_d                                        ),
+      .i_snap_status_c1                                            ( i_snap_status_c1                                            ),
       .wen_ctrl_snap_c1                                            ( wen_ctrl_snap_c1                                            ),
       .wen_ctrl_snap_c1_d                                          ( wen_ctrl_snap_c1_d                                          ),
       .o_ctrl_snap_c1                                              ( o_ctrl_snap_c1                                              ),
+      .o_clear_snap_c1                                             ( o_clear_snap_c1                                             ),
       .i_shadow_reg_c1                                             ( i_shadow_reg_c1                                             ),
       .o_mode_sel_c1                                               ( o_mode_sel_c1                                               ),
       .o_target_reg_ctrl_c1                                        ( o_target_reg_ctrl_c1                                        ),
@@ -412,7 +436,7 @@
       .o_target_reg_b0_c1                                          ( o_target_reg_b0_c1                                          ),
       .o_target_reg_b1_c1                                          ( o_target_reg_b1_c1                                          ),
       .o_target_reg_b2_c1                                          ( o_target_reg_b2_c1                                          ),
-      .o_capture_reg_status_c1                                     ( o_capture_reg_status_c1                                     ),
+      .i_capture_reg_status_c1                                     ( i_capture_reg_status_c1                                     ),
       .o_capture_reg_overflow_ctrl_c1                              ( o_capture_reg_overflow_ctrl_c1                              ),
       .ren_capture_reg_a0_c1                                       ( ren_capture_reg_a0_c1                                       ),
       .ren_capture_reg_a0_c1_d                                     ( ren_capture_reg_a0_c1_d                                     ),
@@ -462,9 +486,13 @@
       .o_src_edge_din0_c2                                          ( o_src_edge_din0_c2                                          ),
       .o_src_sel_din1_c2                                           ( o_src_sel_din1_c2                                           ),
       .o_src_edge_din1_c2                                          ( o_src_edge_din1_c2                                          ),
+      .ren_snap_status_c2                                          ( ren_snap_status_c2                                          ),
+      .ren_snap_status_c2_d                                        ( ren_snap_status_c2_d                                        ),
+      .i_snap_status_c2                                            ( i_snap_status_c2                                            ),
       .wen_ctrl_snap_c2                                            ( wen_ctrl_snap_c2                                            ),
       .wen_ctrl_snap_c2_d                                          ( wen_ctrl_snap_c2_d                                          ),
       .o_ctrl_snap_c2                                              ( o_ctrl_snap_c2                                              ),
+      .o_clear_snap_c2                                             ( o_clear_snap_c2                                             ),
       .i_shadow_reg_c2                                             ( i_shadow_reg_c2                                             ),
       .o_mode_sel_c2                                               ( o_mode_sel_c2                                               ),
       .o_target_reg_ctrl_c2                                        ( o_target_reg_ctrl_c2                                        ),
@@ -476,7 +504,7 @@
       .o_target_reg_b0_c2                                          ( o_target_reg_b0_c2                                          ),
       .o_target_reg_b1_c2                                          ( o_target_reg_b1_c2                                          ),
       .o_target_reg_b2_c2                                          ( o_target_reg_b2_c2                                          ),
-      .o_capture_reg_status_c2                                     ( o_capture_reg_status_c2                                     ),
+      .i_capture_reg_status_c2                                     ( i_capture_reg_status_c2                                     ),
       .o_capture_reg_overflow_ctrl_c2                              ( o_capture_reg_overflow_ctrl_c2                              ),
       .ren_capture_reg_a0_c2                                       ( ren_capture_reg_a0_c2                                       ),
       .ren_capture_reg_a0_c2_d                                     ( ren_capture_reg_a0_c2_d                                     ),
@@ -526,9 +554,13 @@
       .o_src_edge_din0_c3                                          ( o_src_edge_din0_c3                                          ),
       .o_src_sel_din1_c3                                           ( o_src_sel_din1_c3                                           ),
       .o_src_edge_din1_c3                                          ( o_src_edge_din1_c3                                          ),
+      .ren_snap_status_c3                                          ( ren_snap_status_c3                                          ),
+      .ren_snap_status_c3_d                                        ( ren_snap_status_c3_d                                        ),
+      .i_snap_status_c3                                            ( i_snap_status_c3                                            ),
       .wen_ctrl_snap_c3                                            ( wen_ctrl_snap_c3                                            ),
       .wen_ctrl_snap_c3_d                                          ( wen_ctrl_snap_c3_d                                          ),
       .o_ctrl_snap_c3                                              ( o_ctrl_snap_c3                                              ),
+      .o_clear_snap_c3                                             ( o_clear_snap_c3                                             ),
       .i_shadow_reg_c3                                             ( i_shadow_reg_c3                                             ),
       .o_mode_sel_c3                                               ( o_mode_sel_c3                                               ),
       .o_target_reg_ctrl_c3                                        ( o_target_reg_ctrl_c3                                        ),
@@ -540,7 +572,7 @@
       .o_target_reg_b0_c3                                          ( o_target_reg_b0_c3                                          ),
       .o_target_reg_b1_c3                                          ( o_target_reg_b1_c3                                          ),
       .o_target_reg_b2_c3                                          ( o_target_reg_b2_c3                                          ),
-      .o_capture_reg_status_c3                                     ( o_capture_reg_status_c3                                     ),
+      .i_capture_reg_status_c3                                     ( i_capture_reg_status_c3                                     ),
       .o_capture_reg_overflow_ctrl_c3                              ( o_capture_reg_overflow_ctrl_c3                              ),
       .ren_capture_reg_a0_c3                                       ( ren_capture_reg_a0_c3                                       ),
       .ren_capture_reg_a0_c3_d                                     ( ren_capture_reg_a0_c3_d                                     ),
@@ -582,7 +614,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //
 //  $Log: counter_all_apb_reg_inst.inc,v $
-//  Revision 1.0  4/27/2018 0:16:35  register_slave.pl
+//  Revision 1.0  5/2/2018 2:24:50  register_slave.pl
 //  Initial rev
 //
 //
