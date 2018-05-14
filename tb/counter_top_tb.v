@@ -1399,6 +1399,105 @@ end
 end
 `endif
 
+`ifdef  TESTCASE_ALL_COUNTERMODE_1
+
+initial begin
+wait (stop_event) ;
+for(i=0;i<4;i++) begin
+    addr_base=base_c1*i;
+    apb_write_read(addr_base+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
+    if(i==1)
+        apb_write_read(addr_base+`MODE_SEL_C0,32'b000,data);//count in .
+    else if(i==2)
+        apb_write_read(addr_base+`MODE_SEL_C0,32'b001,data);//count out .    
+    else if(i==3)
+        apb_write_read(addr_base+`MODE_SEL_C0,32'b000,data);//count in.
+    else if(i==0)
+        apb_write_read(addr_base+`MODE_SEL_C0,32'b001,data);//count out .
+    
+    //
+    apb_write_read(addr_base+`SHIFTIN_DATA_CTRL_BITCNTS_C0,32'd31,data);
+    //
+    apb_write_read(addr_base+`SRC_SEL_EDGE_C0,32'h12210000,data);
+    if(i==0) begin
+    apb_write_read(addr_base+`TARGET_REG_CTRL_C0,32'b000100,data);
+    apb_write_read(addr_base+`TARGET_REG_A0_C0,32'h10,data);
+    apb_write_read(addr_base+`TARGET_REG_A1_C0,32'h20,data);
+    apb_write_read(addr_base+`TARGET_REG_A2_C0,32'h30,data);
+    apb_write_read(addr_base+`TARGET_REG_B0_C0,32'h10,data);
+    apb_write_read(addr_base+`TARGET_REG_B1_C0,32'h20,data);
+    apb_write_read(addr_base+`TARGET_REG_B2_C0,32'h30,data);
+    // $display("new shiftout data = %h,src data = %h , bits=%d,counter num =%d",count_reverse(data,5'd31),data,5'd31,i);
+    end
+    if(i==2) begin
+    apb_write_read(addr_base+`TARGET_REG_CTRL_C0,32'b000001,data);
+    apb_write_read(addr_base+`TARGET_REG_A0_C0,32'h5,data);
+    apb_write_read(addr_base+`TARGET_REG_A1_C0,32'h15,data);
+    apb_write_read(addr_base+`TARGET_REG_A2_C0,32'h25,data);
+    apb_write_read(addr_base+`TARGET_REG_B0_C0,32'h10,data);
+    apb_write_read(addr_base+`TARGET_REG_B1_C0,32'h27,data);
+    apb_write_read(addr_base+`TARGET_REG_B2_C0,32'h51,data);
+    // $display("new shiftout data = %h,src data = %h , bits=%d,counter num =%d",count_reverse(data,5'd31),data,5'd31,i);
+    end
+    //if(i==1||i==3)
+    // $display("new shiftout data = %h,bits=%d,counter num=%d",count_reverse(data,5'd31),5'd31,i);
+    if(i==1||i==3) begin
+        apb_write_read(addr_base+`SRC_SEL_EDGE_C0,32'h22210000,data);
+        apb_write_read(addr_base+`CAPTURE_REG_OVERFLOW_CTRL_C0,32'h3f,data);//overflow,control.
+    end
+//
+    apb_write_read(addr_base+`SWITCH_MODE_ONEBIT_CNTS_C0,32'h1,data);//one bit represent how many cycle.
+    //apb_write_read(addr_base+`WAVEFORM_MODE_AUTOMATIC_C0,32'h01010808,data);//enable switch to shiftin and shiftout mode.
+    // apb_write_read(addr_base+`WAVEFORM_MODE_AUTOMATIC_C0,32'h01010802,data);//enable switch to shiftin and shiftout mode.
+    // apb_write_read(addr_base+`WAVEFORM_MODE_AUTOMATIC_C0,32'h00010801,data);//enable switch to shiftin and shiftout mode.
+    
+    apb_read (addr_base+`ENABLE_C0,data);
+    apb_write(addr_base+`ENABLE_C0,data|32'h0001);//c0,enable.
+//
+  
+end    
+    //
+    apb_read(`GLOBAL_START_TRIGGER,data);//start;
+    apb_write_read(`GLOBAL_START_TRIGGER,~data,data);//start;
+    //i=0;
+
+        addr_base=base_c1*0;
+        apb_read(addr_base+`CTRL_SNAP_C0,data);
+        apb_write_read(addr_base+`CTRL_SNAP_C0,{data[31:4],~data[3:0]},data);//
+        apb_read(addr_base+`SNAP_STATUS_C0,data);
+        while(!(|data)) apb_read(addr_base+`SNAP_STATUS_C0,data);
+        apb_read(addr_base+`CTRL_SNAP_C0,data);
+        apb_write_read(addr_base+`CTRL_SNAP_C0,{~data[31:16],data[15:0]},data);//
+        apb_read(addr_base+`SNAP_STATUS_C0,data);
+        while((|data)) apb_read(addr_base+`SNAP_STATUS_C0,data);  
+        //
+   
+    int_flag_en = 1;
+    count0=16;
+    while(count0--) begin
+    wait(i_int);
+    tmp_i=32'h1f;
+    //
+    wait(!i_int);
+    end
+    #20_000;
+    apb_read(`GLOBAL_STOP_TRIGGER,data);//stop;
+    apb_write_read(`GLOBAL_STOP_TRIGGER,~data,data);//stop;
+    #20_000;  
+    apb_read(`GLOBAL_CLEAR_TRIGGER,data);//
+    apb_write_read(`GLOBAL_CLEAR_TRIGGER,~data,data);//clear;
+    #300_000;
+    apb_read(`GLOBAL_START_TRIGGER,data);//
+    apb_write_read(`GLOBAL_START_TRIGGER,~data,data);//start;
+    #100_000;
+    apb_read(`GLOBAL_RESET_TRIGGER,data);//
+    apb_write_read(`GLOBAL_RESET_TRIGGER,~data,data);//reset; 
+    #300_000;
+    apb_read(`GLOBAL_START_TRIGGER,data);//
+    apb_write_read(`GLOBAL_START_TRIGGER,~data,data);//start;
+
+end
+`endif
 
 
 `ifdef CAPTURE_DATA_CASECADE
