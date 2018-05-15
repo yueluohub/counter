@@ -751,7 +751,10 @@ always @(posedge i_clk or negedge i_rst_n) begin
         o_shiftin_databits_updated <= 32'h0;
     end
     else begin
-        if(w_ctrl_snap_posedge[0]) begin
+        if(soft_stop_flag||stop_flag)  begin
+            o_shadow_reg     <= current_counter;
+        end
+        else if(w_ctrl_snap_posedge[0]) begin
             o_shadow_reg     <= current_counter;
         end
         if((&r1_capture_reg_status[5:3])) begin //&&!r1_capture_reg_status_dly_b
