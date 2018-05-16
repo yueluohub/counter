@@ -730,13 +730,8 @@ always @(posedge i_clk or negedge i_rst_n) begin
         o_snap_status <= 32'h0;
     end
 end
-<<<<<<< HEAD
 
 
-=======
-
-
->>>>>>> tmp
 always @(posedge i_clk) begin
     r1_ctrl_snap_dly  <= i_ctrl_snap;
     r1_clear_snap_dly[1:0] <= {r1_clear_snap_dly[0],i_clear_snap};
@@ -756,12 +751,6 @@ always @(posedge i_clk or negedge i_rst_n) begin
         o_shiftin_databits_updated <= 32'h0;
     end
     else begin
-<<<<<<< HEAD
-        if(w_ctrl_snap_posedge[0]) begin
-            o_shadow_reg     <= current_counter;
-        end
-        if((&r1_capture_reg_status[5:3])) begin //&&!r1_capture_reg_status_dly_b
-=======
         if(soft_stop_flag||stop_flag)  begin
             o_shadow_reg     <= current_counter;
         end
@@ -775,21 +764,11 @@ always @(posedge i_clk or negedge i_rst_n) begin
             o_capture_reg_b2 <= r1_capture_reg_b2;
         end
         else if(w_ctrl_snap_posedge[1]) begin
->>>>>>> tmp
             o_capture_reg_status <= r1_capture_reg_status;
             o_capture_reg_b0 <= r1_capture_reg_b0;
             o_capture_reg_b1 <= r1_capture_reg_b1;
             o_capture_reg_b2 <= r1_capture_reg_b2;
         end
-<<<<<<< HEAD
-        else if(w_ctrl_snap_posedge[1]) begin
-            o_capture_reg_status <= r1_capture_reg_status;
-            o_capture_reg_b0 <= r1_capture_reg_b0;
-            o_capture_reg_b1 <= r1_capture_reg_b1;
-            o_capture_reg_b2 <= r1_capture_reg_b2;
-        end
-=======
->>>>>>> tmp
         if((&r1_capture_reg_status[2:0])) begin //&&!r1_capture_reg_status_dly_a
             o_capture_reg_status <= r1_capture_reg_status;
             o_capture_reg_a0 <= r1_capture_reg_a0;
