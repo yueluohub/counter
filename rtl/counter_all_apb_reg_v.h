@@ -913,7 +913,11 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //
 //  $Log: counter_all_apb_reg_v.h,v $
+<<<<<<< HEAD
 //  Revision 1.0  5/2/2018 2:24:50  register_slave.pl
+=======
+//  Revision 1.0  5/15/2018 0:29:53  register_slave.pl
+>>>>>>> tmp
 //  Initial rev
 //
 //

@@ -1,0 +1,13 @@
+current_design counter_top 
+#clock -name "i_clk[0]" -period 32.0 -domain "clk_0"
+reset -name "i_rst_n[0]" -value 0 -sync
+#clock -name "i_clk[1]" -period 32.1 -domain "clk_1"
+reset -name "i_rst_n[1]" -value 0 -sync
+#clock -name "i_clk[2]" -period 32.2 -domain "clk_3"
+reset -name "i_rst_n[2]" -value 0 -sync
+#clock -name "i_clk[3]" -period 32.3 -domain "clk_3"
+reset -name "i_rst_n[3]" -value 0 -sync
+#clock -name "i_pclk" -period 16.5 -domain "pclk"
+reset -name "i_prst_n" -value 0 -sync
+sdc_data -file counter_top.sdc
+
