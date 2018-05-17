@@ -18,6 +18,7 @@ grep "counter0:" sim.log > counter0.log
 grep "counter1:" sim.log > counter1.log
 grep "counter2:" sim.log > counter2.log
 grep "counter3:" sim.log > counter3.log
+grep "counter_all:" sim.log > counter_g.log
 
 grep "single start trigger" counter0.log > counter0_trigger0.log
 grep "single stop  trigger" counter0.log > counter0_trigger1.log
@@ -38,3 +39,8 @@ grep "single start trigger" counter3.log > counter3_trigger0.log
 grep "single stop  trigger" counter3.log > counter3_trigger1.log
 grep "single clear trigger" counter3.log > counter3_trigger2.log
 grep "single reset trigger" counter3.log > counter3_trigger3.log
+
+grep "global start trigger" counter_g.log > counter_g_trigger0.log
+grep "global stop  trigger" counter_g.log > counter_g_trigger1.log
+grep "global clear trigger" counter_g.log > counter_g_trigger2.log
+grep "global reset trigger" counter_g.log > counter_g_trigger3.log

@@ -1841,6 +1841,202 @@ end
 end
 `endif
 
+`ifdef  TESTCASE_ALL_COUNTERMODE_5
+`define SOFT_GLOBAL_TRIGGER
+//soft trigger. 
+initial begin
+wait (stop_event) ;
+for(i=0;i<4;i++) begin
+    addr_base=base_c1*i;
+    apb_write_read(addr_base+`SOFT_TRIGGER_CTRL_C0,32'b00001111,data);//global triger enable.
+    if(i==1)
+        apb_write_read(addr_base+`MODE_SEL_C0,32'b000,data);//count in .
+    else if(i==2)
+        apb_write_read(addr_base+`MODE_SEL_C0,32'b000,data);//count in .    
+    else if(i==3)
+        apb_write_read(addr_base+`MODE_SEL_C0,32'b000,data);//count in.
+    else if(i==0)
+        apb_write_read(addr_base+`MODE_SEL_C0,32'b000,data);//count in .
+    
+    //
+    apb_write_read(addr_base+`SHIFTIN_DATA_CTRL_BITCNTS_C0,32'd31,data);
+    //
+    // apb_write_read(addr_base+`SRC_SEL_EDGE_C0,32'h12210000,data);
+    //if(i==1||i==3)
+    // $display("new shiftout data = %h,bits=%d,counter num=%d",count_reverse(data,5'd31),5'd31,i);
+    if(1) begin
+        //
+        apb_write_read(addr_base+`MUX_SEL_C0,32'b0000,data);
+        apb_write_read(addr_base+`SRC_SEL_EDGE_C0,32'h24240000,data);
+        apb_write_read(addr_base+`CAPTURE_REG_OVERFLOW_CTRL_C0,32'h3f,data);//overflow,control.
+    end
+  
+//
+    apb_write_read(addr_base+`SWITCH_MODE_ONEBIT_CNTS_C0,32'h1,data);//one bit represent how many cycle.
+  
+    apb_read (addr_base+`ENABLE_C0,data);
+    apb_write(addr_base+`ENABLE_C0,data|32'h0001);//c0,enable.
+//
+  
+end    
+    //
+for(i=0;i<4;i++) begin
+    addr_base=base_c1*i;
+    apb_read(addr_base+`SINGLE_START_TRIGGER_C0,data);//start;
+    apb_write_read(addr_base+`SINGLE_START_TRIGGER_C0,~data,data);//start;
+end
+    //i=0;
+
+     // addr_base=base_c1*0;
+     // apb_read(addr_base+`CTRL_SNAP_C0,data);
+     // apb_write_read(addr_base+`CTRL_SNAP_C0,{data[31:4],~data[3:0]},data);//
+     // apb_read(addr_base+`SNAP_STATUS_C0,data);
+     // while(!(|data)) apb_read(addr_base+`SNAP_STATUS_C0,data);
+     // apb_read(addr_base+`CTRL_SNAP_C0,data);
+     // apb_write_read(addr_base+`CTRL_SNAP_C0,{~data[31:16],data[15:0]},data);//
+     // apb_read(addr_base+`SNAP_STATUS_C0,data);
+     // while((|data)) apb_read(addr_base+`SNAP_STATUS_C0,data);  
+        //
+   
+    int_flag_en = 1;
+    //count0=16;
+    while(1) begin
+    //wait(i_int);
+    tmp_i=32'h1f;
+    //repeat(20) @(posedge i_clk[i]);
+`ifdef   COUNTER_NUM
+    if(`COUNTER_NUM==0)
+    j  = 0;
+    else if(`COUNTER_NUM==1)
+    j  = 1;
+    else if(`COUNTER_NUM==2)
+    j  = 2;
+    else if(`COUNTER_NUM==3)
+    j  = 3;
+    else 
+    j=0;
+`else
+    for(j=0;j<4;j++) 
+`endif
+    begin
+        $display("counter: j=%h",j);
+        for(i=0;i<4;i++) begin
+        wait(!apb_hand_on_0);
+        apb_hand_on_0 = 1;
+        addr_base=base_c1*i;
+        data = (32'h23230000+((32'h0202*j)<<16));
+        apb_write_read(addr_base+`SRC_SEL_EDGE_C0,data,data);
+        apb_hand_on_0 = 0;
+        end
+        if(j==0) $display("counters %0h, global start-trigger start",i);
+        if(j==1) $display("counters %0h, global stop-trigger start",i);
+        if(j==2) $display("counters %0h, global clear-trigger start",i);
+        if(j==3) $display("counters %0h, global reset-trigger start",i);
+        #10_000_000;
+        if(j==0) $display("counters %0h, global start-trigger stop",i);
+        if(j==1) $display("counters %0h, global stop-trigger stop",i);
+        if(j==2) $display("counters %0h, global clear-trigger stop",i);
+        if(j==3) $display("counters %0h, global reset-trigger stop",i);
+     
+    end
+
+    //wait(!i_int);
+    end
+    #20_000;
+    //apb_read(`GLOBAL_STOP_TRIGGER,data);//stop;
+    //apb_write_read(`GLOBAL_STOP_TRIGGER,~data,data);//stop;
+    //#20_000;  
+    //apb_read(`GLOBAL_CLEAR_TRIGGER,data);//
+    //apb_write_read(`GLOBAL_CLEAR_TRIGGER,~data,data);//clear;
+    //#300_000;
+    //apb_read(`GLOBAL_START_TRIGGER,data);//
+    //apb_write_read(`GLOBAL_START_TRIGGER,~data,data);//start;
+    //#100_000;
+    //apb_read(`GLOBAL_RESET_TRIGGER,data);//
+    //apb_write_read(`GLOBAL_RESET_TRIGGER,~data,data);//reset; 
+    //#300_000;
+    //apb_read(`GLOBAL_START_TRIGGER,data);//
+    //apb_write_read(`GLOBAL_START_TRIGGER,~data,data);//start;
+
+end
+`endif
+
+
+`ifdef SOFT_GLOBAL_TRIGGER
+//
+reg [3:0] trigger_g;//
+
+initial begin
+    //i=0;
+    trigger_g[0]=1'b0;
+    repeat(20) @(posedge i_clk[0]);
+    
+forever begin
+    tmp0[7:0]={$random}%64;
+    tmp0[7:0]+=10;
+    repeat(tmp0[7:0]) @(posedge i_clk[0]);
+    trigger_g[0]=~trigger_g[0];
+    wait(!apb_hand_on_0); apb_hand_on_0 = 1;
+    apb_read(base_c1*0+`GLOBAL_START_TRIGGER,data);//start;
+    apb_write_read(base_c1*0+`GLOBAL_START_TRIGGER,trigger_g[0],data);//start;
+    apb_hand_on_0 = 0;
+    $display("counter_all: global start trigger width = %0h",tmp0[7:0]);
+end
+end
+
+initial begin
+    //i=0;
+    trigger_g[1]=1'b0;
+    repeat(20) @(posedge i_clk[0]);
+forever begin
+    tmp1[7:0]={$random}%64;
+    tmp1[7:0]+=10;
+    repeat(tmp1[7:0]) @(posedge i_clk[0]);
+    trigger_g[1]=~trigger_g[1];
+    wait(!apb_hand_on_0); apb_hand_on_0 = 1;
+    apb_read(base_c1*0+`GLOBAL_STOP_TRIGGER,data);//;
+    apb_write_read(base_c1*0+`GLOBAL_STOP_TRIGGER,trigger_g[1],data);//stop;
+    apb_hand_on_0 = 0;
+    $display("counter_all: global stop  trigger width = %0h",tmp1[7:0]);
+end
+end
+
+initial begin
+    //i=0;
+    trigger_g[2]=1'b0;
+    repeat(20) @(posedge i_clk[0]);
+forever begin
+    tmp2[7:0]={$random}%64;
+    tmp2[7:0]+=10;
+    repeat(tmp2[7:0]) @(posedge i_clk[0]);
+    trigger_g[2]=~trigger_g[2];
+    wait(!apb_hand_on_0); apb_hand_on_0 = 1;
+    apb_read(base_c1*0+`GLOBAL_CLEAR_TRIGGER,data);//;
+    apb_write_read(base_c1*0+`GLOBAL_CLEAR_TRIGGER,trigger_g[2],data);//clear;
+    apb_hand_on_0 = 0;
+    $display("counter_all: global clear trigger width = %0h",tmp2[7:0]);
+end
+end
+
+initial begin
+    //i=0;
+    trigger_g[3]=1'b0;
+    repeat(20) @(posedge i_clk[0]);
+forever begin
+    tmp3[7:0]={$random}%64;
+    tmp3[7:0]+=10;
+    repeat(tmp3[7:0]) @(posedge i_clk[0]);
+    trigger_g[3]=~trigger_g[3];
+    wait(!apb_hand_on_0); apb_hand_on_0 = 1;
+    apb_read(base_c1*0+`GLOBAL_RESET_TRIGGER,data);//;
+    apb_write_read(base_c1*0+`GLOBAL_RESET_TRIGGER,trigger_g[3],data);//reset;
+    apb_hand_on_0 = 0;
+    $display("counter_all: global reset trigger width = %0h",tmp3[7:0]);
+end
+end
+
+`endif
+
 `ifdef SOFT_SINGLE_TRIGGER
 //
 reg [3:0] trigger_c0,trigger_c1,trigger_c2,trigger_c3;
