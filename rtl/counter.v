@@ -404,6 +404,15 @@ reg [5:0] r1_target_reg_status_dly;
 reg r1_count_flag_automatic_update;
 reg r1_count_flag_automatic_update_dly;
 
+reg r1_capture_reg_status_dly_a;
+reg r1_capture_reg_status_dly_b;
+reg r1_current_counter_dly;
+reg shiftin_complete_flag_dly;
+reg r1_shiftout_only_onebit_flag_dly;
+reg r1_waveform_match_reg3_dly;
+reg r1_switch_sendmode_dly;
+reg r1_switch_recmode_dly;
+
 always @(posedge i_clk or negedge i_rst_n) begin
     if(!i_rst_n) begin
         r1_count_overflow_flag_target_reg_a <= 1'b0;
@@ -757,26 +766,26 @@ always @(posedge i_clk or negedge i_rst_n) begin
         else if(w_ctrl_snap_posedge[0]) begin
             o_shadow_reg     <= current_counter;
         end
-        if((&r1_capture_reg_status[5:3])) begin //&&!r1_capture_reg_status_dly_b
-            o_capture_reg_status <= r1_capture_reg_status;
+        if((&r1_capture_reg_status[5:3])&&!r1_capture_reg_status_dly_b) begin //
+            o_capture_reg_status[5:3] <= r1_capture_reg_status[5:3];
             o_capture_reg_b0 <= r1_capture_reg_b0;
             o_capture_reg_b1 <= r1_capture_reg_b1;
             o_capture_reg_b2 <= r1_capture_reg_b2;
         end
         else if(w_ctrl_snap_posedge[1]) begin
-            o_capture_reg_status <= r1_capture_reg_status;
+            o_capture_reg_status[5:3] <= r1_capture_reg_status[5:3];
             o_capture_reg_b0 <= r1_capture_reg_b0;
             o_capture_reg_b1 <= r1_capture_reg_b1;
             o_capture_reg_b2 <= r1_capture_reg_b2;
         end
-        if((&r1_capture_reg_status[2:0])) begin //&&!r1_capture_reg_status_dly_a
-            o_capture_reg_status <= r1_capture_reg_status;
+        if((&r1_capture_reg_status[2:0])&&!r1_capture_reg_status_dly_a) begin //
+            o_capture_reg_status[2:0] <= r1_capture_reg_status[2:0];
             o_capture_reg_a0 <= r1_capture_reg_a0;
             o_capture_reg_a1 <= r1_capture_reg_a1;
             o_capture_reg_a2 <= r1_capture_reg_a2;        
         end
         else if(w_ctrl_snap_posedge[1]) begin
-            o_capture_reg_status <= r1_capture_reg_status;
+            o_capture_reg_status[2:0] <= r1_capture_reg_status[2:0];
             o_capture_reg_a0 <= r1_capture_reg_a0;
             o_capture_reg_a1 <= r1_capture_reg_a1;
             o_capture_reg_a2 <= r1_capture_reg_a2;
@@ -1052,14 +1061,7 @@ end
 
 assign w1_waveform_match_reg3 = waveform_mode_en && (i_target_reg_ctrl[1]&& (i_target_reg_a2==current_counter)) ||(i_target_reg_ctrl[3]&&(i_target_reg_b2==current_counter));
 
-reg r1_capture_reg_status_dly_a;
-reg r1_capture_reg_status_dly_b;
-reg r1_current_counter_dly;
-reg shiftin_complete_flag_dly;
-reg r1_shiftout_only_onebit_flag_dly;
-reg r1_waveform_match_reg3_dly;
-reg r1_switch_sendmode_dly;
-reg r1_switch_recmode_dly;
+
 
 
 always @(posedge i_clk) begin

@@ -1,10 +1,11 @@
 // `define CLK_32M
-`define COUNTER_NUM   0
+// `define COUNTER_NUM   0
 // `define COUNTER_NUM   1
 // `define COUNTER_NUM   2
-// `define COUNTER_NUM   3
+`define COUNTER_NUM   3
 
-// `define SIM_FINISH_MS 10
+`define SIM_FINISH_MS 50
+`define APB_BUS_MONITOR
 
 // `define TESTCASE_C0_WAVEFORM_0
 // `define TESTCASE_C0_WAVEFORM_1

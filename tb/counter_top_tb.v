@@ -114,6 +114,8 @@ reg            o_penable;
 reg  [COUNTER_NUM-1:0] o_extern_din_a;
 reg  [COUNTER_NUM-1:0] o_extern_din_b;
 reg  apb_hand_on;
+reg  apb_hand_on_0;
+
 //assign o_extern_din_a = '0;
 //assign o_extern_din_b = '0;
 
@@ -136,8 +138,9 @@ begin
     o_pwdata  = '0;
     o_psel    = 1'b0;
     o_penable = 1'b0;
-    apb_hand_on ='0;
+    // apb_hand_on ='0;
     @(posedge i_pclk);
+    apb_hand_on ='0;
     
 end
 endtask
@@ -160,8 +163,9 @@ begin
     o_penable = 1'b0;
     r_data    = i_prdata;
     o_psel    = 1'b0;
-    apb_hand_on ='0;
+    // apb_hand_on ='0;
     @(posedge i_pclk);
+    apb_hand_on ='0;
         
 end
 endtask
@@ -192,6 +196,7 @@ reg  int_flag_en;
 
 initial begin
     apb_hand_on ='0;
+    apb_hand_on_0 = 0;
     //
 //   #2_000;
 //   forever begin
@@ -1793,20 +1798,26 @@ end
 `else
     for(j=0;j<4;j++) 
 `endif
-        begin
-    //for(j=0;j<4;j++) begin
+    begin
         $display("counter: j=%h",j);
-        addr_base=base_c1*j;
-        apb_write_read(addr_base+`SRC_SEL_EDGE_C0,32'h24240000+((32'h0202*j)<<16),data);
-        if(j==0) $display("4 counters , start-trigger start");
-        if(j==1) $display("4 counters , stop-trigger start");
-        if(j==2) $display("4 counters , clear-trigger start");
-        if(j==3) $display("4 counters , reset-trigger start");
+        for(i=0;i<4;i++) begin
+        wait(!apb_hand_on_0);
+        apb_hand_on_0 = 1;
+        addr_base=base_c1*i;
+        data = (32'h24240000+((32'h0202*j)<<16));
+        apb_write_read(addr_base+`SRC_SEL_EDGE_C0,data,data);
+        apb_hand_on_0 = 0;
+        end
+        if(j==0) $display("counters %0h, start-trigger start",i);
+        if(j==1) $display("counters %0h, stop-trigger start",i);
+        if(j==2) $display("counters %0h, clear-trigger start",i);
+        if(j==3) $display("counters %0h, reset-trigger start",i);
         #10_000_000;
-        if(j==0) $display("4 counters , start-trigger stop");
-        if(j==1) $display("4 counters , stop-trigger stop");
-        if(j==2) $display("4 counters , clear-trigger stop");
-        if(j==3) $display("4 counters , reset-trigger stop");
+        if(j==0) $display("counters %0h, start-trigger stop",i);
+        if(j==1) $display("counters %0h, stop-trigger stop",i);
+        if(j==2) $display("counters %0h, clear-trigger stop",i);
+        if(j==3) $display("counters %0h, reset-trigger stop",i);
+     
     end
 
     //wait(!i_int);
@@ -1832,54 +1843,73 @@ end
 
 `ifdef SOFT_SINGLE_TRIGGER
 //
+reg [3:0] trigger_c0,trigger_c1,trigger_c2,trigger_c3;
+
 initial begin
     //i=0;
+    trigger_c0[0]=1'b0;
     repeat(20) @(posedge i_clk[0]);
+    
 forever begin
     tmp0[7:0]={$random}%64;
     tmp0[7:0]+=10;
     repeat(tmp0[7:0]) @(posedge i_clk[0]);
+    trigger_c0[0]=~trigger_c0[0];
+    wait(!apb_hand_on_0); apb_hand_on_0 = 1;
     apb_read(base_c1*0+`SINGLE_START_TRIGGER_C0,data);//start;
-    apb_write_read(base_c1*0+`SINGLE_START_TRIGGER_C0,~data,data);//start;
+    apb_write_read(base_c1*0+`SINGLE_START_TRIGGER_C0,trigger_c0[0],data);//start;
+    apb_hand_on_0 = 0;
     $display("counter0: single start trigger width = %0h",tmp0[7:0]);
 end
 end
 
 initial begin
     //i=0;
+    trigger_c0[1]=1'b0;
     repeat(20) @(posedge i_clk[0]);
 forever begin
     tmp1[7:0]={$random}%64;
     tmp1[7:0]+=10;
     repeat(tmp1[7:0]) @(posedge i_clk[0]);
+    trigger_c0[1]=~trigger_c0[1];
+    wait(!apb_hand_on_0); apb_hand_on_0 = 1;
     apb_read(base_c1*0+`SINGLE_STOP_TRIGGER_C0,data);//;
-    apb_write_read(base_c1*0+`SINGLE_STOP_TRIGGER_C0,~data,data);//stop;
+    apb_write_read(base_c1*0+`SINGLE_STOP_TRIGGER_C0,trigger_c0[1],data);//stop;
+    apb_hand_on_0 = 0;
     $display("counter0: single stop  trigger width = %0h",tmp1[7:0]);
 end
 end
 
 initial begin
     //i=0;
+    trigger_c0[2]=1'b0;
     repeat(20) @(posedge i_clk[0]);
 forever begin
     tmp2[7:0]={$random}%64;
     tmp2[7:0]+=10;
     repeat(tmp2[7:0]) @(posedge i_clk[0]);
+    trigger_c0[2]=~trigger_c0[2];
+    wait(!apb_hand_on_0); apb_hand_on_0 = 1;
     apb_read(base_c1*0+`SINGLE_CLEAR_TRIGGER_C0,data);//;
-    apb_write_read(base_c1*0+`SINGLE_CLEAR_TRIGGER_C0,~data,data);//clear;
+    apb_write_read(base_c1*0+`SINGLE_CLEAR_TRIGGER_C0,trigger_c0[2],data);//clear;
+    apb_hand_on_0 = 0;
     $display("counter0: single clear trigger width = %0h",tmp2[7:0]);
 end
 end
 
 initial begin
     //i=0;
+    trigger_c0[3]=1'b0;
     repeat(20) @(posedge i_clk[0]);
 forever begin
     tmp3[7:0]={$random}%64;
     tmp3[7:0]+=10;
     repeat(tmp3[7:0]) @(posedge i_clk[0]);
+    trigger_c0[3]=~trigger_c0[3];
+    wait(!apb_hand_on_0); apb_hand_on_0 = 1;
     apb_read(base_c1*0+`SINGLE_RESET_TRIGGER_C0,data);//;
-    apb_write_read(base_c1*0+`SINGLE_RESET_TRIGGER_C0,~data,data);//reset;
+    apb_write_read(base_c1*0+`SINGLE_RESET_TRIGGER_C0,trigger_c0[3],data);//reset;
+    apb_hand_on_0 = 0;
     $display("counter0: single reset trigger width = %0h",tmp3[7:0]);
 end
 end
@@ -1887,52 +1917,68 @@ end
 //-------------------
 initial begin
     //i=0;
+    trigger_c1[0]=1'b0;
     repeat(20) @(posedge i_clk[1]);
 forever begin
     tmp0[15:8]={$random}%64;
     tmp0[15:8]+=10;
     repeat(tmp0[15:8]) @(posedge i_clk[1]);
+    trigger_c1[0]=~trigger_c1[0];
+    wait(!apb_hand_on_0); apb_hand_on_0 = 1;
     apb_read(base_c1*1+`SINGLE_START_TRIGGER_C0,data);//start;
-    apb_write_read(base_c1*1+`SINGLE_START_TRIGGER_C0,~data,data);//start;
+    apb_write_read(base_c1*1+`SINGLE_START_TRIGGER_C0,trigger_c1[0],data);//start;
+    apb_hand_on_0 = 0;
     $display("counter1: single start trigger width = %0h",tmp0[15:8]);
 end
 end
 
 initial begin
     //i=0;
+    trigger_c1[1]=1'b0;
     repeat(20) @(posedge i_clk[1]);
 forever begin
     tmp1[15:8]={$random}%64;
     tmp1[15:8]+=10;
     repeat(tmp1[15:8]) @(posedge i_clk[1]);
+    trigger_c1[1]=~trigger_c1[1];
+    wait(!apb_hand_on_0); apb_hand_on_0 = 1;
     apb_read(base_c1*1+`SINGLE_STOP_TRIGGER_C0,data);//;
-    apb_write_read(base_c1*1+`SINGLE_STOP_TRIGGER_C0,~data,data);//stop;
+    apb_write_read(base_c1*1+`SINGLE_STOP_TRIGGER_C0,trigger_c1[1],data);//stop;
+    apb_hand_on_0 = 0;
     $display("counter1: single stop  trigger width = %0h",tmp1[15:8]);
 end
 end
 
 initial begin
     //i=0;
+    trigger_c1[2]=1'b0;
     repeat(20) @(posedge i_clk[1]);
 forever begin
     tmp2[15:8]={$random}%64;
     tmp2[15:8]+=10;
     repeat(tmp2[15:8]) @(posedge i_clk[1]);
+    trigger_c1[2]=~trigger_c1[2];
+    wait(!apb_hand_on_0); apb_hand_on_0 = 1;
     apb_read(base_c1*1+`SINGLE_CLEAR_TRIGGER_C0,data);//;
-    apb_write_read(base_c1*1+`SINGLE_CLEAR_TRIGGER_C0,~data,data);//clear;
+    apb_write_read(base_c1*1+`SINGLE_CLEAR_TRIGGER_C0,trigger_c1[2],data);//clear;
+    apb_hand_on_0 = 0;
     $display("counter1: single clear trigger width = %0h",tmp2[15:8]);
 end
 end
 
 initial begin
     //i=0;
+    trigger_c1[3]=1'b0;
     repeat(20) @(posedge i_clk[1]);
 forever begin
     tmp3[15:8]={$random}%64;
     tmp3[15:8]+=10;
     repeat(tmp3[15:8]) @(posedge i_clk[1]);
+    trigger_c1[3]=~trigger_c1[3];
+    wait(!apb_hand_on_0); apb_hand_on_0 = 1;
     apb_read(base_c1*1+`SINGLE_RESET_TRIGGER_C0,data);//;
-    apb_write_read(base_c1*1+`SINGLE_RESET_TRIGGER_C0,~data,data);//reset;
+    apb_write_read(base_c1*1+`SINGLE_RESET_TRIGGER_C0,trigger_c1[3],data);//reset;
+    apb_hand_on_0 = 0;
     $display("counter1: single reset trigger width = %0h",tmp3[15:8]);
 end
 end
@@ -1940,52 +1986,68 @@ end
 //-------------------
 initial begin
     //i=0;
+    trigger_c2[0]=1'b0;
     repeat(20) @(posedge i_clk[2]);
 forever begin
     tmp0[23:16]={$random}%64;
     tmp0[23:16]+=10;
     repeat(tmp0[23:16]) @(posedge i_clk[2]);
+    trigger_c2[0]=~trigger_c2[0];
+    wait(!apb_hand_on_0); apb_hand_on_0 = 1;
     apb_read(base_c1*2+`SINGLE_START_TRIGGER_C0,data);//start;
-    apb_write_read(base_c1*2+`SINGLE_START_TRIGGER_C0,~data,data);//start;
+    apb_write_read(base_c1*2+`SINGLE_START_TRIGGER_C0,trigger_c2[0],data);//start;
+    apb_hand_on_0 = 0;
     $display("counter2: single start trigger width = %0h",tmp0[23:16]);
 end
 end
 
 initial begin
     //i=0;
+    trigger_c2[1]=1'b0;
     repeat(20) @(posedge i_clk[2]);
 forever begin
     tmp1[23:16]={$random}%64;
     tmp1[23:16]+=10;
     repeat(tmp1[23:16]) @(posedge i_clk[2]);
+    trigger_c2[1]=~trigger_c2[1];
+    wait(!apb_hand_on_0); apb_hand_on_0 = 1;
     apb_read(base_c1*2+`SINGLE_STOP_TRIGGER_C0,data);//;
-    apb_write_read(base_c1*2+`SINGLE_STOP_TRIGGER_C0,~data,data);//stop;
+    apb_write_read(base_c1*2+`SINGLE_STOP_TRIGGER_C0,trigger_c2[1],data);//stop;
+    apb_hand_on_0 = 0;
     $display("counter2: single stop  trigger width = %0h",tmp1[23:16]);
 end
 end
 
 initial begin
     //i=0;
+    trigger_c2[2]=1'b0;
     repeat(20) @(posedge i_clk[2]);
 forever begin
     tmp2[23:16]={$random}%64;
     tmp2[23:16]+=10;
     repeat(tmp2[23:16]) @(posedge i_clk[2]);
+    trigger_c2[2]=~trigger_c2[2];
+    wait(!apb_hand_on_0); apb_hand_on_0 = 1;
     apb_read(base_c1*2+`SINGLE_CLEAR_TRIGGER_C0,data);//;
-    apb_write_read(base_c1*2+`SINGLE_CLEAR_TRIGGER_C0,~data,data);//clear;
+    apb_write_read(base_c1*2+`SINGLE_CLEAR_TRIGGER_C0,trigger_c2[2],data);//clear;
+    apb_hand_on_0 = 0;
     $display("counter2: single clear trigger width = %0h",tmp2[23:16]);
 end
 end
 
 initial begin
     //i=0;
+    trigger_c2[3]=1'b0;
     repeat(20) @(posedge i_clk[2]);
 forever begin
     tmp3[23:16]={$random}%64;
     tmp3[23:16]+=10;
     repeat(tmp3[23:16]) @(posedge i_clk[2]);
+    trigger_c2[3]=~trigger_c2[3];
+    wait(!apb_hand_on_0); apb_hand_on_0 = 1;
     apb_read(base_c1*2+`SINGLE_RESET_TRIGGER_C0,data);//;
-    apb_write_read(base_c1*2+`SINGLE_RESET_TRIGGER_C0,~data,data);//reset;
+    apb_write_read(base_c1*2+`SINGLE_RESET_TRIGGER_C0,trigger_c2[3],data);//reset;
+    apb_hand_on_0 = 0;
     $display("counter2: single reset trigger width = %0h",tmp3[23:16]);
 end
 end
@@ -1993,52 +2055,68 @@ end
 //-------------------
 initial begin
     //i=0;
+    trigger_c3[0]=1'b0;
     repeat(20) @(posedge i_clk[3]);
 forever begin
     tmp0[31:24]={$random}%64;
     tmp0[31:24]+=10;
     repeat(tmp0[31:24]) @(posedge i_clk[3]);
+    trigger_c3[0]=~trigger_c3[0];
+    wait(!apb_hand_on_0); apb_hand_on_0 = 1;
     apb_read(base_c1*3+`SINGLE_START_TRIGGER_C0,data);//start;
-    apb_write_read(base_c1*3+`SINGLE_START_TRIGGER_C0,~data,data);//start;
+    apb_write_read(base_c1*3+`SINGLE_START_TRIGGER_C0,trigger_c3[0],data);//start;
+    apb_hand_on_0 = 0;
     $display("counter3: single start trigger width = %0h",tmp0[31:24]);
 end
 end
 
 initial begin
     //i=0;
+    trigger_c3[1]=1'b0;
     repeat(20) @(posedge i_clk[3]);
 forever begin
     tmp1[31:24]={$random}%64;
     tmp1[31:24]+=10;
     repeat(tmp1[31:24]) @(posedge i_clk[3]);
+    trigger_c3[1]=~trigger_c3[1];
+    wait(!apb_hand_on_0); apb_hand_on_0 = 1;
     apb_read(base_c1*3+`SINGLE_STOP_TRIGGER_C0,data);//;
-    apb_write_read(base_c1*3+`SINGLE_STOP_TRIGGER_C0,~data,data);//stop;
+    apb_write_read(base_c1*3+`SINGLE_STOP_TRIGGER_C0,trigger_c3[1],data);//stop;
+    apb_hand_on_0 = 0;
     $display("counter3: single stop  trigger width = %0h",tmp1[31:24]);
 end
 end
 
 initial begin
     //i=0;
+    trigger_c3[2]=1'b0;
     repeat(20) @(posedge i_clk[3]);
 forever begin
     tmp2[31:24]={$random}%64;
     tmp2[31:24]+=10;
     repeat(tmp2[31:24]) @(posedge i_clk[3]);
+    trigger_c3[2]=~trigger_c3[2];
+    wait(!apb_hand_on_0); apb_hand_on_0 = 1;
     apb_read(base_c1*3+`SINGLE_CLEAR_TRIGGER_C0,data);//;
-    apb_write_read(base_c1*3+`SINGLE_CLEAR_TRIGGER_C0,~data,data);//clear;
+    apb_write_read(base_c1*3+`SINGLE_CLEAR_TRIGGER_C0,trigger_c3[2],data);//clear;
+    apb_hand_on_0 = 0;
     $display("counter3: single clear trigger width = %0h",tmp2[31:24]);
 end
 end
 
 initial begin
     //i=0;
+    trigger_c3[3]=1'b0;
     repeat(20) @(posedge i_clk[3]);
 forever begin
     tmp3[31:24]={$random}%64;
     tmp3[31:24]+=10;
     repeat(tmp3[31:24]) @(posedge i_clk[3]);
+    trigger_c3[3]=~trigger_c3[3];
+    wait(!apb_hand_on_0); apb_hand_on_0 = 1;
     apb_read(base_c1*3+`SINGLE_RESET_TRIGGER_C0,data);//;
-    apb_write_read(base_c1*3+`SINGLE_RESET_TRIGGER_C0,~data,data);//reset;
+    apb_write_read(base_c1*3+`SINGLE_RESET_TRIGGER_C0,trigger_c3[3],data);//reset;
+    apb_hand_on_0 = 0;
     $display("counter3: single reset trigger width = %0h",tmp3[31:24]);
 end
 end
@@ -2131,14 +2209,16 @@ initial begin
     // $display("interrupt process ,stage 2");
     wait(i_int);
     // $display("interrupt process ,stage 3");
-      apb_read(`INTR_STATUS,int_status0);
+    wait(!apb_hand_on_0); apb_hand_on_0 = 1;
+    apb_read(`INTR_STATUS,int_status0);
+    repeat(1) @(posedge i_pclk);//
     if(|int_status0)  begin
       apb_write_read(`INTR_CLR,int_status0,data);
     for(i=0;i<4;i++) begin    
+      repeat(1) @(posedge i_pclk);//
       int_status = int_status0>>8*i;
       base_addr_int=base_c1*i;
       if(|int_status[7:0]) begin
-
           //apb_read(base_addr_int+`CTRL_SNAP_C0,data);
           //apb_write_read(base_addr_int+`CTRL_SNAP_C0,{data[31:4],~data[3:0]},data);//
           //apb_read(base_addr_int+`SNAP_STATUS_C0,data);
@@ -2172,13 +2252,13 @@ initial begin
             apb_read(base_addr_int+`CAPTURE_REG_STATUS_C0,data_1);
             if(&data_1[2:0]) begin
                 apb_read(base_addr_int+`CAPTURE_REG_A0_C0,data);
-                $display("in bus a ,new capture edge time = %h,pluse width = %h ,counter num =%d",data,data-cap_count_a,i);
+                $display("counter num =%d , in bus a ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_a);
                 cap_count_a = data;
                 apb_read(base_addr_int+`CAPTURE_REG_A1_C0,data);
-                $display("in bus a ,new capture edge time = %h,pluse width = %h ,counter num =%d",data,data-cap_count_a,i);
+                $display("counter num =%d , in bus a ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_a);
                 cap_count_a = data;
                 apb_read(base_addr_int+`CAPTURE_REG_A2_C0,data); 
-                $display("in bus a ,new capture edge time = %h,pluse width = %h ,counter num =%d",data,data-cap_count_a,i);
+                $display("counter num =%d , in bus a ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_a);
                 cap_count_a = data;
                 
             end            
@@ -2214,13 +2294,13 @@ initial begin
             apb_read(base_addr_int+`CAPTURE_REG_STATUS_C0,data_1);
             if(&data_1[5:3]) begin
                 apb_read(base_addr_int+`CAPTURE_REG_B0_C0,data);
-                $display("in bus b ,new capture edge time = %h,pluse width = %h ,counter num =%d",data,data-cap_count_b,i);
+                $display("counter num =%d , in bus b ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_b);
                 cap_count_b = data;
                 apb_read(base_addr_int+`CAPTURE_REG_B1_C0,data);
-                $display("in bus b ,new capture edge time = %h,pluse width = %h ,counter num =%d",data,data-cap_count_b,i);
+                $display("counter num =%d , in bus b ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_b);
                 cap_count_b = data;
                 apb_read(base_addr_int+`CAPTURE_REG_B2_C0,data);
-                $display("in bus b ,new capture edge time = %h,pluse width = %h ,counter num =%d",data,data-cap_count_b,i);
+                $display("counter num =%d , in bus b ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_b);
                 cap_count_b = data;
             end
             
@@ -2275,8 +2355,9 @@ initial begin
 
     end
    end
+   apb_hand_on_0 = 0;
    end
-
+    
 end
 // `endif
 
@@ -2315,6 +2396,39 @@ count_valid_cnts-=1;
 end
 endfunction
 
+`ifdef APB_BUS_MONITOR
 
+wire write_flag;
+wire read_flag;
+reg  [31:0] apb_addr;
+reg  [31:0] wdata;
+reg  [31:0] rdata;
+reg r1_psel_dly;
+reg r1_penable_dly;
+reg r1_write_flag_dly;
+reg r1_read_flag_dly;
+reg r1_pwrite_dly;
+always @(posedge i_pclk) begin
+    r1_psel_dly     <= o_psel;
+    r1_penable_dly  <= o_penable;
+    r1_write_flag_dly <= write_flag;
+    r1_read_flag_dly  <= read_flag;
+    r1_pwrite_dly <= o_pwrite;
+end
+
+assign write_flag = r1_pwrite_dly  && r1_psel_dly && o_psel && o_penable;
+assign read_flag  = !r1_pwrite_dly && r1_psel_dly && o_psel && o_penable;
+
+
+always @(posedge i_pclk) begin
+if(write_flag)
+    $display("APB WRITE: ADDR = %h, DATA = %h",o_paddr,o_pwdata);
+else if(read_flag)
+    $display("APB  READ: ADDR = %h, DATA = %h",o_paddr,i_prdata);
+end
+
+
+
+`endif
 
 endmodule
