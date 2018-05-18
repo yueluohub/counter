@@ -183,7 +183,7 @@ endtask
 reg stop_event;
 reg [31:0] addr;
 reg [31:0] data,data_1;
-reg [3:0] i,j;
+reg [7:0] i,j;
 reg [31:0] tmp_i,tmp0,tmp1,tmp2,tmp3;
 reg [31:0] count0,count1,count2,count3;
 localparam  base_c0=32'h000,
@@ -658,6 +658,7 @@ initial begin
     //
     apb_write_read(addr_base+`SINGLE_START_TRIGGER_C0,32'b1,data);//start;
     int_flag_en = 1;
+    tmp_i=32'h7;
     while(1) begin
     wait(i_int);
     tmp_i=32'h7;
@@ -692,9 +693,11 @@ initial begin
     `endif
    
     `ifdef	TESTCASE_C0_CAPTURE_1
+    `define CAPTURE_DATA_IN
     apb_write_read(addr_base+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
     apb_write_read(addr_base+`MODE_SEL_C0,32'b000,data);
-    apb_write_read(addr_base+`SRC_SEL_EDGE_C0,32'h02110000,data);
+    // apb_write_read(addr_base+`SRC_SEL_EDGE_C0,32'h02110000,data);
+    apb_write_read(addr_base+`SRC_SEL_EDGE_C0,32'h22210000,data);
     // apb_write_read(addr_base+`SRC_SEL_EDGE_C0,32'h12210000,data);
 
     apb_read (addr_base+`ENABLE_C0,data);
@@ -1088,6 +1091,11 @@ initial begin
  	apb_write(addr_base+`SHIFTOUT_DATA_VALID_C0,32'h0);
     tmp_i=32'd30;
     int_flag_en = 1;
+    while(1) begin
+     wait(i_int);
+    tmp_i--; 
+    wait(!i_int);
+    end
     //while(1) begin
     //  wait(i_int);
     //  apb_read(addr_base+`INTR_STATUS,data_1);
@@ -1961,6 +1969,104 @@ end
 end
 `endif
 
+`ifdef  TESTCASE_ALL_COUNTERMODE_6
+`define CAPTURE_DATA_IN
+`define SOFT_GLOBAL_TRIGGER
+`define SOFT_SINGLE_TRIGGER
+//input start/stop signal. 
+initial begin
+wait (stop_event) ;
+for(i=0;i<4;i++) begin
+    addr_base=base_c1*i;
+    apb_write_read(addr_base+`SOFT_TRIGGER_CTRL_C0,32'b11111111,data);//global triger enable.
+    if(i==1)
+        apb_write_read(addr_base+`MODE_SEL_C0,32'b001,data);//count out .
+    else if(i==2)
+        apb_write_read(addr_base+`MODE_SEL_C0,32'b001,data);//count out .    
+    else if(i==3)
+        apb_write_read(addr_base+`MODE_SEL_C0,32'b001,data);//count out.
+    else if(i==0)
+        apb_write_read(addr_base+`MODE_SEL_C0,32'b001,data);//count out .
+    
+    //
+    apb_write_read(addr_base+`SHIFTIN_DATA_CTRL_BITCNTS_C0,32'd31,data);
+    //
+    // apb_write_read(addr_base+`SRC_SEL_EDGE_C0,32'h12210000,data);
+    //if(i==1||i==3)
+    // $display("new shiftout data = %h,bits=%d,counter num=%d",count_reverse(data,5'd31),5'd31,i);
+    apb_write_read(addr_base+`TARGET_REG_CTRL_C0,32'b000101,data);
+    apb_write_read(addr_base+`TARGET_REG_A0_C0,32'h10+i,data);
+    apb_write_read(addr_base+`TARGET_REG_A1_C0,32'h20+i,data);
+    apb_write_read(addr_base+`TARGET_REG_A2_C0,32'h30+i,data);
+    apb_write_read(addr_base+`TARGET_REG_B0_C0,32'h1+i,data);
+    apb_write_read(addr_base+`TARGET_REG_B1_C0,32'h2+i,data);
+    apb_write_read(addr_base+`TARGET_REG_B2_C0,32'h3+i,data);
+    apb_write_read(addr_base+`SRC_SEL_EDGE_C0,32'h20202020,data);
+
+//
+    apb_write_read(addr_base+`SWITCH_MODE_ONEBIT_CNTS_C0,32'h1,data);//one bit represent how many cycle.
+  
+    apb_read (addr_base+`ENABLE_C0,data);
+    apb_write(addr_base+`ENABLE_C0,data|32'h0001);//c0,enable.
+//
+  
+end    
+    //
+//for(i=0;i<4;i++) begin
+//    addr_base=base_c1*i;
+//    apb_read(addr_base+`SINGLE_START_TRIGGER_C0,data);//start;
+//    apb_write_read(addr_base+`SINGLE_START_TRIGGER_C0,~data,data);//start;
+//end
+   
+    int_flag_en = 1;
+    //count0=16;
+    while(1) begin
+    //wait(i_int);
+    tmp_i=32'h1f;
+    //repeat(20) @(posedge i_clk[i]);
+    for(j=0;j<15;j++) 
+    begin
+        $display("counter: source j=%h",j);
+        for(i=0;i<4;i++) begin
+        wait(!apb_hand_on_0);
+        apb_hand_on_0 = 1;
+        addr_base=base_c1*i;
+        data = (32'h20201000+((32'h0101*j)));
+        apb_write_read(addr_base+`SRC_SEL_EDGE_C0,data,data);
+        apb_hand_on_0 = 0;
+        end
+        // if(j==0) $display("counters %0h, global start-trigger start",i);
+        // if(j==1) $display("counters %0h, global stop-trigger start",i);
+        // if(j==2) $display("counters %0h, global clear-trigger start",i);
+        // if(j==3) $display("counters %0h, global reset-trigger start",i);
+        #10_000_000;
+
+    end
+
+    //wait(!i_int);
+    end
+    #20_000;
+    //apb_read(`GLOBAL_STOP_TRIGGER,data);//stop;
+    //apb_write_read(`GLOBAL_STOP_TRIGGER,~data,data);//stop;
+    //#20_000;  
+    //apb_read(`GLOBAL_CLEAR_TRIGGER,data);//
+    //apb_write_read(`GLOBAL_CLEAR_TRIGGER,~data,data);//clear;
+    //#300_000;
+    //apb_read(`GLOBAL_START_TRIGGER,data);//
+    //apb_write_read(`GLOBAL_START_TRIGGER,~data,data);//start;
+    //#100_000;
+    //apb_read(`GLOBAL_RESET_TRIGGER,data);//
+    //apb_write_read(`GLOBAL_RESET_TRIGGER,~data,data);//reset; 
+    //#300_000;
+    //apb_read(`GLOBAL_START_TRIGGER,data);//
+    //apb_write_read(`GLOBAL_START_TRIGGER,~data,data);//start;
+
+end
+`endif
+
+
+
+
 
 `ifdef SOFT_GLOBAL_TRIGGER
 //
@@ -2348,7 +2454,41 @@ else
         o_extern_din_b[0] = 1'b1;
 end
 end
-`else 
+`elsif CAPTURE_DATA_IN
+reg [31:0] tmp_a,tmp_b;
+
+genvar i_l0;
+generate for(i_l0=0;i_l0<4;i_l0++) begin:loop
+initial begin
+    o_extern_din_a[i_l0] = 1'b0;
+    repeat(20) @(posedge i_clk[i_l0]);
+forever begin
+    tmp_a[8*(i_l0+1)-1:8*i_l0]={$random}%64;
+    tmp_a[8*(i_l0+1)-1:8*i_l0]+=10;
+    repeat(tmp_a[8*(i_l0+1)-1:8*i_l0]) @(posedge i_clk[i_l0]);
+    o_extern_din_a[i_l0] = ~ o_extern_din_a[i_l0];
+    $display("counter%0h: extern_din_a width = %0h",i_l0,tmp_a[8*(i_l0+1)-1:8*i_l0]);
+end
+end
+
+initial begin
+    o_extern_din_b[i_l0] = 1'b0;
+    repeat(20) @(posedge i_clk[i_l0]);
+forever begin
+    tmp_b[8*(i_l0+1)-1:8*i_l0]={$random}%64;
+    tmp_b[8*(i_l0+1)-1:8*i_l0]+=10;
+    repeat(tmp_b[8*(i_l0+1)-1:8*i_l0]) @(posedge i_clk[i_l0]);
+    o_extern_din_b[i_l0] = ~ o_extern_din_b[i_l0];
+    $display("counter%0h: extern_din_b width = %0h",i_l0,tmp_b[8*(i_l0+1)-1:8*i_l0]);
+end
+end
+
+end
+endgenerate 
+
+
+
+`elsif SHIFT_DATA_IN
 initial begin
 o_extern_din_a = 1'b0;
 o_extern_din_b = 1'b0;
@@ -2448,13 +2588,13 @@ initial begin
             apb_read(base_addr_int+`CAPTURE_REG_STATUS_C0,data_1);
             if(&data_1[2:0]) begin
                 apb_read(base_addr_int+`CAPTURE_REG_A0_C0,data);
-                $display("counter num =%d , in bus a ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_a);
+                $display("counter num =%0d , in bus a ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_a);
                 cap_count_a = data;
                 apb_read(base_addr_int+`CAPTURE_REG_A1_C0,data);
-                $display("counter num =%d , in bus a ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_a);
+                $display("counter num =%0d , in bus a ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_a);
                 cap_count_a = data;
                 apb_read(base_addr_int+`CAPTURE_REG_A2_C0,data); 
-                $display("counter num =%d , in bus a ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_a);
+                $display("counter num =%0d , in bus a ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_a);
                 cap_count_a = data;
                 
             end            
@@ -2490,13 +2630,13 @@ initial begin
             apb_read(base_addr_int+`CAPTURE_REG_STATUS_C0,data_1);
             if(&data_1[5:3]) begin
                 apb_read(base_addr_int+`CAPTURE_REG_B0_C0,data);
-                $display("counter num =%d , in bus b ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_b);
+                $display("counter num =%0d , in bus b ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_b);
                 cap_count_b = data;
                 apb_read(base_addr_int+`CAPTURE_REG_B1_C0,data);
-                $display("counter num =%d , in bus b ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_b);
+                $display("counter num =%0d , in bus b ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_b);
                 cap_count_b = data;
                 apb_read(base_addr_int+`CAPTURE_REG_B2_C0,data);
-                $display("counter num =%d , in bus b ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_b);
+                $display("counter num =%0d , in bus b ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_b);
                 cap_count_b = data;
             end
             
