@@ -1,8 +1,8 @@
 // `define CLK_32M
-// `define COUNTER_NUM   0
+`define COUNTER_NUM   0
 // `define COUNTER_NUM   1
 // `define COUNTER_NUM   2
-`define COUNTER_NUM   3
+// `define COUNTER_NUM   3
 
 // `define SIM_FINISH_MS 10
 // `define SIM_FINISH_MS 20

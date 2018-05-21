@@ -2001,7 +2001,7 @@ for(i=0;i<4;i++) begin
     apb_write_read(addr_base+`TARGET_REG_B0_C0,32'h1+i,data);
     apb_write_read(addr_base+`TARGET_REG_B1_C0,32'h2+i,data);
     apb_write_read(addr_base+`TARGET_REG_B2_C0,32'h3+i,data);
-    apb_write_read(addr_base+`SRC_SEL_EDGE_C0,32'h20202020,data);
+    apb_write_read(addr_base+`SRC_SEL_EDGE_C0,32'h20201101,data);
 
 //
     apb_write_read(addr_base+`SWITCH_MODE_ONEBIT_CNTS_C0,32'h1,data);//one bit represent how many cycle.
@@ -2027,11 +2027,26 @@ end
     for(j=0;j<15;j++) 
     begin
         $display("counter: source j=%h",j);
-        for(i=0;i<4;i++) begin
+
+`ifdef   COUNTER_NUM
+    if(`COUNTER_NUM==0)
+    i  = 0;
+    else if(`COUNTER_NUM==1)
+    i  = 1;
+    else if(`COUNTER_NUM==2)
+    i  = 2;
+    else if(`COUNTER_NUM==3)
+    i  = 3;
+    else 
+    i  = 0;
+`else        
+        for(i=0;i<4;i++) 
+`endif
+        begin
         wait(!apb_hand_on_0);
         apb_hand_on_0 = 1;
         addr_base=base_c1*i;
-        data = (32'h20201000+((32'h0101*j)));
+        data = (32'h20201000+((32'h0101*(j))));
         apb_write_read(addr_base+`SRC_SEL_EDGE_C0,data,data);
         apb_hand_on_0 = 0;
         end
