@@ -1,0 +1,1 @@
+merge -run_file merge.file   -out merged4 -metrics all

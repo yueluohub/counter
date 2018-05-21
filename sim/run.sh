@@ -26,7 +26,7 @@ ncverilog \
 #+incdir+../rtl/ -f counter_filelist.f -f int_filelist.f -nctop counter_top -l sim.log
 #irun +incdir+../rtl/  \
 ##+gui
-#  imc -gui & 
+# imc -gui & 
 # imc -exec merge_cov.imc //merge -run_file merge.file   -out merged4 -metrics all
 # imc -exec gen_cov_report.imc
 # 

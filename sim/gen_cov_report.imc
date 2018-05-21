@@ -1,0 +1,8 @@
+load -run ./cov_work/scope/merged
+source cov.waiver
+report -summary -inst -html -metrics all -out merged_cov_sum.html -overwrite
+report -detail  -inst -html -metrics all -out merged_uncov_detail.html -overwrite
+report -summary -inst -text -metrics all -out merged_cov_sum.txt
+report -detail  -inst -text -metrics all -uncovered -out merged_uncov_detail.txt
+report -detail  -inst -text -metrics all -excludes -out merged_waived.txt -exclComments
+report -detail  -inst -text -metrics all -unr -out merged_unreachable.txt -exclComments

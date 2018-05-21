@@ -2,7 +2,7 @@
 `timescale 1ns / 1ps 
 
 
-`define     BASE_ADDR               32'h44108000
+`define     BASE_ADDR               32'h44120000
 `define     INTR_STATUS 	        `BASE_ADDR+32'h000
 `define     INTR_MASK_STATUS 	    `BASE_ADDR+32'h004
 `define     INTR_CLR 	            `BASE_ADDR+32'h008
@@ -2736,9 +2736,9 @@ endfunction
 
 wire write_flag;
 wire read_flag;
-reg  [31:0] apb_addr;
-reg  [31:0] wdata;
-reg  [31:0] rdata;
+reg  [31:0] r1_apb_addr;
+reg  [31:0] r1_wdata;
+reg  [31:0] r1_rdata;
 reg r1_psel_dly;
 reg r1_penable_dly;
 reg r1_write_flag_dly;
@@ -2750,6 +2750,8 @@ always @(posedge i_pclk) begin
     r1_write_flag_dly <= write_flag;
     r1_read_flag_dly  <= read_flag;
     r1_pwrite_dly <= o_pwrite;
+    r1_apb_addr	   <= o_paddr;
+    r1_wdata   <= o_pwdata;
 end
 
 assign write_flag = r1_pwrite_dly  && r1_psel_dly && o_psel && o_penable;
@@ -2758,9 +2760,9 @@ assign read_flag  = !r1_pwrite_dly && r1_psel_dly && o_psel && o_penable;
 
 always @(posedge i_pclk) begin
 if(write_flag)
-    $display("APB WRITE: ADDR = %h, DATA = %h",o_paddr,o_pwdata);
+    $display("APB WRITE: ADDR = %h, DATA = %h",r1_apb_addr,r1_wdata);
 else if(read_flag)
-    $display("APB  READ: ADDR = %h, DATA = %h",o_paddr,i_prdata);
+    $display("APB  READ: ADDR = %h, DATA = %h",r1_apb_addr,i_prdata);
 end
 
 

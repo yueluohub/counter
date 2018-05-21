@@ -1870,7 +1870,7 @@ endmodule
 ////////////////////////////////////////////////////////////////////////////////////////
 //
 //  $Log: counter_all_apb_reg.v,v $
-//  Revision 1.0  5/15/2018 0:29:53  register_slave.pl
+//  Revision 1.0  5/20/2018 18:52:12  register_slave.pl
 //  Initial rev
 //
 //
