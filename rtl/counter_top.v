@@ -123,7 +123,7 @@ end
 //   wire              [ 31 : 0 ] o_target_reg_b0_c0;
 //   wire              [ 31 : 0 ] o_target_reg_b1_c0;
 //   wire              [ 31 : 0 ] o_target_reg_b2_c0;
-//   wire              [  5 : 0 ] o_capture_reg_status_c0;
+//   wire              [  5 : 0 ] i_capture_reg_status_c0;
 //   wire              [  5 : 0 ] o_capture_reg_overflow_ctrl_c0;
 //   wire                         ren_capture_reg_a0_c0;
 //   wire                         ren_capture_reg_a0_c0_d;
@@ -181,7 +181,10 @@ wire  [COUNTER_NUM*2-1:0] w_src_edge_din0;
 wire  [COUNTER_NUM*SEL_WIDTH-1:0] w_src_sel_din1;
 wire  [COUNTER_NUM*2-1:0] w_src_edge_din1;
 wire  [COUNTER_NUM*4-1:0] w_ctrl_snap;
-wire [COUNTER_NUM*32-1:0] w_shadow_reg;
+wire  [COUNTER_NUM*4-1:0] w_snap_status;
+wire  [COUNTER_NUM-1:0]   w_clear_snap;
+
+wire  [COUNTER_NUM*32-1:0] w_shadow_reg;
 wire  [COUNTER_NUM*6-1:0] w_target_reg_ctrl;
 wire  [COUNTER_NUM*32-1:0] w_target_reg_a0;
 wire  [COUNTER_NUM*32-1:0] w_target_reg_a1;
@@ -221,10 +224,10 @@ assign w_global_stop_trigger   = o_global_stop_trigger;
 assign w_global_clear_trigger  = o_global_clear_trigger;
 assign w_global_reset_trigger  = o_global_reset_trigger;
 
-assign w_single_start_trigger  = o_single_start_trigger_c0;
-assign w_single_stop_trigger   = o_single_stop_trigger_c0;
-assign w_single_clear_trigger  = o_single_clear_trigger_c0;
-assign w_single_reset_trigger  = o_single_reset_trigger_c0;
+assign w_single_start_trigger  = {o_single_start_trigger_c3,o_single_start_trigger_c2,o_single_start_trigger_c1,o_single_start_trigger_c0};
+assign w_single_stop_trigger   = {o_single_stop_trigger_c3,o_single_stop_trigger_c2,o_single_stop_trigger_c1,o_single_stop_trigger_c0};
+assign w_single_clear_trigger  = {o_single_clear_trigger_c3,o_single_clear_trigger_c2,o_single_clear_trigger_c1,o_single_clear_trigger_c0};
+assign w_single_reset_trigger  = {o_single_reset_trigger_c3,o_single_reset_trigger_c2,o_single_reset_trigger_c1,o_single_reset_trigger_c0};
 
 assign o_enable     = {o_enable_c3,o_enable_c2,o_enable_c1,o_enable_c0};
 assign o_clk_ctrl   = {o_clk_ctrl_c3,o_clk_ctrl_c2,o_clk_ctrl_c1,o_clk_ctrl_c0};//
@@ -239,6 +242,8 @@ assign w_src_edge_din0  = {o_src_edge_din0_c3,o_src_edge_din0_c2,o_src_edge_din0
 assign w_src_sel_din1   = {o_src_sel_din1_c3,o_src_sel_din1_c2,o_src_sel_din1_c1,o_src_sel_din1_c0};
 assign w_src_edge_din1  = {o_src_edge_din1_c3,o_src_edge_din1_c2,o_src_edge_din1_c1,o_src_edge_din1_c0};
 assign w_ctrl_snap      = {o_ctrl_snap_c3,o_ctrl_snap_c2,o_ctrl_snap_c1,o_ctrl_snap_c0};//wen_ctrl_snap_c0
+assign w_clear_snap     = {o_clear_snap_c3,o_clear_snap_c2,o_clear_snap_c1,o_clear_snap_c0};
+assign {i_snap_status_c3,i_snap_status_c2,i_snap_status_c1,i_snap_status_c0} =  w_snap_status;
 assign {i_shadow_reg_c3,i_shadow_reg_c2,i_shadow_reg_c1,i_shadow_reg_c0}    =   w_shadow_reg;
 assign w_target_reg_ctrl = {o_target_reg_ctrl_c3,o_target_reg_ctrl_c2,o_target_reg_ctrl_c1,o_target_reg_ctrl_c0};
 
@@ -248,7 +253,9 @@ assign w_target_reg_a2  = {o_target_reg_a2_c3,o_target_reg_a2_c2,o_target_reg_a2
 assign w_target_reg_b0  = {o_target_reg_b0_c3,o_target_reg_b0_c2,o_target_reg_b0_c1,o_target_reg_b0_c0};
 assign w_target_reg_b1  = {o_target_reg_b1_c3,o_target_reg_b1_c2,o_target_reg_b1_c1,o_target_reg_b1_c0};
 assign w_target_reg_b2  = {o_target_reg_b2_c3,o_target_reg_b2_c2,o_target_reg_b2_c1,o_target_reg_b2_c0};
-assign w_capture_reg_status = {o_capture_reg_status_c3,o_capture_reg_status_c2,o_capture_reg_status_c1,o_capture_reg_status_c0};
+//assign w_capture_reg_status = {i_capture_reg_status_c3,i_capture_reg_status_c2,i_capture_reg_status_c1,i_capture_reg_status_c0};
+assign {i_capture_reg_status_c3,i_capture_reg_status_c2,i_capture_reg_status_c1,i_capture_reg_status_c0} = w_capture_reg_status ;
+
 assign w_capture_reg_read_flag = {ren_capture_reg_b2_c3_d,ren_capture_reg_b1_c3_d,ren_capture_reg_b0_c3_d,ren_capture_reg_a2_c3_d,ren_capture_reg_a1_c3_d,ren_capture_reg_a0_c3_d,
                                   ren_capture_reg_b2_c2_d,ren_capture_reg_b1_c2_d,ren_capture_reg_b0_c2_d,ren_capture_reg_a2_c2_d,ren_capture_reg_a1_c2_d,ren_capture_reg_a0_c2_d,
                                   ren_capture_reg_b2_c1_d,ren_capture_reg_b1_c1_d,ren_capture_reg_b0_c1_d,ren_capture_reg_a2_c1_d,ren_capture_reg_a1_c1_d,ren_capture_reg_a0_c1_d,
@@ -310,6 +317,8 @@ counter_all #(.COUNTER_NUM(COUNTER_NUM)) u_counter_all(
         .i_src_sel_din1                     (w_src_sel_din1                             ),       
         .i_src_edge_din1                    (w_src_edge_din1                            ),
         .i_ctrl_snap                        (w_ctrl_snap                                ),
+        .o_snap_status                      (w_snap_status                              ),
+        .i_clear_snap                       (w_clear_snap                               ),
         .o_shadow_reg                       (w_shadow_reg                               ),
         .i_target_reg_ctrl                  (w_target_reg_ctrl                          ),
         .i_target_reg_a0                    (w_target_reg_a0                            ),

@@ -56,9 +56,13 @@ module counter_all_apb_reg
 	output	[1:0]	o_src_edge_din0_c0,
 	output	[3:0]	o_src_sel_din1_c0,
 	output	[1:0]	o_src_edge_din1_c0,
+	output		ren_snap_status_c0,
+	output reg 	ren_snap_status_c0_d,
+	input	[3:0]	i_snap_status_c0,
 	output		wen_ctrl_snap_c0,
 	output reg	wen_ctrl_snap_c0_d,
 	output	[3:0]	o_ctrl_snap_c0,
+	output		o_clear_snap_c0,
 	input	[31:0]	i_shadow_reg_c0,
 	output	[2:0]	o_mode_sel_c0,
 	output	[5:0]	o_target_reg_ctrl_c0,
@@ -70,7 +74,7 @@ module counter_all_apb_reg
 	output	[31:0]	o_target_reg_b0_c0,
 	output	[31:0]	o_target_reg_b1_c0,
 	output	[31:0]	o_target_reg_b2_c0,
-	input	[5:0]	o_capture_reg_status_c0,
+	input	[5:0]	i_capture_reg_status_c0,
 	output	[5:0]	o_capture_reg_overflow_ctrl_c0,
 	output		ren_capture_reg_a0_c0,
 	output reg 	ren_capture_reg_a0_c0_d,
@@ -120,9 +124,13 @@ module counter_all_apb_reg
 	output	[1:0]	o_src_edge_din0_c1,
 	output	[3:0]	o_src_sel_din1_c1,
 	output	[1:0]	o_src_edge_din1_c1,
+	output		ren_snap_status_c1,
+	output reg 	ren_snap_status_c1_d,
+	input	[3:0]	i_snap_status_c1,
 	output		wen_ctrl_snap_c1,
 	output reg	wen_ctrl_snap_c1_d,
 	output	[3:0]	o_ctrl_snap_c1,
+	output		o_clear_snap_c1,
 	input	[31:0]	i_shadow_reg_c1,
 	output	[2:0]	o_mode_sel_c1,
 	output	[5:0]	o_target_reg_ctrl_c1,
@@ -134,7 +142,7 @@ module counter_all_apb_reg
 	output	[31:0]	o_target_reg_b0_c1,
 	output	[31:0]	o_target_reg_b1_c1,
 	output	[31:0]	o_target_reg_b2_c1,
-	input	[5:0]	o_capture_reg_status_c1,
+	input	[5:0]	i_capture_reg_status_c1,
 	output	[5:0]	o_capture_reg_overflow_ctrl_c1,
 	output		ren_capture_reg_a0_c1,
 	output reg 	ren_capture_reg_a0_c1_d,
@@ -184,9 +192,13 @@ module counter_all_apb_reg
 	output	[1:0]	o_src_edge_din0_c2,
 	output	[3:0]	o_src_sel_din1_c2,
 	output	[1:0]	o_src_edge_din1_c2,
+	output		ren_snap_status_c2,
+	output reg 	ren_snap_status_c2_d,
+	input	[3:0]	i_snap_status_c2,
 	output		wen_ctrl_snap_c2,
 	output reg	wen_ctrl_snap_c2_d,
 	output	[3:0]	o_ctrl_snap_c2,
+	output		o_clear_snap_c2,
 	input	[31:0]	i_shadow_reg_c2,
 	output	[2:0]	o_mode_sel_c2,
 	output	[5:0]	o_target_reg_ctrl_c2,
@@ -198,7 +210,7 @@ module counter_all_apb_reg
 	output	[31:0]	o_target_reg_b0_c2,
 	output	[31:0]	o_target_reg_b1_c2,
 	output	[31:0]	o_target_reg_b2_c2,
-	input	[5:0]	o_capture_reg_status_c2,
+	input	[5:0]	i_capture_reg_status_c2,
 	output	[5:0]	o_capture_reg_overflow_ctrl_c2,
 	output		ren_capture_reg_a0_c2,
 	output reg 	ren_capture_reg_a0_c2_d,
@@ -248,9 +260,13 @@ module counter_all_apb_reg
 	output	[1:0]	o_src_edge_din0_c3,
 	output	[3:0]	o_src_sel_din1_c3,
 	output	[1:0]	o_src_edge_din1_c3,
+	output		ren_snap_status_c3,
+	output reg 	ren_snap_status_c3_d,
+	input	[3:0]	i_snap_status_c3,
 	output		wen_ctrl_snap_c3,
 	output reg	wen_ctrl_snap_c3_d,
 	output	[3:0]	o_ctrl_snap_c3,
+	output		o_clear_snap_c3,
 	input	[31:0]	i_shadow_reg_c3,
 	output	[2:0]	o_mode_sel_c3,
 	output	[5:0]	o_target_reg_ctrl_c3,
@@ -262,7 +278,7 @@ module counter_all_apb_reg
 	output	[31:0]	o_target_reg_b0_c3,
 	output	[31:0]	o_target_reg_b1_c3,
 	output	[31:0]	o_target_reg_b2_c3,
-	input	[5:0]	o_capture_reg_status_c3,
+	input	[5:0]	i_capture_reg_status_c3,
 	output	[5:0]	o_capture_reg_overflow_ctrl_c3,
 	output		ren_capture_reg_a0_c3,
 	output reg 	ren_capture_reg_a0_c3_d,
@@ -318,7 +334,7 @@ reg	[15:0]	enable_c0;
 reg	[7:0]	soft_trigger_ctrl_c0;
 reg	[3:0]	mux_sel_c0;
 reg	[29:0]	src_sel_edge_c0;
-reg	[3:0]	ctrl_snap_c0;
+reg	[16:0]	ctrl_snap_c0;
 reg	[2:0]	mode_sel_c0;
 reg	[5:0]	target_reg_ctrl_c0;
 reg	[31:0]	target_reg_a0_c0;
@@ -343,7 +359,7 @@ reg	[15:0]	enable_c1;
 reg	[7:0]	soft_trigger_ctrl_c1;
 reg	[3:0]	mux_sel_c1;
 reg	[29:0]	src_sel_edge_c1;
-reg	[3:0]	ctrl_snap_c1;
+reg	[16:0]	ctrl_snap_c1;
 reg	[2:0]	mode_sel_c1;
 reg	[5:0]	target_reg_ctrl_c1;
 reg	[31:0]	target_reg_a0_c1;
@@ -368,7 +384,7 @@ reg	[15:0]	enable_c2;
 reg	[7:0]	soft_trigger_ctrl_c2;
 reg	[3:0]	mux_sel_c2;
 reg	[29:0]	src_sel_edge_c2;
-reg	[3:0]	ctrl_snap_c2;
+reg	[16:0]	ctrl_snap_c2;
 reg	[2:0]	mode_sel_c2;
 reg	[5:0]	target_reg_ctrl_c2;
 reg	[31:0]	target_reg_a0_c2;
@@ -393,7 +409,7 @@ reg	[15:0]	enable_c3;
 reg	[7:0]	soft_trigger_ctrl_c3;
 reg	[3:0]	mux_sel_c3;
 reg	[29:0]	src_sel_edge_c3;
-reg	[3:0]	ctrl_snap_c3;
+reg	[16:0]	ctrl_snap_c3;
 reg	[2:0]	mode_sel_c3;
 reg	[5:0]	target_reg_ctrl_c3;
 reg	[31:0]	target_reg_a0_c3;
@@ -439,6 +455,7 @@ assign o_src_edge_din0_c0 [1:0]                            = src_sel_edge_c0 [21
 assign o_src_sel_din1_c0 [3:0]                             = src_sel_edge_c0 [27:24];
 assign o_src_edge_din1_c0 [1:0]                            = src_sel_edge_c0 [29:28];
 assign o_ctrl_snap_c0 [3:0]                                = ctrl_snap_c0 [3:0];
+assign o_clear_snap_c0                                     = ctrl_snap_c0 [16];
 assign o_mode_sel_c0 [2:0]                                 = mode_sel_c0 [2:0];
 assign o_target_reg_ctrl_c0 [5:0]                          = target_reg_ctrl_c0 [5:0];
 assign o_target_reg_a0_c0 [31:0]                           = target_reg_a0_c0 [31:0];
@@ -475,6 +492,7 @@ assign o_src_edge_din0_c1 [1:0]                            = src_sel_edge_c1 [21
 assign o_src_sel_din1_c1 [3:0]                             = src_sel_edge_c1 [27:24];
 assign o_src_edge_din1_c1 [1:0]                            = src_sel_edge_c1 [29:28];
 assign o_ctrl_snap_c1 [3:0]                                = ctrl_snap_c1 [3:0];
+assign o_clear_snap_c1                                     = ctrl_snap_c1 [16];
 assign o_mode_sel_c1 [2:0]                                 = mode_sel_c1 [2:0];
 assign o_target_reg_ctrl_c1 [5:0]                          = target_reg_ctrl_c1 [5:0];
 assign o_target_reg_a0_c1 [31:0]                           = target_reg_a0_c1 [31:0];
@@ -511,6 +529,7 @@ assign o_src_edge_din0_c2 [1:0]                            = src_sel_edge_c2 [21
 assign o_src_sel_din1_c2 [3:0]                             = src_sel_edge_c2 [27:24];
 assign o_src_edge_din1_c2 [1:0]                            = src_sel_edge_c2 [29:28];
 assign o_ctrl_snap_c2 [3:0]                                = ctrl_snap_c2 [3:0];
+assign o_clear_snap_c2                                     = ctrl_snap_c2 [16];
 assign o_mode_sel_c2 [2:0]                                 = mode_sel_c2 [2:0];
 assign o_target_reg_ctrl_c2 [5:0]                          = target_reg_ctrl_c2 [5:0];
 assign o_target_reg_a0_c2 [31:0]                           = target_reg_a0_c2 [31:0];
@@ -547,6 +566,7 @@ assign o_src_edge_din0_c3 [1:0]                            = src_sel_edge_c3 [21
 assign o_src_sel_din1_c3 [3:0]                             = src_sel_edge_c3 [27:24];
 assign o_src_edge_din1_c3 [1:0]                            = src_sel_edge_c3 [29:28];
 assign o_ctrl_snap_c3 [3:0]                                = ctrl_snap_c3 [3:0];
+assign o_clear_snap_c3                                     = ctrl_snap_c3 [16];
 assign o_mode_sel_c3 [2:0]                                 = mode_sel_c3 [2:0];
 assign o_target_reg_ctrl_c3 [5:0]                          = target_reg_ctrl_c3 [5:0];
 assign o_target_reg_a0_c3 [31:0]                           = target_reg_a0_c3 [31:0];
@@ -807,7 +827,7 @@ always @ ( posedge hclk or negedge hrst_n )
 	if ( !hrst_n )
 		ctrl_snap_c0                  <= `lcl_COUNTER_ALL_APB_REG_CTRL_SNAP_C0_RST;
 	else if ( one_hot_reg_wire[17] && hwen ) 
-		ctrl_snap_c0                  <= hwdata_32w[3:0];
+		ctrl_snap_c0                  <= {hwdata_32w[16], 12'b 0, hwdata_32w[3:0]};
 
 
 always @ ( posedge hclk or negedge hrst_n )
@@ -982,7 +1002,7 @@ always @ ( posedge hclk or negedge hrst_n )
 	if ( !hrst_n )
 		ctrl_snap_c1                  <= `lcl_COUNTER_ALL_APB_REG_CTRL_SNAP_C1_RST;
 	else if ( one_hot_reg_wire[42] && hwen ) 
-		ctrl_snap_c1                  <= hwdata_32w[3:0];
+		ctrl_snap_c1                  <= {hwdata_32w[16], 12'b 0, hwdata_32w[3:0]};
 
 
 always @ ( posedge hclk or negedge hrst_n )
@@ -1157,7 +1177,7 @@ always @ ( posedge hclk or negedge hrst_n )
 	if ( !hrst_n )
 		ctrl_snap_c2                  <= `lcl_COUNTER_ALL_APB_REG_CTRL_SNAP_C2_RST;
 	else if ( one_hot_reg_wire[67] && hwen ) 
-		ctrl_snap_c2                  <= hwdata_32w[3:0];
+		ctrl_snap_c2                  <= {hwdata_32w[16], 12'b 0, hwdata_32w[3:0]};
 
 
 always @ ( posedge hclk or negedge hrst_n )
@@ -1332,7 +1352,7 @@ always @ ( posedge hclk or negedge hrst_n )
 	if ( !hrst_n )
 		ctrl_snap_c3                  <= `lcl_COUNTER_ALL_APB_REG_CTRL_SNAP_C3_RST;
 	else if ( one_hot_reg_wire[92] && hwen ) 
-		ctrl_snap_c3                  <= hwdata_32w[3:0];
+		ctrl_snap_c3                  <= {hwdata_32w[16], 12'b 0, hwdata_32w[3:0]};
 
 
 always @ ( posedge hclk or negedge hrst_n )
@@ -1473,7 +1493,8 @@ case ( haddr_11w )
 	`lcl_COUNTER_ALL_APB_REG_SOFT_TRIGGER_CTRL_C0_ADDR : hrdata_32w = {24'b 0, soft_trigger_ctrl_c0[7:0]};
 	`lcl_COUNTER_ALL_APB_REG_MUX_SEL_C0_ADDR : hrdata_32w = {28'b 0, mux_sel_c0[3:0]};
 	`lcl_COUNTER_ALL_APB_REG_SRC_SEL_EDGE_C0_ADDR : hrdata_32w = {2'b 0, src_sel_edge_c0[29:24], 2'b 0, src_sel_edge_c0[21:16], 2'b 0, src_sel_edge_c0[13:8], 2'b 0, src_sel_edge_c0[5:0]};
-	`lcl_COUNTER_ALL_APB_REG_CTRL_SNAP_C0_ADDR : hrdata_32w = {28'b 0, ctrl_snap_c0[3:0]};
+	`lcl_COUNTER_ALL_APB_REG_SNAP_STATUS_C0_ADDR : hrdata_32w = {28'b 0, i_snap_status_c0};
+	`lcl_COUNTER_ALL_APB_REG_CTRL_SNAP_C0_ADDR : hrdata_32w = {15'b 0, ctrl_snap_c0[16], 12'b 0, ctrl_snap_c0[3:0]};
 	`lcl_COUNTER_ALL_APB_REG_SHADOW_REG_C0_ADDR : hrdata_32w = i_shadow_reg_c0;
 	`lcl_COUNTER_ALL_APB_REG_MODE_SEL_C0_ADDR : hrdata_32w = {29'b 0, mode_sel_c0[2:0]};
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_CTRL_C0_ADDR : hrdata_32w = {26'b 0, target_reg_ctrl_c0[5:0]};
@@ -1483,7 +1504,7 @@ case ( haddr_11w )
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_B0_C0_ADDR : hrdata_32w = target_reg_b0_c0[31:0];
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_B1_C0_ADDR : hrdata_32w = target_reg_b1_c0[31:0];
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_B2_C0_ADDR : hrdata_32w = target_reg_b2_c0[31:0];
-	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C0_ADDR : hrdata_32w = {26'b 0, o_capture_reg_status_c0};
+	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C0_ADDR : hrdata_32w = {26'b 0, i_capture_reg_status_c0};
 	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_OVERFLOW_CTRL_C0_ADDR : hrdata_32w = {26'b 0, capture_reg_overflow_ctrl_c0[5:0]};
 	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A0_C0_ADDR : hrdata_32w = i_capture_reg_a0_c0;
 	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A1_C0_ADDR : hrdata_32w = i_capture_reg_a1_c0;
@@ -1508,7 +1529,8 @@ case ( haddr_11w )
 	`lcl_COUNTER_ALL_APB_REG_SOFT_TRIGGER_CTRL_C1_ADDR : hrdata_32w = {24'b 0, soft_trigger_ctrl_c1[7:0]};
 	`lcl_COUNTER_ALL_APB_REG_MUX_SEL_C1_ADDR : hrdata_32w = {28'b 0, mux_sel_c1[3:0]};
 	`lcl_COUNTER_ALL_APB_REG_SRC_SEL_EDGE_C1_ADDR : hrdata_32w = {2'b 0, src_sel_edge_c1[29:24], 2'b 0, src_sel_edge_c1[21:16], 2'b 0, src_sel_edge_c1[13:8], 2'b 0, src_sel_edge_c1[5:0]};
-	`lcl_COUNTER_ALL_APB_REG_CTRL_SNAP_C1_ADDR : hrdata_32w = {28'b 0, ctrl_snap_c1[3:0]};
+	`lcl_COUNTER_ALL_APB_REG_SNAP_STATUS_C1_ADDR : hrdata_32w = {28'b 0, i_snap_status_c1};
+	`lcl_COUNTER_ALL_APB_REG_CTRL_SNAP_C1_ADDR : hrdata_32w = {15'b 0, ctrl_snap_c1[16], 12'b 0, ctrl_snap_c1[3:0]};
 	`lcl_COUNTER_ALL_APB_REG_SHADOW_REG_C1_ADDR : hrdata_32w = i_shadow_reg_c1;
 	`lcl_COUNTER_ALL_APB_REG_MODE_SEL_C1_ADDR : hrdata_32w = {29'b 0, mode_sel_c1[2:0]};
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_CTRL_C1_ADDR : hrdata_32w = {26'b 0, target_reg_ctrl_c1[5:0]};
@@ -1518,7 +1540,7 @@ case ( haddr_11w )
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_B0_C1_ADDR : hrdata_32w = target_reg_b0_c1[31:0];
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_B1_C1_ADDR : hrdata_32w = target_reg_b1_c1[31:0];
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_B2_C1_ADDR : hrdata_32w = target_reg_b2_c1[31:0];
-	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C1_ADDR : hrdata_32w = {26'b 0, o_capture_reg_status_c1};
+	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C1_ADDR : hrdata_32w = {26'b 0, i_capture_reg_status_c1};
 	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_OVERFLOW_CTRL_C1_ADDR : hrdata_32w = {26'b 0, capture_reg_overflow_ctrl_c1[5:0]};
 	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A0_C1_ADDR : hrdata_32w = i_capture_reg_a0_c1;
 	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A1_C1_ADDR : hrdata_32w = i_capture_reg_a1_c1;
@@ -1543,7 +1565,8 @@ case ( haddr_11w )
 	`lcl_COUNTER_ALL_APB_REG_SOFT_TRIGGER_CTRL_C2_ADDR : hrdata_32w = {24'b 0, soft_trigger_ctrl_c2[7:0]};
 	`lcl_COUNTER_ALL_APB_REG_MUX_SEL_C2_ADDR : hrdata_32w = {28'b 0, mux_sel_c2[3:0]};
 	`lcl_COUNTER_ALL_APB_REG_SRC_SEL_EDGE_C2_ADDR : hrdata_32w = {2'b 0, src_sel_edge_c2[29:24], 2'b 0, src_sel_edge_c2[21:16], 2'b 0, src_sel_edge_c2[13:8], 2'b 0, src_sel_edge_c2[5:0]};
-	`lcl_COUNTER_ALL_APB_REG_CTRL_SNAP_C2_ADDR : hrdata_32w = {28'b 0, ctrl_snap_c2[3:0]};
+	`lcl_COUNTER_ALL_APB_REG_SNAP_STATUS_C2_ADDR : hrdata_32w = {28'b 0, i_snap_status_c2};
+	`lcl_COUNTER_ALL_APB_REG_CTRL_SNAP_C2_ADDR : hrdata_32w = {15'b 0, ctrl_snap_c2[16], 12'b 0, ctrl_snap_c2[3:0]};
 	`lcl_COUNTER_ALL_APB_REG_SHADOW_REG_C2_ADDR : hrdata_32w = i_shadow_reg_c2;
 	`lcl_COUNTER_ALL_APB_REG_MODE_SEL_C2_ADDR : hrdata_32w = {29'b 0, mode_sel_c2[2:0]};
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_CTRL_C2_ADDR : hrdata_32w = {26'b 0, target_reg_ctrl_c2[5:0]};
@@ -1553,7 +1576,7 @@ case ( haddr_11w )
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_B0_C2_ADDR : hrdata_32w = target_reg_b0_c2[31:0];
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_B1_C2_ADDR : hrdata_32w = target_reg_b1_c2[31:0];
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_B2_C2_ADDR : hrdata_32w = target_reg_b2_c2[31:0];
-	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C2_ADDR : hrdata_32w = {26'b 0, o_capture_reg_status_c2};
+	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C2_ADDR : hrdata_32w = {26'b 0, i_capture_reg_status_c2};
 	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_OVERFLOW_CTRL_C2_ADDR : hrdata_32w = {26'b 0, capture_reg_overflow_ctrl_c2[5:0]};
 	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A0_C2_ADDR : hrdata_32w = i_capture_reg_a0_c2;
 	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A1_C2_ADDR : hrdata_32w = i_capture_reg_a1_c2;
@@ -1578,7 +1601,8 @@ case ( haddr_11w )
 	`lcl_COUNTER_ALL_APB_REG_SOFT_TRIGGER_CTRL_C3_ADDR : hrdata_32w = {24'b 0, soft_trigger_ctrl_c3[7:0]};
 	`lcl_COUNTER_ALL_APB_REG_MUX_SEL_C3_ADDR : hrdata_32w = {28'b 0, mux_sel_c3[3:0]};
 	`lcl_COUNTER_ALL_APB_REG_SRC_SEL_EDGE_C3_ADDR : hrdata_32w = {2'b 0, src_sel_edge_c3[29:24], 2'b 0, src_sel_edge_c3[21:16], 2'b 0, src_sel_edge_c3[13:8], 2'b 0, src_sel_edge_c3[5:0]};
-	`lcl_COUNTER_ALL_APB_REG_CTRL_SNAP_C3_ADDR : hrdata_32w = {28'b 0, ctrl_snap_c3[3:0]};
+	`lcl_COUNTER_ALL_APB_REG_SNAP_STATUS_C3_ADDR : hrdata_32w = {28'b 0, i_snap_status_c3};
+	`lcl_COUNTER_ALL_APB_REG_CTRL_SNAP_C3_ADDR : hrdata_32w = {15'b 0, ctrl_snap_c3[16], 12'b 0, ctrl_snap_c3[3:0]};
 	`lcl_COUNTER_ALL_APB_REG_SHADOW_REG_C3_ADDR : hrdata_32w = i_shadow_reg_c3;
 	`lcl_COUNTER_ALL_APB_REG_MODE_SEL_C3_ADDR : hrdata_32w = {29'b 0, mode_sel_c3[2:0]};
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_CTRL_C3_ADDR : hrdata_32w = {26'b 0, target_reg_ctrl_c3[5:0]};
@@ -1588,7 +1612,7 @@ case ( haddr_11w )
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_B0_C3_ADDR : hrdata_32w = target_reg_b0_c3[31:0];
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_B1_C3_ADDR : hrdata_32w = target_reg_b1_c3[31:0];
 	`lcl_COUNTER_ALL_APB_REG_TARGET_REG_B2_C3_ADDR : hrdata_32w = target_reg_b2_c3[31:0];
-	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C3_ADDR : hrdata_32w = {26'b 0, o_capture_reg_status_c3};
+	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C3_ADDR : hrdata_32w = {26'b 0, i_capture_reg_status_c3};
 	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_OVERFLOW_CTRL_C3_ADDR : hrdata_32w = {26'b 0, capture_reg_overflow_ctrl_c3[5:0]};
 	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A0_C3_ADDR : hrdata_32w = i_capture_reg_a0_c3;
 	`lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A1_C3_ADDR : hrdata_32w = i_capture_reg_a1_c3;
@@ -1697,6 +1721,11 @@ end
 // ********* Create Read Enable Pulses *******************
 // ********************************************************
 
+assign ren_snap_status_c0 = (haddr_11w == 40) ? (~hwen & hren): 1'b0;
+always @ (posedge hclk or negedge hrst_n) begin
+  if (~hrst_n) ren_snap_status_c0_d <= 1'b0;
+  else         ren_snap_status_c0_d <= ren_snap_status_c0;
+end
 assign ren_capture_reg_a0_c0 = (haddr_11w == 54) ? (~hwen & hren): 1'b0;
 always @ (posedge hclk or negedge hrst_n) begin
   if (~hrst_n) ren_capture_reg_a0_c0_d <= 1'b0;
@@ -1726,6 +1755,11 @@ assign ren_capture_reg_b2_c0 = (haddr_11w == 59) ? (~hwen & hren): 1'b0;
 always @ (posedge hclk or negedge hrst_n) begin
   if (~hrst_n) ren_capture_reg_b2_c0_d <= 1'b0;
   else         ren_capture_reg_b2_c0_d <= ren_capture_reg_b2_c0;
+end
+assign ren_snap_status_c1 = (haddr_11w == 104) ? (~hwen & hren): 1'b0;
+always @ (posedge hclk or negedge hrst_n) begin
+  if (~hrst_n) ren_snap_status_c1_d <= 1'b0;
+  else         ren_snap_status_c1_d <= ren_snap_status_c1;
 end
 assign ren_capture_reg_a0_c1 = (haddr_11w == 118) ? (~hwen & hren): 1'b0;
 always @ (posedge hclk or negedge hrst_n) begin
@@ -1757,6 +1791,11 @@ always @ (posedge hclk or negedge hrst_n) begin
   if (~hrst_n) ren_capture_reg_b2_c1_d <= 1'b0;
   else         ren_capture_reg_b2_c1_d <= ren_capture_reg_b2_c1;
 end
+assign ren_snap_status_c2 = (haddr_11w == 168) ? (~hwen & hren): 1'b0;
+always @ (posedge hclk or negedge hrst_n) begin
+  if (~hrst_n) ren_snap_status_c2_d <= 1'b0;
+  else         ren_snap_status_c2_d <= ren_snap_status_c2;
+end
 assign ren_capture_reg_a0_c2 = (haddr_11w == 182) ? (~hwen & hren): 1'b0;
 always @ (posedge hclk or negedge hrst_n) begin
   if (~hrst_n) ren_capture_reg_a0_c2_d <= 1'b0;
@@ -1786,6 +1825,11 @@ assign ren_capture_reg_b2_c2 = (haddr_11w == 187) ? (~hwen & hren): 1'b0;
 always @ (posedge hclk or negedge hrst_n) begin
   if (~hrst_n) ren_capture_reg_b2_c2_d <= 1'b0;
   else         ren_capture_reg_b2_c2_d <= ren_capture_reg_b2_c2;
+end
+assign ren_snap_status_c3 = (haddr_11w == 232) ? (~hwen & hren): 1'b0;
+always @ (posedge hclk or negedge hrst_n) begin
+  if (~hrst_n) ren_snap_status_c3_d <= 1'b0;
+  else         ren_snap_status_c3_d <= ren_snap_status_c3;
 end
 assign ren_capture_reg_a0_c3 = (haddr_11w == 246) ? (~hwen & hren): 1'b0;
 always @ (posedge hclk or negedge hrst_n) begin
@@ -1826,7 +1870,7 @@ endmodule
 ////////////////////////////////////////////////////////////////////////////////////////
 //
 //  $Log: counter_all_apb_reg.v,v $
-//  Revision 1.0  4/27/2018 0:16:35  register_slave.pl
+//  Revision 1.0  5/20/2018 18:52:12  register_slave.pl
 //  Initial rev
 //
 //

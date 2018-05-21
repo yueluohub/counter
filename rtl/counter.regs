@@ -1,6 +1,6 @@
 Global_Parameters
 data_bus_width: 32
-base_address: 0x44108000
+base_address: 0x44120000
 address_block_name: counter_all_apb_reg
 address_bus_width: 11
 hclk: i_pclk
@@ -321,7 +321,7 @@ register_begin
   name: src_sel_edge_c0
   default_access: read-write
     size: 30 
-    address_offset: 0x28
+    address_offset: 0x27
   description:  select the valid input and edge for start/stop/din0/din1. 
   field_begin
     name: start
@@ -383,13 +383,29 @@ register_begin
   field_end 
 register_end
 
+Register_Parameters
+register_begin
+  name: snap_status_c0
+  default_access: read-only
+  enable_ren_pulse
+  size: 4 
+  address_offset: 0x28
+  description: the status of snapping the status or data from counter 0  
+  field_begin
+    name: start
+    rtl_name:i_snap_status_c0
+    bit_range: [3:0]
+    field_reset_value: 0x0
+    description: the status of snapping the status or data from counter 0. 
+  field_end 
+register_end
 
 Register_Parameters
 register_begin
   name: ctrl_snap_c0
   default_access: read-write
   enable_wen_pulse
-  size: 4 
+  size: 17 
   address_offset: 0x29
   description:  snap the status or data from counter 0. 
   field_begin
@@ -399,6 +415,13 @@ register_begin
     field_reset_value: 0x0
     description: snap the status or data from counter 0. 
   field_end 
+  field_begin
+    name: start
+    rtl_name:o_clear_snap_c0
+    bit_range: [16:16]
+    field_reset_value: 0x0
+    description: clear the status of snap the status or data from counter 0. 
+  field_end   
 register_end
 
 Register_Parameters
@@ -565,7 +588,7 @@ register_begin
   description:  capture mode , snap the status from counter 0. 
   field_begin
     name: start
-    rtl_name:o_capture_reg_status_c0
+    rtl_name:i_capture_reg_status_c0
     bit_range:[5:0] 
     field_reset_value: 0x0
     description_begin
@@ -593,7 +616,7 @@ register_begin
     bit_range:[5:0] 
     field_reset_value: 0x0
     description_begin
-        every bit means the same as o_capture_reg_status_c0.
+        every bit means the same as i_capture_reg_status_c0.
         1--> rewrite, o--> discard.
     description_end
   field_end 
@@ -1004,7 +1027,7 @@ register_begin
   name: src_sel_edge_c1
   default_access: read-write
     size: 30 
-    address_offset: 0x68
+    address_offset: 0x67
   description:  select the  valid input and edge for start/stop/din0/din1. 
   field_begin
     name: start
@@ -1066,13 +1089,29 @@ register_begin
   field_end 
 register_end
 
+Register_Parameters
+register_begin
+  name: snap_status_c1
+  default_access: read-only
+  enable_ren_pulse
+  size: 4 
+  address_offset: 0x68
+  description: the status of snapping the status or data from counter 1  
+  field_begin
+    name: start
+    rtl_name:i_snap_status_c1
+    bit_range: [3:0]
+    field_reset_value: 0x0
+    description: the status of snapping the status or data from counter 1. 
+  field_end 
+register_end
 
 Register_Parameters
 register_begin
   name: ctrl_snap_c1
   default_access: read-write
   enable_wen_pulse
-  size: 4 
+  size: 17 
   address_offset: 0x69
   description:  snap the status or data from counter 1. 
   field_begin
@@ -1082,6 +1121,13 @@ register_begin
     field_reset_value: 0x0
     description: snap the status or data from counter 1. 
   field_end 
+  field_begin
+    name: start
+    rtl_name:o_clear_snap_c1
+    bit_range: [16:16]
+    field_reset_value: 0x0
+    description: clear the status of snap the status or data from counter 1. 
+  field_end   
 register_end
 
 Register_Parameters
@@ -1248,7 +1294,7 @@ register_begin
   description:  capture mode , snap the status from counter 1. 
   field_begin
     name: start
-    rtl_name:o_capture_reg_status_c1
+    rtl_name:i_capture_reg_status_c1
     bit_range:[5:0] 
     field_reset_value: 0x0
     description_begin
@@ -1276,7 +1322,7 @@ register_begin
     bit_range:[5:0] 
     field_reset_value: 0x0
     description_begin
-        every bit means the same as o_capture_reg_status_c1.
+        every bit means the same as i_capture_reg_status_c1.
         1--> rewrite, o--> discard.
     description_end
   field_end 
@@ -1694,7 +1740,7 @@ register_begin
   name: src_sel_edge_c2
   default_access: read-write
     size: 30 
-    address_offset: 0xa8
+    address_offset: 0xa7
   description:  select the  valid input and edge for start/stop/din0/din1. 
   field_begin
     name: start
@@ -1756,13 +1802,29 @@ register_begin
   field_end 
 register_end
 
+Register_Parameters
+register_begin
+  name: snap_status_c2
+  default_access: read-only
+  enable_ren_pulse
+  size: 4 
+  address_offset: 0xa8
+  description: the status of snapping the status or data from counter 2  
+  field_begin
+    name: start
+    rtl_name:i_snap_status_c2
+    bit_range: [3:0]
+    field_reset_value: 0x0
+    description: the status of snapping the status or data from counter 2. 
+  field_end 
+register_end
 
 Register_Parameters
 register_begin
   name: ctrl_snap_c2
   default_access: read-write
   enable_wen_pulse
-  size: 4 
+  size: 17
   address_offset: 0xa9
   description:  snap the status or data from counter 2. 
   field_begin
@@ -1772,6 +1834,13 @@ register_begin
     field_reset_value: 0x0
     description: snap the status or data from counter 2. 
   field_end 
+  field_begin
+    name: start
+    rtl_name:o_clear_snap_c2
+    bit_range: [16:16]
+    field_reset_value: 0x0
+    description: clear the status of snap the status or data from counter 2. 
+  field_end   
 register_end
 
 Register_Parameters
@@ -1938,7 +2007,7 @@ register_begin
   description:  capture mode , snap the status from counter 2. 
   field_begin
     name: start
-    rtl_name:o_capture_reg_status_c2
+    rtl_name:i_capture_reg_status_c2
     bit_range:[5:0] 
     field_reset_value: 0x0
     description_begin
@@ -1966,7 +2035,7 @@ register_begin
     bit_range:[5:0] 
     field_reset_value: 0x0
     description_begin
-        every bit means the same as o_capture_reg_status_c2.
+        every bit means the same as i_capture_reg_status_c2.
         1--> rewrite, o--> discard.
     description_end
   field_end 
@@ -2378,7 +2447,7 @@ register_begin
   name: src_sel_edge_c3
   default_access: read-write
     size: 30 
-    address_offset: 0xe8
+    address_offset: 0xe7
   description:  select the  valid input and edge for start/stop/din0/din1. 
   field_begin
     name: start
@@ -2440,13 +2509,29 @@ register_begin
   field_end 
 register_end
 
+Register_Parameters
+register_begin
+  name: snap_status_c3
+  default_access: read-only
+  enable_ren_pulse
+  size: 4 
+  address_offset: 0xe8
+  description: the status of snapping the status or data from counter 3. 
+  field_begin
+    name: start
+    rtl_name:i_snap_status_c3
+    bit_range: [3:0]
+    field_reset_value: 0x0
+    description: the status of snapping the status or data from counter 3. 
+  field_end 
+register_end
 
 Register_Parameters
 register_begin
   name: ctrl_snap_c3
   default_access: read-write
   enable_wen_pulse
-  size: 4 
+  size: 17 
   address_offset: 0xe9
   description:  snap the status or data from counter 3. 
   field_begin
@@ -2455,6 +2540,13 @@ register_begin
     bit_range: [3:0]
     field_reset_value: 0x0
     description: snap the status or data from counter 3. 
+  field_end 
+  field_begin
+    name: start
+    rtl_name:o_clear_snap_c3
+    bit_range: [16:16]
+    field_reset_value: 0x0
+    description: clear the status of snap the status or data from counter 3. 
   field_end 
 register_end
 
@@ -2622,7 +2714,7 @@ register_begin
   description:  capture mode , snap the status from counter 3. 
   field_begin
     name: start
-    rtl_name:o_capture_reg_status_c3
+    rtl_name:i_capture_reg_status_c3
     bit_range:[5:0] 
     field_reset_value: 0x0
     description_begin
@@ -2650,7 +2742,7 @@ register_begin
     bit_range:[5:0] 
     field_reset_value: 0x0
     description_begin
-        every bit means the same as o_capture_reg_status_c3.
+        every bit means the same as i_capture_reg_status_c3.
         1--> rewrite, o--> discard.
     description_end
   field_end 
