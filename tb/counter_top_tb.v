@@ -2715,8 +2715,11 @@ end
 `ifdef SIM_FINISH_MS
 initial begin
 #(1_000_000*`SIM_FINISH_MS);
+`ifdef AUTO_FINISH
+$finish;
+`else
 $stop;
-//$finish;
+`endif
 
 end
 `endif
