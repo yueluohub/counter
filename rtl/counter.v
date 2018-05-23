@@ -238,6 +238,8 @@ wire [32:0] current_counter_automatic;
 wire w1_waveform_match_reg3;
 
 //assign inner_din_shift = i_inner_din>>COUNTER_NUM-1;
+wire [5:0] w1_inner_din;
+assign w1_inner_din = {{(6-COUNTER_NUM){1'b0}},i_inner_din[COUNTER_NUM-1:0]};
 
 always @(*) begin
     case(32'h1<<i_src_sel_start) 
@@ -251,12 +253,12 @@ always @(*) begin
         32'h1<<8 :   counter_start = i_single_clear_trigger & i_soft_trigger_ctrl[6];
         32'h1<<9 :   counter_start = i_global_reset_trigger & i_soft_trigger_ctrl[3];
         32'h1<<10:   counter_start = i_single_reset_trigger & i_soft_trigger_ctrl[7];
-        32'h1<<11:   counter_start = i_inner_din[0];
-        32'h1<<12:   counter_start = (COUNTER_NUM>1)?i_inner_din[1]:1'b0;
-        32'h1<<13:   counter_start = (COUNTER_NUM>2)?i_inner_din[2]:1'b0;
-        32'h1<<14:   counter_start = (COUNTER_NUM>3)?i_inner_din[3]:1'b0;
-        32'h1<<15:   counter_start = (COUNTER_NUM>4)?i_inner_din[4]:1'b0;
-        default:     counter_start = (COUNTER_NUM>5)?i_inner_din[5]:1'b0;
+        32'h1<<11:   counter_start = w1_inner_din[0];
+        32'h1<<12:   counter_start = w1_inner_din[1];
+        32'h1<<13:   counter_start = w1_inner_din[2];
+        32'h1<<14:   counter_start = w1_inner_din[3];
+        32'h1<<15:   counter_start = w1_inner_din[4];
+        default:     counter_start = w1_inner_din[5];
     endcase
 end
 
@@ -272,12 +274,12 @@ always @(*) begin
         32'h1<<8:    counter_stop = i_single_clear_trigger & i_soft_trigger_ctrl[6];
         32'h1<<9:    counter_stop = i_global_reset_trigger & i_soft_trigger_ctrl[3];
         32'h1<<10:   counter_stop = i_single_reset_trigger & i_soft_trigger_ctrl[7];
-        32'h1<<11:   counter_stop = i_inner_din[0];
-        32'h1<<12:   counter_stop = (COUNTER_NUM>1)?i_inner_din[1]:1'b0;
-        32'h1<<13:   counter_stop = (COUNTER_NUM>2)?i_inner_din[2]:1'b0;
-        32'h1<<14:   counter_stop = (COUNTER_NUM>3)?i_inner_din[3]:1'b0;
-        32'h1<<15:   counter_stop = (COUNTER_NUM>4)?i_inner_din[4]:1'b0;
-        default:     counter_stop = (COUNTER_NUM>5)?i_inner_din[5]:1'b0;
+        32'h1<<11:   counter_stop = w1_inner_din[0];
+        32'h1<<12:   counter_stop = w1_inner_din[1];
+        32'h1<<13:   counter_stop = w1_inner_din[2];
+        32'h1<<14:   counter_stop = w1_inner_din[3];
+        32'h1<<15:   counter_stop = w1_inner_din[4];
+        default:     counter_stop = w1_inner_din[5];
     endcase
 end
 
@@ -293,12 +295,12 @@ always @(*) begin
         32'h1<<8:    counter_din0 = i_single_clear_trigger & i_soft_trigger_ctrl[6];
         32'h1<<9:    counter_din0 = i_global_reset_trigger & i_soft_trigger_ctrl[3];
         32'h1<<10:   counter_din0 = i_single_reset_trigger & i_soft_trigger_ctrl[7];
-        32'h1<<11:   counter_din0 = i_inner_din[0];
-        32'h1<<12:   counter_din0 = (COUNTER_NUM>1)?i_inner_din[1]:1'b0;
-        32'h1<<13:   counter_din0 = (COUNTER_NUM>2)?i_inner_din[2]:1'b0;
-        32'h1<<14:   counter_din0 = (COUNTER_NUM>3)?i_inner_din[3]:1'b0;
-        32'h1<<15:   counter_din0 = (COUNTER_NUM>4)?i_inner_din[4]:1'b0;
-        default:     counter_din0 = (COUNTER_NUM>5)?i_inner_din[5]:1'b0;
+        32'h1<<11:   counter_din0 = w1_inner_din[0];
+        32'h1<<12:   counter_din0 = w1_inner_din[1];
+        32'h1<<13:   counter_din0 = w1_inner_din[2];
+        32'h1<<14:   counter_din0 = w1_inner_din[3];
+        32'h1<<15:   counter_din0 = w1_inner_din[4];
+        default:     counter_din0 = w1_inner_din[5];
     endcase
 end
 
@@ -314,12 +316,12 @@ always @(*) begin
         32'h1<<8:    counter_din1 = i_single_clear_trigger & i_soft_trigger_ctrl[6];
         32'h1<<9:    counter_din1 = i_global_reset_trigger & i_soft_trigger_ctrl[3];
         32'h1<<10:   counter_din1 = i_single_reset_trigger & i_soft_trigger_ctrl[7];
-        32'h1<<11:   counter_din1 = i_inner_din[0];
-        32'h1<<12:   counter_din1 = (COUNTER_NUM>1)?i_inner_din[1]:1'b0;
-        32'h1<<13:   counter_din1 = (COUNTER_NUM>2)?i_inner_din[2]:1'b0;
-        32'h1<<14:   counter_din1 = (COUNTER_NUM>3)?i_inner_din[3]:1'b0;
-        32'h1<<15:   counter_din1 = (COUNTER_NUM>4)?i_inner_din[4]:1'b0;
-        default:     counter_din1 = (COUNTER_NUM>5)?i_inner_din[5]:1'b0;
+        32'h1<<11:   counter_din1 = w1_inner_din[0];
+        32'h1<<12:   counter_din1 = w1_inner_din[1];
+        32'h1<<13:   counter_din1 = w1_inner_din[2];
+        32'h1<<14:   counter_din1 = w1_inner_din[3];
+        32'h1<<15:   counter_din1 = w1_inner_din[4];
+        default:     counter_din1 = w1_inner_din[5];
     endcase
 end
 
