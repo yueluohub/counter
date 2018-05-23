@@ -53,20 +53,4 @@
 // `define TESTCASE_ALL_COUNTERMODE_5 //global trigger.
 `define TESTCASE_ALL_COUNTERMODE_6 // start 、stop
 
-//
-//
-// `define TESTCASE_C1_WAVEFORM_0
-// `define TESTCASE_C1_WAVEFORM_1
-// `define TESTCASE_C1_WAVEFORM_2
-// `define TESTCASE_C1_WAVEFORM_3
-// 
-// 
-// `define TESTCASE_C2_WAVEFORM_0
-// `define TESTCASE_C2_WAVEFORM_1
-// `define TESTCASE_C2_WAVEFORM_2
-// `define TESTCASE_C2_WAVEFORM_3
-// 
-// `define TESTCASE_C3_WAVEFORM_0
-// `define TESTCASE_C3_WAVEFORM_1
-// `define TESTCASE_C3_WAVEFORM_2
-// `define TESTCASE_C3_WAVEFORM_3
+

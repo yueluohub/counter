@@ -229,18 +229,7 @@ end
 //end
 //end
 //
-`ifdef TESTCASE_C0_WAVEFORM_0
- `define CLK_32M
-`endif
-`ifdef TESTCASE_C0_WAVEFORM_1
- `define CLK_32M
-`endif
-`ifdef TESTCASE_C0_WAVEFORM_2
- `define CLK_32M
-`endif
-`ifdef TESTCASE_C0_WAVEFORM_3
- `define CLK_32M
-`endif
+
 
 
 
@@ -263,17 +252,7 @@ initial begin
     apb_write(32'h8,32'hff);
     apb_read(32'h8,data);
     apb_read (base_c0+`ENABLE_C0,data);
-    `ifdef  CLK_32M
-    apb_write(base_c0+`ENABLE_C0,data|32'h2000);//c0,enable.,32m.
-    apb_write(base_c1+`ENABLE_C0,data|32'h2000);//c0,enable.,32m.
-    apb_write(base_c2+`ENABLE_C0,data|32'h2000);//c0,enable.,32m.
-    apb_write(base_c3+`ENABLE_C0,data|32'h2000);//c0,enable.,32m.    
-    `else 
-    apb_write(base_c0+`ENABLE_C0,data|32'h2100);//c0,enable.//32k
-    apb_write(base_c1+`ENABLE_C0,data|32'h2100);//c0,enable.//32k
-    apb_write(base_c2+`ENABLE_C0,data|32'h2100);//c0,enable.//32k
-    apb_write(base_c3+`ENABLE_C0,data|32'h2100);//c0,enable.//32k
-    `endif
+    #2000；
     // apb_read (base_c1+`ENABLE_C0,data);
     // apb_write(base_c1+`ENABLE_C0,data|32'h2000);//c1
     // apb_read (base_c2+`ENABLE_C0,data);
@@ -306,6 +285,7 @@ initial begin
     
     //
    `ifdef	TESTCASE_C0_WAVEFORM_0
+    `define CLK_32M
     apb_write_read(addr_base+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
     apb_write_read(addr_base+`MODE_SEL_C0,32'b001,data);
     apb_write_read(addr_base+`TARGET_REG_CTRL_C0,32'b000001,data);
@@ -338,6 +318,7 @@ initial begin
    `endif
 
    `ifdef	TESTCASE_C0_WAVEFORM_1
+    `define CLK_32M
 
     apb_write_read(addr_base+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
     apb_write_read(addr_base+`MODE_SEL_C0,32'b001,data);
@@ -362,6 +343,7 @@ initial begin
    `endif
    
     `ifdef	TESTCASE_C0_WAVEFORM_2
+     `define CLK_32M
 
     apb_write_read(addr_base+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
     apb_write_read(addr_base+`MODE_SEL_C0,32'b001,data);
@@ -386,6 +368,7 @@ initial begin
    `endif
 
     `ifdef	TESTCASE_C0_WAVEFORM_3
+     `define CLK_32M
 
     apb_write_read(addr_base+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
     apb_write_read(addr_base+`MODE_SEL_C0,32'b001,data);
@@ -421,6 +404,7 @@ initial begin
    `endif   
  
     `ifdef	TESTCASE_C0_SW_COUNTMODE_0
+     `define CLK_32M
 
     apb_write_read(addr_base+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
     apb_write_read(addr_base+`MODE_SEL_C0,32'b101,data);//count switch 
@@ -459,6 +443,7 @@ initial begin
    `endif 
 
     `ifdef	TESTCASE_C0_SW_COUNTMODE_1
+     `define CLK_32M
 
     apb_write_read(addr_base+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
     apb_write_read(addr_base+`MODE_SEL_C0,32'b101,data);//count switch 
@@ -499,6 +484,7 @@ initial begin
    `endif 
 
     `ifdef	TESTCASE_C0_SW_COUNTMODE_2
+     `define CLK_32M
 
     apb_write_read(addr_base+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
     apb_write_read(addr_base+`MODE_SEL_C0,32'b100,data);//count switch 
@@ -689,6 +675,9 @@ initial begin
    `endif
    
     `ifdef	TESTCASE_C0_CAPTURE_0
+    `define CLK_32M
+    `define CAPTURE_DATA_IN
+
         apb_write_read(addr_base+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
         apb_write_read(addr_base+`MODE_SEL_C0,32'b000,data);
         apb_write_read(addr_base+`SRC_SEL_EDGE_C0,32'h01220000,data);
@@ -710,6 +699,7 @@ initial begin
     `endif
    
     `ifdef	TESTCASE_C0_CAPTURE_1
+    `define CLK_32M
     `define CAPTURE_DATA_IN
     apb_write_read(addr_base+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
     apb_write_read(addr_base+`MODE_SEL_C0,32'b000,data);
@@ -756,6 +746,8 @@ initial begin
    `endif
 
    `ifdef	TESTCASE_C0_CAPTURE_2
+    `define CLK_32M
+    `define CAPTURE_DATA_IN
     apb_write_read(addr_base+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
     apb_write_read(addr_base+`MODE_SEL_C0,32'b000,data);
     //apb_write_read(addr_base+`TARGET_REG_CTRL_C0,32'b110110,data);
@@ -830,6 +822,7 @@ initial begin
    `endif
    
    `ifdef TESTCASE_C0_SHIFTIN_0
+   `define SHIFT_DATA_IN
     apb_write_read(addr_base+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
     apb_write_read(addr_base+`MODE_SEL_C0,32'b010,data);//shift in mode.
     apb_write_read(addr_base+`SHIFTIN_DATA_CTRL_BITCNTS_C0,32'd31,data);
@@ -867,6 +860,7 @@ initial begin
    `endif
    
     `ifdef TESTCASE_C0_SHIFTIN_1
+    `define SHIFT_DATA_IN
     apb_write_read(addr_base+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
     apb_write_read(addr_base+`MODE_SEL_C0,32'b010,data);//shift in mode.
     // apb_write_read(addr_base+`SHIFTIN_DATA_CTRL_BITCNTS_C0,32'd31,data);
@@ -910,6 +904,7 @@ initial begin
    `endif  
 
     `ifdef TESTCASE_C0_SHIFTIN_2
+    `define SHIFT_DATA_IN
     apb_write_read(addr_base+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
     apb_write_read(addr_base+`MODE_SEL_C0,32'b010,data);//shift in mode.
     // apb_write_read(addr_base+`SHIFTIN_DATA_CTRL_BITCNTS_C0,32'd31,data);
@@ -1333,7 +1328,7 @@ end
 
 `ifdef  TESTCASE_ALL_COUNTERMODE_0
 `define CAPTURE_DATA_CASECADE
-
+`define CLK_32M
 initial begin
 wait (stop_event) ;
 for(i=0;i<4;i++) begin
@@ -1434,7 +1429,7 @@ end
 
 `ifdef  TESTCASE_ALL_COUNTERMODE_1
 `define CAPTURE_DATA_CASECADE
-
+`define CLK_32M
 initial begin
 wait (stop_event) ;
 for(i=0;i<4;i++) begin
@@ -1534,6 +1529,7 @@ end
 `endif
 
 `ifdef  TESTCASE_ALL_COUNTERMODE_2
+`define CLK_32M
 //inner channel casecade
 initial begin
 wait (stop_event) ;
@@ -1642,6 +1638,7 @@ end
 `endif
 
 `ifdef  TESTCASE_ALL_COUNTERMODE_3
+`define CLK_32M
 //inner channel casecade
 initial begin
 wait (stop_event) ;
@@ -1751,6 +1748,7 @@ end
 
 `ifdef  TESTCASE_ALL_COUNTERMODE_4
 `define SOFT_SINGLE_TRIGGER
+`define CLK_32M
 //soft trigger. 
 initial begin
 wait (stop_event) ;
@@ -1868,6 +1866,7 @@ end
 
 `ifdef  TESTCASE_ALL_COUNTERMODE_5
 `define SOFT_GLOBAL_TRIGGER
+`define CLK_32M
 //soft trigger. 
 initial begin
 wait (stop_event) ;
@@ -2458,6 +2457,24 @@ end
 
 
 `endif
+
+
+
+initial begin
+    #2500;
+    apb_read (base_c0+`ENABLE_C0,data);
+    `ifdef  CLK_32M
+    apb_write(base_c0+`ENABLE_C0,data|32'h2000);//c0,enable.,32m.
+    apb_write(base_c1+`ENABLE_C0,data|32'h2000);//c0,enable.,32m.
+    apb_write(base_c2+`ENABLE_C0,data|32'h2000);//c0,enable.,32m.
+    apb_write(base_c3+`ENABLE_C0,data|32'h2000);//c0,enable.,32m.    
+    `else 
+    apb_write(base_c0+`ENABLE_C0,data|32'h2100);//c0,enable.//32k
+    apb_write(base_c1+`ENABLE_C0,data|32'h2100);//c0,enable.//32k
+    apb_write(base_c2+`ENABLE_C0,data|32'h2100);//c0,enable.//32k
+    apb_write(base_c3+`ENABLE_C0,data|32'h2100);//c0,enable.//32k
+    `endif
+end
 
 
 `ifdef CAPTURE_DATA_CASECADE
