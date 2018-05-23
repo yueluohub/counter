@@ -228,6 +228,23 @@ end
 //join
 //end
 //end
+//
+`ifdef TESTCASE_C0_WAVEFORM_0
+ `define CLK_32M
+`endif
+`ifdef TESTCASE_C0_WAVEFORM_1
+ `define CLK_32M
+`endif
+`ifdef TESTCASE_C0_WAVEFORM_2
+ `define CLK_32M
+`endif
+`ifdef TESTCASE_C0_WAVEFORM_3
+ `define CLK_32M
+`endif
+
+
+
+
 
 initial begin
     o_paddr     <= '0;
@@ -2024,7 +2041,7 @@ end
     //wait(i_int);
     tmp_i=32'h1f;
     //repeat(20) @(posedge i_clk[i]);
-    for(j=0;j<15;j++) 
+    for(j=0;j<16;j++) 
     begin
         $display("counter: source j=%h",j);
 

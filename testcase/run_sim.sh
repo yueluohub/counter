@@ -1,5 +1,5 @@
 #! /bin/bash
-
+if [[ "$2"x == *'define'*x ]]; then
   current_path="`pwd`"
   CASE_NUM=$1
   TESTCASE=$2
@@ -30,6 +30,7 @@
   echo $RUN_SIM_CMD $TESTCASE >> cmd.log
   if [[ $TESTCASE == *${key_word}* ]]; then
   xterm -e $RUN_SIM_CMD $TESTCASE 
+  ${current_path}/make.sh sim.log
   if [ ! -d "$COV_WORK0" ]; then
   mkdir $COV_WORK0
   fi
@@ -39,4 +40,6 @@
   cp -rf ./cov_work/scope/$CASE_NUM $COV_WORK/$CASE_NUM
   cp -f ./cov_work/scope/*.ucm $COV_WORK/
   fi
-
+else 
+  echo "please input case0 testcase"
+fi

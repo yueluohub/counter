@@ -1,0 +1,1 @@
+merge -runfile merge.file   -out merged -metrics all -overwrite
