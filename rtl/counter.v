@@ -770,11 +770,17 @@ always @(posedge i_clk or negedge i_rst_n) begin
         end
         if((&r1_capture_reg_status[5:3])&&!r1_capture_reg_status_dly_b) begin //
             o_capture_reg_status[5:3] <= r1_capture_reg_status[5:3];
-            o_capture_reg_b0 <= r1_capture_reg_b0;
-            o_capture_reg_b1 <= r1_capture_reg_b1;
-            o_capture_reg_b2 <= r1_capture_reg_b2;
+	    if(!o_capture_reg_status[3]||(o_capture_reg_status[3]&&i_capture_reg_overflow_ctrl[3]))
+              o_capture_reg_b0 <= r1_capture_reg_b0;
+	    if(!o_capture_reg_status[4]||(o_capture_reg_status[4]&&i_capture_reg_overflow_ctrl[4]))
+              o_capture_reg_b1 <= r1_capture_reg_b1;
+	    if(!o_capture_reg_status[5]||(o_capture_reg_status[5]&&i_capture_reg_overflow_ctrl[5]))
+              o_capture_reg_b2 <= r1_capture_reg_b2;
         end
-        else if(w_ctrl_snap_posedge[1]) begin
+	else if(|w_capture_reg_read_flag_posedge[5:3]) begin
+            o_capture_reg_status[5:3] <= o_capture_reg_status[5:3] & (~w_capture_reg_read_flag_posedge[5:3]);
+	end
+        else if(w_ctrl_snap_posedge[2]) begin
             o_capture_reg_status[5:3] <= r1_capture_reg_status[5:3];
             o_capture_reg_b0 <= r1_capture_reg_b0;
             o_capture_reg_b1 <= r1_capture_reg_b1;
@@ -782,10 +788,16 @@ always @(posedge i_clk or negedge i_rst_n) begin
         end
         if((&r1_capture_reg_status[2:0])&&!r1_capture_reg_status_dly_a) begin //
             o_capture_reg_status[2:0] <= r1_capture_reg_status[2:0];
-            o_capture_reg_a0 <= r1_capture_reg_a0;
-            o_capture_reg_a1 <= r1_capture_reg_a1;
-            o_capture_reg_a2 <= r1_capture_reg_a2;        
+	    if(!o_capture_reg_status[0]||(o_capture_reg_status[0]&&i_capture_reg_overflow_ctrl[0]))
+              o_capture_reg_a0 <= r1_capture_reg_a0;
+	    if(!o_capture_reg_status[1]||(o_capture_reg_status[1]&&i_capture_reg_overflow_ctrl[1]))
+              o_capture_reg_a1 <= r1_capture_reg_a1;
+	    if(!o_capture_reg_status[2]||(o_capture_reg_status[2]&&i_capture_reg_overflow_ctrl[2]))
+              o_capture_reg_a2 <= r1_capture_reg_a2;        
         end
+	else if(|w_capture_reg_read_flag_posedge[2:0]) begin
+            o_capture_reg_status[2:0] <= o_capture_reg_status[2:0] & (~w_capture_reg_read_flag_posedge[2:0]);
+	end
         else if(w_ctrl_snap_posedge[1]) begin
             o_capture_reg_status[2:0] <= r1_capture_reg_status[2:0];
             o_capture_reg_a0 <= r1_capture_reg_a0;
@@ -796,7 +808,7 @@ always @(posedge i_clk or negedge i_rst_n) begin
             o_shiftin_data              <= r1_shiftin_data;
             o_shiftin_databits_updated  <= r1_shiftin_databits_updated;
         end
-        else if(w_ctrl_snap_posedge[2]) begin
+        else if(w_ctrl_snap_posedge[3]) begin
             o_shiftin_data              <= r1_shiftin_data;
             o_shiftin_databits_updated  <= r1_shiftin_databits_updated;
         end
@@ -849,7 +861,14 @@ always @(posedge i_clk or negedge i_rst_n) begin
         capture_cnts_a    <= 2'h0;      
     end
     else if(capture_mode_en) begin
-        r1_capture_reg_status[2:0] <= r1_capture_reg_status[2:0] & (~w_capture_reg_read_flag_posedge[2:0]);
+	if(w_ctrl_snap_posedge[1]||((&r1_capture_reg_status[2:0])&&!r1_capture_reg_status_dly_a))
+          if(din0_flag) 
+	    r1_capture_reg_status[2:0] <= (3'h1<<capture_cnts_a);
+	  else
+	    r1_capture_reg_status[2:0] <= 3'b0;
+	else if(din0_flag) 
+            r1_capture_reg_status[2:0] <= r1_capture_reg_status[2:0] | (3'h1<<capture_cnts_a);
+	 
         if(din0_flag) begin
             if(capture_cnts_a==2'h2)
                 capture_cnts_a <= 2'h0;
@@ -857,7 +876,6 @@ always @(posedge i_clk or negedge i_rst_n) begin
                 capture_cnts_a <= capture_cnts_a + 2'h1;
         end
         if(din0_flag) begin
-            r1_capture_reg_status[2:0] <= r1_capture_reg_status[2:0] & (~w_capture_reg_read_flag_posedge[2:0]) | (3'h1<<capture_cnts_a);
             if(capture_cnts_a==2'h0 && (!r1_capture_reg_status[0] || w_capture_reg_read_flag_posedge[0] || (r1_capture_reg_status[0]&&i_capture_reg_overflow_ctrl[0]))) // overflow overwrite. and a new edge.
                 r1_capture_reg_a0 <= current_counter;
             else if(capture_cnts_a==2'h1 && (!r1_capture_reg_status[1] || w_capture_reg_read_flag_posedge[1] || (r1_capture_reg_status[1]&&i_capture_reg_overflow_ctrl[1])))
@@ -888,7 +906,15 @@ always @(posedge i_clk or negedge i_rst_n) begin
         capture_cnts_b    <= 2'h0;      
     end
     else if(capture_mode_en) begin
-        r1_capture_reg_status[5:3] <= r1_capture_reg_status[5:3] & (~w_capture_reg_read_flag_posedge[5:3]);
+	if(w_ctrl_snap_posedge[2]||((&r1_capture_reg_status[5:3])&&!r1_capture_reg_status_dly_b))
+	  if(din1_flag) begin
+		r1_capture_reg_status[5:3] <= (3'h1<<capture_cnts_b);
+	  end
+	  else begin
+		r1_capture_reg_status[5:3] <= 3'b0;
+	  end
+	else if(din1_flag)
+            r1_capture_reg_status[5:3] <= r1_capture_reg_status[5:3] | (3'h1<<capture_cnts_b);
         if(din1_flag) begin
             if(capture_cnts_b==2'h2)
                 capture_cnts_b <= 2'h0;
@@ -896,7 +922,6 @@ always @(posedge i_clk or negedge i_rst_n) begin
                 capture_cnts_b <= capture_cnts_b + 2'h1;
         end
         if(din1_flag) begin
-            r1_capture_reg_status[5:3] <= r1_capture_reg_status[5:3] & (~w_capture_reg_read_flag_posedge[5:3]) | (3'h1<<capture_cnts_b);
             if(capture_cnts_b==2'h0 && (!r1_capture_reg_status[3] || w_capture_reg_read_flag_posedge[3] || (r1_capture_reg_status[3]&&i_capture_reg_overflow_ctrl[3])))
                 r1_capture_reg_b0 <= current_counter;
             else if(capture_cnts_b==2'h1 && (!r1_capture_reg_status[4] || w_capture_reg_read_flag_posedge[4] || (r1_capture_reg_status[4]&&i_capture_reg_overflow_ctrl[4])))

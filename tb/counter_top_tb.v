@@ -193,6 +193,14 @@ localparam  base_c0=32'h000,
 
 reg [31:0] addr_base;
 reg  int_flag_en;
+reg [31:0] int_status,int_status0;
+reg [31:0] base_addr_int;
+reg [31:0] cap_count_a,cap_count_b;
+reg [31:0] cap_count_a_c0,cap_count_b_c0;
+reg [31:0] cap_count_a_c1,cap_count_b_c1;
+reg [31:0] cap_count_a_c2,cap_count_b_c2;
+reg [31:0] cap_count_a_c3,cap_count_b_c3;
+
 
 initial begin
     apb_hand_on ='0;
@@ -1328,7 +1336,7 @@ end
 
 `ifdef  TESTCASE_ALL_COUNTERMODE_0
 `define CAPTURE_DATA_CASECADE
-`define CLK_32M
+//`define CLK_32M
 initial begin
 wait (stop_event) ;
 for(i=0;i<4;i++) begin
@@ -1429,7 +1437,7 @@ end
 
 `ifdef  TESTCASE_ALL_COUNTERMODE_1
 `define CAPTURE_DATA_CASECADE
-`define CLK_32M
+//`define CLK_32M
 initial begin
 wait (stop_event) ;
 for(i=0;i<4;i++) begin
@@ -1529,7 +1537,7 @@ end
 `endif
 
 `ifdef  TESTCASE_ALL_COUNTERMODE_2
-`define CLK_32M
+//`define CLK_32M
 //inner channel casecade
 initial begin
 wait (stop_event) ;
@@ -1638,7 +1646,7 @@ end
 `endif
 
 `ifdef  TESTCASE_ALL_COUNTERMODE_3
-`define CLK_32M
+//`define CLK_32M
 //inner channel casecade
 initial begin
 wait (stop_event) ;
@@ -1663,19 +1671,21 @@ for(i=0;i<4;i++) begin
     apb_write_read(addr_base+`TARGET_REG_A0_C0,32'h10,data);
     apb_write_read(addr_base+`TARGET_REG_A1_C0,32'h20,data);
     apb_write_read(addr_base+`TARGET_REG_A2_C0,32'h30,data);
+    //apb_write_read(addr_base+`TARGET_REG_A2_C0,32'ha0,data);
     apb_write_read(addr_base+`TARGET_REG_B0_C0,32'h10,data);
     apb_write_read(addr_base+`TARGET_REG_B1_C0,32'h20,data);
     apb_write_read(addr_base+`TARGET_REG_B2_C0,32'h30,data);
+    //apb_write_read(addr_base+`TARGET_REG_B2_C0,32'ha0,data);
     // $display("new shiftout data = %h,src data = %h , bits=%d,counter num =%d",count_reverse(data,5'd31),data,5'd31,i);
     end
     if(i==2) begin
     apb_write_read(addr_base+`TARGET_REG_CTRL_C0,32'b000001,data);
-    apb_write_read(addr_base+`TARGET_REG_A0_C0,32'h5,data);
-    apb_write_read(addr_base+`TARGET_REG_A1_C0,32'h15,data);
-    apb_write_read(addr_base+`TARGET_REG_A2_C0,32'h25,data);
-    apb_write_read(addr_base+`TARGET_REG_B0_C0,32'h10,data);
-    apb_write_read(addr_base+`TARGET_REG_B1_C0,32'h27,data);
-    apb_write_read(addr_base+`TARGET_REG_B2_C0,32'h51,data);
+    apb_write_read(addr_base+`TARGET_REG_A0_C0,32'h55,data);
+    apb_write_read(addr_base+`TARGET_REG_A1_C0,32'he5,data);
+    apb_write_read(addr_base+`TARGET_REG_A2_C0,32'hf0,data);
+    apb_write_read(addr_base+`TARGET_REG_B0_C0,32'h90,data);
+    apb_write_read(addr_base+`TARGET_REG_B1_C0,32'h97,data);
+    apb_write_read(addr_base+`TARGET_REG_B2_C0,32'hf1,data);
     // $display("new shiftout data = %h,src data = %h , bits=%d,counter num =%d",count_reverse(data,5'd31),data,5'd31,i);
     end
     //if(i==1||i==3)
@@ -1684,7 +1694,8 @@ for(i=0;i<4;i++) begin
         //
         apb_write_read(addr_base+`MUX_SEL_C0,32'b0000,data);
         apb_write_read(addr_base+`SRC_SEL_EDGE_C0,32'h2d2b0000,data);
-        apb_write_read(addr_base+`CAPTURE_REG_OVERFLOW_CTRL_C0,32'h3f,data);//overflow,control.
+        //apb_write_read(addr_base+`CAPTURE_REG_OVERFLOW_CTRL_C0,32'h3f,data);//overflow,control.
+        apb_write_read(addr_base+`CAPTURE_REG_OVERFLOW_CTRL_C0,32'h00,data);//overflow,control.
     end
     if(i==3) begin
         //
@@ -1703,11 +1714,19 @@ for(i=0;i<4;i++) begin
 //
   
 end    
+    apb_read (base_c0+`ENABLE_C0,data);
+    apb_write(base_c0+`ENABLE_C0,data|32'h2100);//c0,enable.//32M
+    apb_read (base_c1+`ENABLE_C0,data);
+    apb_write(base_c1+`ENABLE_C0,data|32'h2000);//c0,enable.//32k
+    apb_read (base_c2+`ENABLE_C0,data);
+    apb_write(base_c2+`ENABLE_C0,data|32'h2100);//c0,enable.//32M
+    apb_read (base_c3+`ENABLE_C0,data);
+    apb_write(base_c3+`ENABLE_C0,data|32'h2000);//c0,enable.//32k
     //
     apb_read(`GLOBAL_START_TRIGGER,data);//start;
     apb_write_read(`GLOBAL_START_TRIGGER,~data,data);//start;
     //i=0;
-
+    if(1) begin
         addr_base=base_c1*0;
         apb_read(addr_base+`CTRL_SNAP_C0,data);
         apb_write_read(addr_base+`CTRL_SNAP_C0,{data[31:4],~data[3:0]},data);//
@@ -1717,17 +1736,83 @@ end
         apb_write_read(addr_base+`CTRL_SNAP_C0,{~data[31:16],data[15:0]},data);//
         apb_read(addr_base+`SNAP_STATUS_C0,data);
         while((|data)) apb_read(addr_base+`SNAP_STATUS_C0,data);  
+     end
         //
    
     int_flag_en = 1;
-    //count0=16;
-    while(1) begin
-    wait(i_int);
     tmp_i=32'h1f;
-    //
-    wait(!i_int);
-    end
-    #20_000;
+
+    tmp0=0;
+    addr_base=base_c1*1;
+    while(1) begin
+        wait(i_int);	
+	tmp0++;
+        wait(!i_int);	
+	if(tmp0[4:0]==2'b00) begin
+        addr_base=base_c1*1;
+        apb_read(addr_base+`CTRL_SNAP_C0,data);
+        apb_write_read(addr_base+`CTRL_SNAP_C0,{data[31:4],{data[3],data[2],~data[1],data[0]}},data);//
+        apb_read(addr_base+`SNAP_STATUS_C0,data);
+        while(!(|data)) apb_read(addr_base+`SNAP_STATUS_C0,data);
+	cap_count_a = cap_count_a_c1 ;
+	apb_read(addr_base+`CAPTURE_REG_STATUS_C0,data_1);
+            if(data_1[0]) begin
+                apb_read(addr_base+`CAPTURE_REG_A0_C0,data);
+                $display("counter num =%0d , in bus a ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_a);
+                cap_count_a = data;
+	    end
+            if(data_1[1]) begin
+                apb_read(addr_base+`CAPTURE_REG_A1_C0,data);
+                $display("counter num =%0d , in bus a ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_a);
+                cap_count_a = data;
+	    end
+            if(data_1[1]) begin
+                apb_read(addr_base+`CAPTURE_REG_A2_C0,data); 
+                $display("counter num =%0d , in bus a ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_a);
+                cap_count_a = data;
+                
+            end
+	cap_count_a_c1 = cap_count_a;
+        apb_read(addr_base+`CTRL_SNAP_C0,data);
+        apb_write_read(addr_base+`CTRL_SNAP_C0,{~data[31:16],data[15:0]},data);//
+        apb_read(addr_base+`SNAP_STATUS_C0,data);
+        while((|data)) apb_read(addr_base+`SNAP_STATUS_C0,data);  
+        apb_read(addr_base+`CTRL_SNAP_C0,data);
+        apb_write_read(addr_base+`CTRL_SNAP_C0,{data[31:4],{data[3],~data[2],data[1],data[0]}},data);//
+        apb_read(addr_base+`SNAP_STATUS_C0,data);
+        while(!(|data)) apb_read(addr_base+`SNAP_STATUS_C0,data);
+            cap_count_b = cap_count_b_c1 ;          
+	apb_read(addr_base+`CAPTURE_REG_STATUS_C0,data_1);
+            if(data_1[3]) begin
+                apb_read(addr_base+`CAPTURE_REG_B0_C0,data);
+                $display("counter num =%0d , in bus b ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_b);
+                cap_count_b = data;
+            end
+            if(data_1[4]) begin
+                apb_read(addr_base+`CAPTURE_REG_B1_C0,data);
+                $display("counter num =%0d , in bus b ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_b);
+                cap_count_b = data;
+            end
+            if(data_1[5]) begin
+                apb_read(addr_base+`CAPTURE_REG_B2_C0,data);
+                $display("counter num =%0d , in bus b ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_b);
+                cap_count_b = data;
+            end
+            cap_count_b_c1 = cap_count_b;          
+        apb_read(addr_base+`CTRL_SNAP_C0,data);
+        apb_write_read(addr_base+`CTRL_SNAP_C0,{~data[31:16],data[15:0]},data);//
+        apb_read(addr_base+`SNAP_STATUS_C0,data);
+        while((|data)) apb_read(addr_base+`SNAP_STATUS_C0,data);  
+	end
+     end
+    ////count0=16;
+    //while(1) begin
+    //wait(i_int);
+    //tmp_i=32'h1f;
+    ////
+    //wait(!i_int);
+    //end
+    //#20_000;
     //apb_read(`GLOBAL_STOP_TRIGGER,data);//stop;
     //apb_write_read(`GLOBAL_STOP_TRIGGER,~data,data);//stop;
     //#20_000;  
@@ -1748,7 +1833,7 @@ end
 
 `ifdef  TESTCASE_ALL_COUNTERMODE_4
 `define SOFT_SINGLE_TRIGGER
-`define CLK_32M
+//`define CLK_32M
 //soft trigger. 
 initial begin
 wait (stop_event) ;
@@ -1865,8 +1950,8 @@ end
 `endif
 
 `ifdef  TESTCASE_ALL_COUNTERMODE_5
-`define SOFT_GLOBAL_TRIGGER
-`define CLK_32M
+//`define SOFT_GLOBAL_TRIGGER
+//`define CLK_32M
 //soft trigger. 
 initial begin
 wait (stop_event) ;
@@ -2567,13 +2652,13 @@ end
 
 // `ifdef INT_HAND
 
-reg [31:0] int_status,int_status0;
-reg [31:0] base_addr_int;
-reg [31:0] cap_count_a,cap_count_b;
-reg [31:0] cap_count_a_c0,cap_count_b_c0;
-reg [31:0] cap_count_a_c1,cap_count_b_c1;
-reg [31:0] cap_count_a_c2,cap_count_b_c2;
-reg [31:0] cap_count_a_c3,cap_count_b_c3;
+//reg [31:0] int_status,int_status0;
+//reg [31:0] base_addr_int;
+//reg [31:0] cap_count_a,cap_count_b;
+//reg [31:0] cap_count_a_c0,cap_count_b_c0;
+//reg [31:0] cap_count_a_c1,cap_count_b_c1;
+//reg [31:0] cap_count_a_c2,cap_count_b_c2;
+//reg [31:0] cap_count_a_c3,cap_count_b_c3;
 
 
 initial begin

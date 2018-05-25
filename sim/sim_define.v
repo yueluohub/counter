@@ -1,4 +1,4 @@
-// `define CLK_32M
+`define CLK_32M
 `define COUNTER_NUM   0
 // `define COUNTER_NUM   1
 // `define COUNTER_NUM   2
@@ -41,16 +41,16 @@
 
 // `define CAPTURE_DATA_CASECADE
 
- // `define TESTCASE_ALL_SHIFTMODE_0
+// `define TESTCASE_ALL_SHIFTMODE_0
 // `define TESTCASE_ALL_SHIFTMODE_1
 
-// `define TESTCASE_ALL_COUNTERMODE_0
-// `define TESTCASE_ALL_COUNTERMODE_1
-// `define TESTCASE_ALL_COUNTERMODE_2
-//`define TESTCASE_ALL_COUNTERMODE_3
+//`define TESTCASE_ALL_COUNTERMODE_0
+//`define TESTCASE_ALL_COUNTERMODE_1
+//`define TESTCASE_ALL_COUNTERMODE_2
+`define TESTCASE_ALL_COUNTERMODE_3
 
-// `define TESTCASE_ALL_COUNTERMODE_4 //single trigger.
-// `define TESTCASE_ALL_COUNTERMODE_5 //global trigger.
-`define TESTCASE_ALL_COUNTERMODE_6 // start 、stop
+//`define TESTCASE_ALL_COUNTERMODE_4 //single trigger.
+//`define TESTCASE_ALL_COUNTERMODE_5 //global trigger.
+//`define TESTCASE_ALL_COUNTERMODE_6 // start 、stop
 
 
