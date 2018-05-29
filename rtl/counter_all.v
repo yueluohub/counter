@@ -63,6 +63,9 @@ module counter_all(
         i_capture_mode_cnts,
         i_waveform_mode_automatic_sw,
         i_capture_mode_automatic_sw,
+        i_capture_mode_automatic_validedge,
+        i_shiftmode_point_en,
+        i_shiftmode_point_cnts,         
         i_shiftmode_ctrl,
         i_shiftout_data,
         i_shiftout_data_ctrl_bitcnts,
@@ -147,6 +150,10 @@ input  wire [COUNTER_NUM*8-1:0] i_capture_mode_cnts;//capture/shiftin mode cnts.
 input  wire [COUNTER_NUM-1:0] i_waveform_mode_automatic_sw;//1-automatic switch to waveform mode enable,0-disable.
 input  wire [COUNTER_NUM-1:0] i_capture_mode_automatic_sw;//1-automatic switch to capture mode enable,0-disable.
 input  wire [COUNTER_NUM-1:0] i_shiftmode_ctrl;//0-bus_a(din_a/dout_a),1-bus_b(din_b/dout_b).
+input wire  [COUNTER_NUM-1:0] i_capture_mode_automatic_validedge;//1-automatic capture mode first valid edge enable,0-disable.
+input wire  [COUNTER_NUM-1:0] i_shiftmode_point_en;//shiftin data in this cnts or shiftout data in the cnts enable ,1 is active.
+input wire  [COUNTER_NUM*16-1:0] i_shiftmode_point_cnts;//shiftin data in this cnts or shiftout data in the cnts.
+
 input  wire [COUNTER_NUM*32-1:0] i_shiftout_data;
 input  wire [COUNTER_NUM*5-1:0] i_shiftout_data_ctrl_bitcnts;//n-> (n+1) bit;
 input  wire [COUNTER_NUM-1:0] i_shiftout_data_valid;//1->active.
@@ -276,6 +283,9 @@ counter #(.COUNTER_NUM(COUNTER_NUM)) u_counter(
         .i_capture_mode_cnts                (i_capture_mode_cnts[(i+1)*8-1:i*8]            ),
         .i_waveform_mode_automatic_sw       (i_waveform_mode_automatic_sw[i]               ),
         .i_capture_mode_automatic_sw        (i_capture_mode_automatic_sw[i]                ),
+        .i_capture_mode_automatic_validedge (i_capture_mode_automatic_validedge[i]         ),
+        .i_shiftmode_point_en               (i_shiftmode_point_en[i]                       ),
+        .i_shiftmode_point_cnts             (i_shiftmode_point_cnts[(i+1)*16-1:i*16]       ),  
         .i_shiftmode_ctrl                   (i_shiftmode_ctrl[i]                           ),
         .i_shiftout_data                    (i_shiftout_data[(i+1)*32-1:i*32]              ),
         .i_shiftout_data_ctrl_bitcnts       (i_shiftout_data_ctrl_bitcnts[(i+1)*5-1:i*5]   ),

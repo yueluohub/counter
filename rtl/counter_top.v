@@ -207,6 +207,11 @@ wire  [COUNTER_NUM*8-1:0] w_waveform_mode_cnts;//waveform/shiftout mode cnts.
 wire  [COUNTER_NUM*8-1:0] w_capture_mode_cnts;//capture/shiftin mode cnts.
 wire  [COUNTER_NUM-1:0] w_waveform_mode_automatic_sw;//1-automatic switch to waveform mode enable,0-disable.
 wire  [COUNTER_NUM-1:0] w_capture_mode_automatic_sw;//1-automatic switch to capture mode enable,0-disable.
+
+wire  [COUNTER_NUM-1:0] w_capture_mode_automatic_validedge;
+wire  [COUNTER_NUM-1:0] w_shiftmode_point_en;              
+wire  [COUNTER_NUM*16-1:0] w_shiftmode_point_cnts;
+            
 wire  [COUNTER_NUM-1:0] w_shiftmode_ctrl;//0-bus_a(din_a/dout_a),1-bus_b(din_b/dout_b).
 wire  [COUNTER_NUM*32-1:0] w_shiftout_data;
 wire  [COUNTER_NUM*5-1:0] w_shiftout_data_ctrl_bitcnts;//n-> (n+1) bit;
@@ -281,7 +286,9 @@ assign {i_shiftin_data_c3,i_shiftin_data_c2,i_shiftin_data_c1,i_shiftin_data_c0}
 assign  w_shiftin_data_ctrl_bitcnts = {o_shiftin_data_ctrl_bitcnts_c3,o_shiftin_data_ctrl_bitcnts_c2,o_shiftin_data_ctrl_bitcnts_c1,o_shiftin_data_ctrl_bitcnts_c0};
 assign {i_shiftin_databits_updated_c3,i_shiftin_databits_updated_c2,i_shiftin_databits_updated_c1,i_shiftin_databits_updated_c0}= w_shiftin_databits_updated;
 
-
+assign w_shiftmode_point_cnts = {o_shiftmode_point_cnts_c3,o_shiftmode_point_cnts_c2,o_shiftmode_point_cnts_c1,o_shiftmode_point_cnts_c0};
+assign w_capture_mode_automatic_validedge = {o_capture_mode_automatic_validedge_c3,o_capture_mode_automatic_validedge_c2,o_capture_mode_automatic_validedge_c1,o_capture_mode_automatic_validedge_c0};
+assign w_shiftmode_point_en = {o_shiftmode_point_en_c3,o_shiftmode_point_en_c2,o_shiftmode_point_en_c1,o_shiftmode_point_en_c0};  
 
 
 counter_all #(.COUNTER_NUM(COUNTER_NUM)) u_counter_all(
@@ -342,6 +349,9 @@ counter_all #(.COUNTER_NUM(COUNTER_NUM)) u_counter_all(
         .i_capture_mode_cnts                (w_capture_mode_cnts                        ),
         .i_waveform_mode_automatic_sw       (w_waveform_mode_automatic_sw               ),
         .i_capture_mode_automatic_sw        (w_capture_mode_automatic_sw                ),
+        .i_capture_mode_automatic_validedge (w_capture_mode_automatic_validedge         ),
+        .i_shiftmode_point_en               (w_shiftmode_point_en                       ),
+        .i_shiftmode_point_cnts             (w_shiftmode_point_cnts                     ),  
         .i_shiftmode_ctrl                   (w_shiftmode_ctrl                           ),
         .i_shiftout_data                    (w_shiftout_data                            ),
         .i_shiftout_data_ctrl_bitcnts       (w_shiftout_data_ctrl_bitcnts               ),

@@ -58,6 +58,9 @@ module counter(
         i_capture_mode_cnts,
         i_waveform_mode_automatic_sw,
         i_capture_mode_automatic_sw,
+        i_capture_mode_automatic_validedge,
+        i_shiftmode_point_en,
+        i_shiftmode_point_cnts,        
         i_shiftmode_ctrl,
         i_shiftout_data,
         i_shiftout_data_ctrl_bitcnts,
@@ -148,6 +151,11 @@ input wire   [7:0] i_waveform_mode_cnts;//waveform/shiftout mode cnts.
 input wire   [7:0] i_capture_mode_cnts;//capture/shiftin mode cnts.
 input wire   i_waveform_mode_automatic_sw;//1-automatic switch to waveform mode enable,0-disable.
 input wire   i_capture_mode_automatic_sw;//1-automatic switch to capture mode enable,0-disable.
+
+input wire   i_capture_mode_automatic_validedge;//1-automatic capture mode first valid edge enable,0-disable.
+input wire   i_shiftmode_point_en;//shiftin data in this cnts or shiftout data in the cnts enable ,1 is active.
+input wire   [15:0] i_shiftmode_point_cnts;//shiftin data in this cnts or shiftout data in the cnts.
+
 input wire   i_shiftmode_ctrl;//0-bus_a(din_a/dout_a),1-bus_b(din_b/dout_b).
 input wire   [31:0] i_shiftout_data;
 input wire   [4:0] i_shiftout_data_ctrl_bitcnts;//n-> (n+1) bit;
@@ -426,12 +434,7 @@ always @(posedge i_clk or negedge i_rst_n) begin
         r1_count_overflow_flag_target_reg_b <= 1'b0;
         r1_count_overflow_flag_automatic    <= 1'b0;    
     end
-    else if(soft_reset_flag) begin
-        r1_count_overflow_flag_target_reg_a <= 1'b0;
-        r1_count_overflow_flag_target_reg_b <= 1'b0;
-        r1_count_overflow_flag_automatic    <= 1'b0;    
-    end
-    else if(soft_start_flag||start_flag) begin
+    else if(soft_reset_flag||soft_clear_flag) begin
         r1_count_overflow_flag_target_reg_a <= 1'b0;
         r1_count_overflow_flag_target_reg_b <= 1'b0;
         r1_count_overflow_flag_automatic    <= 1'b0;    
@@ -498,10 +501,12 @@ end
 reg r1_shiftout_mode_en_dly;
 reg r1_shiftin_mode_en_dly;
 reg r1_waveform_mode_en_dly;
+reg r1_capture_mode_en_dly;
 always @(posedge i_clk) begin
     r1_shiftout_mode_en_dly <= shiftout_mode_en;
     r1_shiftin_mode_en_dly  <= shiftin_mode_en;
-    r1_waveform_mode_en_dly    <= waveform_mode_en;
+    r1_waveform_mode_en_dly     <= waveform_mode_en;
+    r1_capture_mode_en_dly      <= capture_mode_en;
 end
 
 always @(posedge i_clk or negedge i_rst_n) begin
@@ -516,7 +521,12 @@ always @(posedge i_clk or negedge i_rst_n) begin
     //    end
     //end
     else if(shiftout_mode_en) begin
-        if(w1_shiftout_only_onebit_flag||!r1_shiftout_mode_en_dly) begin//only one bit.
+    if(!r1_shiftout_mode_en_dly) begin//only one bit.
+            r1_shiftout_data[31:0] <= r1_shiftout_data[63:32];
+            r1_shiftout_databits_valid[31:0]  <= r1_shiftout_databits_valid[63:32];         
+    end
+    else if(!i_shiftmode_point_en || (i_shiftmode_point_en &&(current_counter_automatic==(lastbit_current_counter+i_shiftmode_point_cnts)))) begin
+        if(w1_shiftout_only_onebit_flag) begin//only one bit.
             r1_shiftout_data[31:0] <= r1_shiftout_data[63:32];
             r1_shiftout_databits_valid[31:0]  <= r1_shiftout_databits_valid[63:32];         
         end
@@ -524,6 +534,7 @@ always @(posedge i_clk or negedge i_rst_n) begin
             r1_shiftout_data[31:0] <= r1_shiftout_data[31:0]>>1;
             r1_shiftout_databits_valid[31:0]  <= r1_shiftout_databits_valid[31:0]>>1;
         end
+    end
     end
 end
 
@@ -554,25 +565,27 @@ always @(posedge i_clk or negedge i_rst_n) begin
             last_current_counter_a <= 32'h0;
             last_current_counter_b <= 32'h0;            
         end 
-        else if(soft_start_flag||start_flag) begin
-            if(i_mode_sel[0]) begin//counter waveform mode&shiftout mode//&&!i_mode_sel[1]
-                o_extern_dout_a     <= i_target_reg_ctrl[4];//reset value.
-                o_extern_dout_b     <= i_target_reg_ctrl[5];//reset value.
-                r1_target_reg_status <= 6'b0;    
-                // last_current_counter_a <= current_counter;
-                // last_current_counter_b <= current_counter;                
-            end
-        end
-        else if(data_recs_bits_cnts==(i_capture_mode_cnts-8'h1) && (current_counter_automatic==(lastbit_current_counter+i_switch_mode_onebit_cnts))&& i_waveform_mode_automatic_sw && !waveform_mode_en && capture_mode_en) begin
-                o_extern_dout_a     <= i_target_reg_ctrl[4];//reset value.
-                o_extern_dout_b     <= i_target_reg_ctrl[5];//reset value.
-                r1_target_reg_status <= 6'b0; 
-                // last_current_counter_a <= current_counter;
-                // last_current_counter_b <= current_counter;
-        end 
+        // else if(soft_start_flag||start_flag) begin
+        //     if(i_mode_sel[0]) begin//counter waveform mode&shiftout mode//&&!i_mode_sel[1]
+        //         o_extern_dout_a     <= i_target_reg_ctrl[4];//reset value.
+        //         o_extern_dout_b     <= i_target_reg_ctrl[5];//reset value.
+        //         r1_target_reg_status <= 6'b0;    
+        //         // last_current_counter_a <= current_counter;
+        //         // last_current_counter_b <= current_counter;                
+        //     end
+        // end
+        // else if(data_recs_bits_cnts==(i_capture_mode_cnts-8'h1) && (current_counter_automatic==(lastbit_current_counter+i_switch_mode_onebit_cnts))&& i_waveform_mode_automatic_sw && !waveform_mode_en && capture_mode_en) begin
+        //         o_extern_dout_a     <= i_target_reg_ctrl[4];//reset value.
+        //         o_extern_dout_b     <= i_target_reg_ctrl[5];//reset value.
+        //         r1_target_reg_status <= 6'b0; 
+        //         // last_current_counter_a <= current_counter;
+        //         // last_current_counter_b <= current_counter;
+        // end 
         else if(waveform_mode_en) begin //counter waveform mode.
             if(!r1_waveform_mode_en_dly) begin
-                r1_target_reg_status <= 6'b0; 
+                r1_target_reg_status <= 6'b0;
+                o_extern_dout_a     <= i_target_reg_ctrl[4];//reset value.
+                o_extern_dout_b     <= i_target_reg_ctrl[5];//reset value.                
                 last_current_counter_a <= current_counter;
                 last_current_counter_b <= current_counter;    
             end
@@ -658,13 +671,6 @@ always @(posedge i_clk or negedge i_rst_n) begin
                 //o_extern_dout_a_oen     <= 1'b0;
                 //o_extern_dout_b_oen     <= 1'b0;            
             end 
-            //else if(i_mode_sel[0] && i_mode_sel[1]) begin// shiftout mode.
-            //    waveform_mode_en <= 1'b0;
-            //    //if(!i_shiftmode_ctrl)
-            //    //    //o_extern_dout_a_oen     <= 1'b0;
-            //    //else
-            //    //    //o_extern_dout_b_oen     <= 1'b0;    
-            //end
             else  begin//
                 waveform_mode_en <= 1'b0;
                 //o_extern_dout_a_oen     <= 1'b1;
@@ -762,7 +768,8 @@ always @(posedge i_clk or negedge i_rst_n) begin
         o_shiftin_databits_updated <= 32'h0;
     end
     else begin
-        if(soft_stop_flag||stop_flag)  begin
+        // if(soft_stop_flag || stop_flag || soft_start_flag || start_flag)  begin
+        if(capture_mode_en^r1_capture_mode_en_dly || r1_waveform_mode_en_dly^waveform_mode_en  )  begin
             o_shadow_reg     <= current_counter;
         end
         else if(w_ctrl_snap_posedge[0]) begin
@@ -844,6 +851,11 @@ always @(posedge i_clk or negedge i_rst_n) begin
 end
 
 // 
+reg r1_capture_reg_a_first_valid_edge;
+reg r1_capture_reg_b_first_valid_edge;
+reg r1_capture_reg_a_first_valid_edge_dly;
+reg r1_capture_reg_b_first_valid_edge_dly;
+
 
 always @(posedge i_clk or negedge i_rst_n) begin
     if(!i_rst_n) begin
@@ -852,6 +864,7 @@ always @(posedge i_clk or negedge i_rst_n) begin
         r1_capture_reg_a1 <= 32'h0;
         r1_capture_reg_a2 <= 32'h0;
         capture_cnts_a    <= 2'h0;
+        r1_capture_reg_a_first_valid_edge <= 1'b0;
     end
     else if(!i_enable || soft_reset_flag ||soft_clear_flag) begin
         r1_capture_reg_status[2:0] <= 3'h0;
@@ -859,8 +872,12 @@ always @(posedge i_clk or negedge i_rst_n) begin
         r1_capture_reg_a1 <= 32'h0;
         r1_capture_reg_a2 <= 32'h0;
         capture_cnts_a    <= 2'h0;      
+        r1_capture_reg_a_first_valid_edge <= 1'b0;
     end
     else if(capture_mode_en) begin
+    if(din0_flag) 
+        r1_capture_reg_a_first_valid_edge <= 1'b1;
+    //    
 	if(w_ctrl_snap_posedge[1]||((&r1_capture_reg_status[2:0])&&!r1_capture_reg_status_dly_a))
           if(din0_flag) 
 	    r1_capture_reg_status[2:0] <= (3'h1<<capture_cnts_a);
@@ -887,6 +904,7 @@ always @(posedge i_clk or negedge i_rst_n) begin
     end
     else begin
         r1_capture_reg_status[2:0] <= r1_capture_reg_status[2:0] & (~w_capture_reg_read_flag_posedge[2:0]);
+        r1_capture_reg_a_first_valid_edge <= 1'b0;
     end
 end
 
@@ -897,6 +915,7 @@ always @(posedge i_clk or negedge i_rst_n) begin
         r1_capture_reg_b1 <= 32'h0;
         r1_capture_reg_b2 <= 32'h0;
         capture_cnts_b    <= 2'h0;
+        r1_capture_reg_b_first_valid_edge <= 1'b0;
     end
     else if(!i_enable || soft_reset_flag ||soft_clear_flag) begin
         r1_capture_reg_status[5:3] <= 3'h0;
@@ -904,8 +923,12 @@ always @(posedge i_clk or negedge i_rst_n) begin
         r1_capture_reg_b1 <= 32'h0;
         r1_capture_reg_b2 <= 32'h0;
         capture_cnts_b    <= 2'h0;      
+        r1_capture_reg_b_first_valid_edge <= 1'b0;
     end
     else if(capture_mode_en) begin
+    if(din1_flag)
+        r1_capture_reg_b_first_valid_edge <= 1'b1;
+    //
 	if(w_ctrl_snap_posedge[2]||((&r1_capture_reg_status[5:3])&&!r1_capture_reg_status_dly_b))
 	  if(din1_flag) begin
 		r1_capture_reg_status[5:3] <= (3'h1<<capture_cnts_b);
@@ -933,7 +956,7 @@ always @(posedge i_clk or negedge i_rst_n) begin
     end
     else begin
         r1_capture_reg_status[5:3] <= r1_capture_reg_status[5:3] & (~w_capture_reg_read_flag_posedge[5:3]);
-           
+        r1_capture_reg_b_first_valid_edge <= 1'b0;
     end
 end
 
@@ -943,6 +966,11 @@ end
 //----------------------------------------------//
 //----------------------------------------------//
 assign current_counter_automatic = {r1_count_overflow_flag_automatic,current_counter};
+
+always @(posedge i_clk) begin
+    r1_capture_reg_a_first_valid_edge_dly <= r1_capture_reg_a_first_valid_edge;
+    r1_capture_reg_b_first_valid_edge_dly <= r1_capture_reg_b_first_valid_edge;
+end
 
 always @(posedge i_clk or negedge i_rst_n) begin
     if(!i_rst_n) begin
@@ -957,19 +985,24 @@ always @(posedge i_clk or negedge i_rst_n) begin
         lastbit_current_counter <= 32'h0;
         //r1_count_flag_automatic_update <= 1'b0;
     end
-    else if(soft_reset_flag||soft_stop_flag||stop_flag) begin
+    else if(soft_reset_flag||soft_stop_flag||stop_flag||soft_clear_flag) begin
         data_sends_bits_cnts <= 8'h0;
         data_recs_bits_cnts  <= 8'h0;
         lastbit_current_counter <= 32'h0;
     end
-    else if(soft_start_flag||start_flag) begin
-        data_sends_bits_cnts <= 8'h0;
-        data_recs_bits_cnts  <= 8'h0;
-        lastbit_current_counter <= current_counter;
-    end
+    //else if(soft_start_flag||start_flag) begin
+    //    data_sends_bits_cnts <= 8'h0;
+    //    data_recs_bits_cnts  <= 8'h0;
+    //    lastbit_current_counter <= current_counter;
+    //end
     else if(i_mode_sel[2]) begin//!i_mode_sel[1]&&
         if(waveform_mode_en||shiftout_mode_en) begin
             data_recs_bits_cnts  <= 8'h0;
+            /*if((r1_capture_reg_a_first_valid_edge||r1_capture_reg_b_first_valid_edge) &&waveform_mode_en) begin
+                lastbit_current_counter <= current_counter;
+                data_sends_bits_cnts <= 8'h0;
+            end
+            else*/ 
             if(current_counter_automatic==(lastbit_current_counter+i_switch_mode_onebit_cnts)) begin//
                 lastbit_current_counter <= current_counter;
                 data_sends_bits_cnts <= data_sends_bits_cnts +1'b1;
@@ -978,7 +1011,21 @@ always @(posedge i_clk or negedge i_rst_n) begin
         end
         else if(capture_mode_en||shiftin_mode_en) begin
             data_sends_bits_cnts <= 8'h0;
-            if(current_counter_automatic==(lastbit_current_counter+i_switch_mode_onebit_cnts)) begin//
+            if(capture_mode_en&&i_capture_mode_automatic_validedge) begin
+                if((r1_capture_reg_a_first_valid_edge&&!r1_capture_reg_a_first_valid_edge_dly||r1_capture_reg_b_first_valid_edge&&!r1_capture_reg_b_first_valid_edge_dly) ) begin
+                    lastbit_current_counter <= current_counter;
+                    data_recs_bits_cnts <= 8'h0;
+                end
+                else if(r1_capture_reg_a_first_valid_edge||r1_capture_reg_b_first_valid_edge) begin
+                    if(current_counter_automatic==(lastbit_current_counter+i_switch_mode_onebit_cnts)) begin//
+                        lastbit_current_counter <= current_counter;
+                        data_recs_bits_cnts <= data_recs_bits_cnts +1'b1;
+                        r1_count_flag_automatic_update <= ~r1_count_flag_automatic_update;
+                    end  
+                
+                end
+            end
+            else if(current_counter_automatic==(lastbit_current_counter+i_switch_mode_onebit_cnts)) begin//
                 lastbit_current_counter <= current_counter;
                 data_recs_bits_cnts <= data_recs_bits_cnts +1'b1;
                 r1_count_flag_automatic_update <= ~r1_count_flag_automatic_update;
@@ -1045,6 +1092,7 @@ always @(posedge i_clk or negedge i_rst_n) begin
         r1_shiftin_databits_updated <= 32'h0;
     end
     else if(shiftin_mode_en) begin
+    if(!i_shiftmode_point_en || (i_shiftmode_point_en &&(current_counter_automatic==(lastbit_current_counter+i_shiftmode_point_cnts)))) begin
         if(shiftin_complete_flag||!r1_shiftin_mode_en_dly) begin
             r1_shiftin_databits_updated <= 32'b1; 
             r1_shiftin_data[31:0] <= {r1_shiftin_data[30:0],counter_shiftin_din};
@@ -1053,6 +1101,7 @@ always @(posedge i_clk or negedge i_rst_n) begin
             r1_shiftin_databits_updated <= {r1_shiftin_databits_updated[30:0],1'b1};
             r1_shiftin_data[31:0] <= {r1_shiftin_data[30:0],counter_shiftin_din};
         end
+    end
     end
 end
 
@@ -1086,7 +1135,7 @@ always @(posedge i_clk or negedge i_rst_n) begin
 end
 
 
-assign w1_waveform_match_reg3 = waveform_mode_en && (i_target_reg_ctrl[1]&& (i_target_reg_a2==current_counter)) ||(i_target_reg_ctrl[3]&&(i_target_reg_b2==current_counter));
+assign w1_waveform_match_reg3 = waveform_mode_en && ((i_target_reg_ctrl[1]&& ((i_target_reg_a2+last_current_counter_a)==current_counter_target_reg_a)) ||(i_target_reg_ctrl[3]&&((i_target_reg_b2+last_current_counter_b)==current_counter_target_reg_b)));
 
 
 

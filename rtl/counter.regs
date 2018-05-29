@@ -607,7 +607,7 @@ Register_Parameters
 register_begin
   name: capture_reg_overflow_ctrl_c0
   default_access: read-write
-  size: 6 
+  size: 17 
   address_offset: 0x34
   description:  capture mode , when overflow ,discard or rewrite. 
   field_begin
@@ -619,6 +619,13 @@ register_begin
         every bit means the same as i_capture_reg_status_c0.
         1--> rewrite, o--> discard.
     description_end
+  field_end 
+  field_begin
+    name: start0
+    rtl_name:o_capture_mode_automatic_validedge_c0
+    bit_range:[16:16] 
+    field_reset_value: 0x0
+    description: capture mode first valid edge flag on ,1- enable,0-disable.
   field_end 
 register_end
 
@@ -880,6 +887,28 @@ register_begin
     bit_range:[31:0] 
     field_reset_value: 0x0
     description: shift_in data(bitmap is updated) for counter 0. value 1 is acitve.
+  field_end 
+register_end
+
+register_begin
+  name: shiftmode_point_en_c0
+  default_access: read-write
+  size: 17 
+  address_offset: 0x45
+  description:  automatic waveform and capture switch mode,for counter 0. 
+  field_begin
+    name: start
+    rtl_name:o_shiftmode_point_cnts_c0
+    bit_range:[15:0] 
+    field_reset_value: 0x1
+    description: shiftin data in this cnts or shiftout data in the cnts..
+  field_end  
+  field_begin
+    name: start
+    rtl_name:o_shiftmode_point_en_c0
+    bit_range:[16:16] 
+    field_reset_value: 0x0
+    description: shiftin data in this cnts or shiftout data in the cnts enable ,1 is active. 1- enable,0-disable.
   field_end 
 register_end
 
@@ -1313,7 +1342,7 @@ Register_Parameters
 register_begin
   name: capture_reg_overflow_ctrl_c1
   default_access: read-write
-  size: 6 
+  size: 17 
   address_offset: 0x74
   description:  capture mode , when overflow ,discard or rewrite. 
   field_begin
@@ -1325,6 +1354,13 @@ register_begin
         every bit means the same as i_capture_reg_status_c1.
         1--> rewrite, o--> discard.
     description_end
+  field_end 
+  field_begin
+    name: start0
+    rtl_name:o_capture_mode_automatic_validedge_c1
+    bit_range:[16:16] 
+    field_reset_value: 0x0
+    description: capture mode first valid edge flag on ,1- enable,0-disable.
   field_end 
 register_end
 
@@ -1589,7 +1625,27 @@ register_begin
   field_end 
 register_end
 
-
+register_begin
+  name: shiftmode_point_en_c1
+  default_access: read-write
+  size: 17 
+  address_offset: 0x85
+  description:  automatic waveform and capture switch mode,for counter 0. 
+  field_begin
+    name: start
+    rtl_name:o_shiftmode_point_cnts_c1
+    bit_range:[15:0] 
+    field_reset_value: 0x1
+    description: shiftin data in this cnts or shiftout data in the cnts..
+  field_end  
+  field_begin
+    name: start
+    rtl_name:o_shiftmode_point_en_c1
+    bit_range:[16:16] 
+    field_reset_value: 0x0
+    description: shiftin data in this cnts or shiftout data in the cnts enable ,1 is active. 1- enable,0-disable.
+  field_end 
+register_end
 
 
 
@@ -2026,7 +2082,7 @@ Register_Parameters
 register_begin
   name: capture_reg_overflow_ctrl_c2
   default_access: read-write
-  size: 6 
+  size: 17 
   address_offset: 0xb4
   description:  capture mode , when overflow ,discard or rewrite. 
   field_begin
@@ -2038,6 +2094,13 @@ register_begin
         every bit means the same as i_capture_reg_status_c2.
         1--> rewrite, o--> discard.
     description_end
+  field_end 
+  field_begin
+    name: start0
+    rtl_name:o_capture_mode_automatic_validedge_c2
+    bit_range:[16:16] 
+    field_reset_value: 0x0
+    description: capture mode first valid edge flag on ,1- enable,0-disable.
   field_end 
 register_end
 
@@ -2299,6 +2362,28 @@ register_begin
     bit_range:[31:0] 
     field_reset_value: 0x0
     description: shift_in data(bitmap is updated) for counter 2. value 1 is acitve.
+  field_end 
+register_end
+
+register_begin
+  name: shiftmode_point_en_c2
+  default_access: read-write
+  size: 17 
+  address_offset: 0xc5
+  description:  automatic waveform and capture switch mode,for counter 0. 
+  field_begin
+    name: start
+    rtl_name:o_shiftmode_point_cnts_c2
+    bit_range:[15:0] 
+    field_reset_value: 0x1
+    description: shiftin data in this cnts or shiftout data in the cnts..
+  field_end  
+  field_begin
+    name: start
+    rtl_name:o_shiftmode_point_en_c2
+    bit_range:[16:16] 
+    field_reset_value: 0x0
+    description: shiftin data in this cnts or shiftout data in the cnts enable ,1 is active. 1- enable,0-disable.
   field_end 
 register_end
 
@@ -2733,7 +2818,7 @@ Register_Parameters
 register_begin
   name: capture_reg_overflow_ctrl_c3
   default_access: read-write
-  size: 6 
+  size: 17 
   address_offset: 0xf4
   description:  capture mode , when overflow ,discard or rewrite. 
   field_begin
@@ -2745,6 +2830,13 @@ register_begin
         every bit means the same as i_capture_reg_status_c3.
         1--> rewrite, o--> discard.
     description_end
+  field_end 
+  field_begin
+    name: start0
+    rtl_name:o_capture_mode_automatic_validedge_c3
+    bit_range:[16:16] 
+    field_reset_value: 0x0
+    description: capture mode first valid edge flag on ,1- enable,0-disable.
   field_end 
 register_end
 
@@ -3009,7 +3101,29 @@ register_begin
   field_end 
 register_end
 
+register_begin
+  name: shiftmode_point_en_c3
+  default_access: read-write
+  size: 17 
+  address_offset: 0x105
+  description:  automatic waveform and capture switch mode,for counter 0. 
+  field_begin
+    name: start
+    rtl_name:o_shiftmode_point_cnts_c3
+    bit_range:[15:0] 
+    field_reset_value: 0x1
+    description: shiftin data in this cnts or shiftout data in the cnts..
+  field_end  
+  field_begin
+    name: start
+    rtl_name:o_shiftmode_point_en_c3
+    bit_range:[16:16] 
+    field_reset_value: 0x0
+    description: shiftin data in this cnts or shiftout data in the cnts enable ,1 is active. 1- enable,0-disable.
+  field_end 
+register_end
 
+#####
 
 
 

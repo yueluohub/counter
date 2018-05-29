@@ -1,4 +1,4 @@
-`define CLK_32M
+// `define CLK_32M
 `define COUNTER_NUM   0
 // `define COUNTER_NUM   1
 // `define COUNTER_NUM   2
@@ -6,8 +6,8 @@
 
 // `define SIM_FINISH_MS 10
 // `define SIM_FINISH_MS 20
-// `define SIM_FINISH_MS 50
-`define SIM_FINISH_MS 200
+`define SIM_FINISH_MS 50
+// `define SIM_FINISH_MS 200
 `define APB_BUS_MONITOR
 
 // `define CAPTURE_DATA_IN
@@ -47,10 +47,12 @@
 //`define TESTCASE_ALL_COUNTERMODE_0
 //`define TESTCASE_ALL_COUNTERMODE_1
 //`define TESTCASE_ALL_COUNTERMODE_2
-`define TESTCASE_ALL_COUNTERMODE_3
+// `define TESTCASE_ALL_COUNTERMODE_3
 
 //`define TESTCASE_ALL_COUNTERMODE_4 //single trigger.
 //`define TESTCASE_ALL_COUNTERMODE_5 //global trigger.
 //`define TESTCASE_ALL_COUNTERMODE_6 // start 、stop
 
+// `define TESTCASE_ALL_ISO7816_IFC
+`define TESTCASE_ALL_SHIFTMODE_ISO7816_IFC
 
