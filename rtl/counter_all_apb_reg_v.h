@@ -52,6 +52,7 @@
 `define lcl_COUNTER_ALL_APB_REG_SHIFTIN_DATA_CTRL_BITCNTS_C0_ADDR 11'h 42
 `define lcl_COUNTER_ALL_APB_REG_SHIFTIN_DATA_C0_ADDR 11'h 43
 `define lcl_COUNTER_ALL_APB_REG_SHIFTIN_DATABITS_UPDATED_C0_ADDR 11'h 44
+`define lcl_COUNTER_ALL_APB_REG_SHIFTMODE_POINT_EN_C0_ADDR 11'h 45
 `define lcl_COUNTER_ALL_APB_REG_SINGLE_START_TRIGGER_C1_ADDR 11'h 60
 `define lcl_COUNTER_ALL_APB_REG_SINGLE_STOP_TRIGGER_C1_ADDR 11'h 61
 `define lcl_COUNTER_ALL_APB_REG_SINGLE_CLEAR_TRIGGER_C1_ADDR 11'h 62
@@ -88,6 +89,7 @@
 `define lcl_COUNTER_ALL_APB_REG_SHIFTIN_DATA_CTRL_BITCNTS_C1_ADDR 11'h 82
 `define lcl_COUNTER_ALL_APB_REG_SHIFTIN_DATA_C1_ADDR 11'h 83
 `define lcl_COUNTER_ALL_APB_REG_SHIFTIN_DATABITS_UPDATED_C1_ADDR 11'h 84
+`define lcl_COUNTER_ALL_APB_REG_SHIFTMODE_POINT_EN_C1_ADDR 11'h 85
 `define lcl_COUNTER_ALL_APB_REG_SINGLE_START_TRIGGER_C2_ADDR 11'h A0
 `define lcl_COUNTER_ALL_APB_REG_SINGLE_STOP_TRIGGER_C2_ADDR 11'h A1
 `define lcl_COUNTER_ALL_APB_REG_SINGLE_CLEAR_TRIGGER_C2_ADDR 11'h A2
@@ -124,6 +126,7 @@
 `define lcl_COUNTER_ALL_APB_REG_SHIFTIN_DATA_CTRL_BITCNTS_C2_ADDR 11'h C2
 `define lcl_COUNTER_ALL_APB_REG_SHIFTIN_DATA_C2_ADDR 11'h C3
 `define lcl_COUNTER_ALL_APB_REG_SHIFTIN_DATABITS_UPDATED_C2_ADDR 11'h C4
+`define lcl_COUNTER_ALL_APB_REG_SHIFTMODE_POINT_EN_C2_ADDR 11'h C5
 `define lcl_COUNTER_ALL_APB_REG_SINGLE_START_TRIGGER_C3_ADDR 11'h E0
 `define lcl_COUNTER_ALL_APB_REG_SINGLE_STOP_TRIGGER_C3_ADDR 11'h E1
 `define lcl_COUNTER_ALL_APB_REG_SINGLE_CLEAR_TRIGGER_C3_ADDR 11'h E2
@@ -160,6 +163,7 @@
 `define lcl_COUNTER_ALL_APB_REG_SHIFTIN_DATA_CTRL_BITCNTS_C3_ADDR 11'h 102
 `define lcl_COUNTER_ALL_APB_REG_SHIFTIN_DATA_C3_ADDR 11'h 103
 `define lcl_COUNTER_ALL_APB_REG_SHIFTIN_DATABITS_UPDATED_C3_ADDR 11'h 104
+`define lcl_COUNTER_ALL_APB_REG_SHIFTMODE_POINT_EN_C3_ADDR 11'h 105
 
 // ABSOLUTE Base address of each register
 `define COUNTER_ALL_APB_REG_INTR_STATUS_ADDR 'h 44120000
@@ -209,6 +213,7 @@
 `define COUNTER_ALL_APB_REG_SHIFTIN_DATA_CTRL_BITCNTS_C0_ADDR 'h 44120108
 `define COUNTER_ALL_APB_REG_SHIFTIN_DATA_C0_ADDR 'h 4412010C
 `define COUNTER_ALL_APB_REG_SHIFTIN_DATABITS_UPDATED_C0_ADDR 'h 44120110
+`define COUNTER_ALL_APB_REG_SHIFTMODE_POINT_EN_C0_ADDR 'h 44120114
 `define COUNTER_ALL_APB_REG_SINGLE_START_TRIGGER_C1_ADDR 'h 44120180
 `define COUNTER_ALL_APB_REG_SINGLE_STOP_TRIGGER_C1_ADDR 'h 44120184
 `define COUNTER_ALL_APB_REG_SINGLE_CLEAR_TRIGGER_C1_ADDR 'h 44120188
@@ -245,6 +250,7 @@
 `define COUNTER_ALL_APB_REG_SHIFTIN_DATA_CTRL_BITCNTS_C1_ADDR 'h 44120208
 `define COUNTER_ALL_APB_REG_SHIFTIN_DATA_C1_ADDR 'h 4412020C
 `define COUNTER_ALL_APB_REG_SHIFTIN_DATABITS_UPDATED_C1_ADDR 'h 44120210
+`define COUNTER_ALL_APB_REG_SHIFTMODE_POINT_EN_C1_ADDR 'h 44120214
 `define COUNTER_ALL_APB_REG_SINGLE_START_TRIGGER_C2_ADDR 'h 44120280
 `define COUNTER_ALL_APB_REG_SINGLE_STOP_TRIGGER_C2_ADDR 'h 44120284
 `define COUNTER_ALL_APB_REG_SINGLE_CLEAR_TRIGGER_C2_ADDR 'h 44120288
@@ -281,6 +287,7 @@
 `define COUNTER_ALL_APB_REG_SHIFTIN_DATA_CTRL_BITCNTS_C2_ADDR 'h 44120308
 `define COUNTER_ALL_APB_REG_SHIFTIN_DATA_C2_ADDR 'h 4412030C
 `define COUNTER_ALL_APB_REG_SHIFTIN_DATABITS_UPDATED_C2_ADDR 'h 44120310
+`define COUNTER_ALL_APB_REG_SHIFTMODE_POINT_EN_C2_ADDR 'h 44120314
 `define COUNTER_ALL_APB_REG_SINGLE_START_TRIGGER_C3_ADDR 'h 44120380
 `define COUNTER_ALL_APB_REG_SINGLE_STOP_TRIGGER_C3_ADDR 'h 44120384
 `define COUNTER_ALL_APB_REG_SINGLE_CLEAR_TRIGGER_C3_ADDR 'h 44120388
@@ -317,6 +324,7 @@
 `define COUNTER_ALL_APB_REG_SHIFTIN_DATA_CTRL_BITCNTS_C3_ADDR 'h 44120408
 `define COUNTER_ALL_APB_REG_SHIFTIN_DATA_C3_ADDR 'h 4412040C
 `define COUNTER_ALL_APB_REG_SHIFTIN_DATABITS_UPDATED_C3_ADDR 'h 44120410
+`define COUNTER_ALL_APB_REG_SHIFTMODE_POINT_EN_C3_ADDR 'h 44120414
 
 // Reset values for each register
 `define lcl_COUNTER_ALL_APB_REG_INTR_STATUS_RST 32'h 00000000
@@ -350,7 +358,7 @@
 `define lcl_COUNTER_ALL_APB_REG_TARGET_REG_B1_C0_RST 32'h 00000000
 `define lcl_COUNTER_ALL_APB_REG_TARGET_REG_B2_C0_RST 32'h 00000000
 `define lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C0_RST 6'h 00
-`define lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_OVERFLOW_CTRL_C0_RST 6'h 00
+`define lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_OVERFLOW_CTRL_C0_RST 17'h 00000
 `define lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A0_C0_RST 32'h 00000000
 `define lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A1_C0_RST 32'h 00000000
 `define lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A2_C0_RST 32'h 00000000
@@ -366,6 +374,7 @@
 `define lcl_COUNTER_ALL_APB_REG_SHIFTIN_DATA_CTRL_BITCNTS_C0_RST 5'h 00
 `define lcl_COUNTER_ALL_APB_REG_SHIFTIN_DATA_C0_RST 32'h 00000000
 `define lcl_COUNTER_ALL_APB_REG_SHIFTIN_DATABITS_UPDATED_C0_RST 32'h 00000000
+`define lcl_COUNTER_ALL_APB_REG_SHIFTMODE_POINT_EN_C0_RST 17'h 00001
 `define lcl_COUNTER_ALL_APB_REG_SINGLE_START_TRIGGER_C1_RST 1'h 0
 `define lcl_COUNTER_ALL_APB_REG_SINGLE_STOP_TRIGGER_C1_RST 1'h 0
 `define lcl_COUNTER_ALL_APB_REG_SINGLE_CLEAR_TRIGGER_C1_RST 1'h 0
@@ -386,7 +395,7 @@
 `define lcl_COUNTER_ALL_APB_REG_TARGET_REG_B1_C1_RST 32'h 00000000
 `define lcl_COUNTER_ALL_APB_REG_TARGET_REG_B2_C1_RST 32'h 00000000
 `define lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C1_RST 6'h 00
-`define lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_OVERFLOW_CTRL_C1_RST 6'h 00
+`define lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_OVERFLOW_CTRL_C1_RST 17'h 00000
 `define lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A0_C1_RST 32'h 00000000
 `define lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A1_C1_RST 32'h 00000000
 `define lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A2_C1_RST 32'h 00000000
@@ -402,6 +411,7 @@
 `define lcl_COUNTER_ALL_APB_REG_SHIFTIN_DATA_CTRL_BITCNTS_C1_RST 5'h 00
 `define lcl_COUNTER_ALL_APB_REG_SHIFTIN_DATA_C1_RST 32'h 00000000
 `define lcl_COUNTER_ALL_APB_REG_SHIFTIN_DATABITS_UPDATED_C1_RST 32'h 00000000
+`define lcl_COUNTER_ALL_APB_REG_SHIFTMODE_POINT_EN_C1_RST 17'h 00001
 `define lcl_COUNTER_ALL_APB_REG_SINGLE_START_TRIGGER_C2_RST 1'h 0
 `define lcl_COUNTER_ALL_APB_REG_SINGLE_STOP_TRIGGER_C2_RST 1'h 0
 `define lcl_COUNTER_ALL_APB_REG_SINGLE_CLEAR_TRIGGER_C2_RST 1'h 0
@@ -422,7 +432,7 @@
 `define lcl_COUNTER_ALL_APB_REG_TARGET_REG_B1_C2_RST 32'h 00000000
 `define lcl_COUNTER_ALL_APB_REG_TARGET_REG_B2_C2_RST 32'h 00000000
 `define lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C2_RST 6'h 00
-`define lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_OVERFLOW_CTRL_C2_RST 6'h 00
+`define lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_OVERFLOW_CTRL_C2_RST 17'h 00000
 `define lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A0_C2_RST 32'h 00000000
 `define lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A1_C2_RST 32'h 00000000
 `define lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A2_C2_RST 32'h 00000000
@@ -438,6 +448,7 @@
 `define lcl_COUNTER_ALL_APB_REG_SHIFTIN_DATA_CTRL_BITCNTS_C2_RST 5'h 00
 `define lcl_COUNTER_ALL_APB_REG_SHIFTIN_DATA_C2_RST 32'h 00000000
 `define lcl_COUNTER_ALL_APB_REG_SHIFTIN_DATABITS_UPDATED_C2_RST 32'h 00000000
+`define lcl_COUNTER_ALL_APB_REG_SHIFTMODE_POINT_EN_C2_RST 17'h 00001
 `define lcl_COUNTER_ALL_APB_REG_SINGLE_START_TRIGGER_C3_RST 1'h 0
 `define lcl_COUNTER_ALL_APB_REG_SINGLE_STOP_TRIGGER_C3_RST 1'h 0
 `define lcl_COUNTER_ALL_APB_REG_SINGLE_CLEAR_TRIGGER_C3_RST 1'h 0
@@ -458,7 +469,7 @@
 `define lcl_COUNTER_ALL_APB_REG_TARGET_REG_B1_C3_RST 32'h 00000000
 `define lcl_COUNTER_ALL_APB_REG_TARGET_REG_B2_C3_RST 32'h 00000000
 `define lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_STATUS_C3_RST 6'h 00
-`define lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_OVERFLOW_CTRL_C3_RST 6'h 00
+`define lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_OVERFLOW_CTRL_C3_RST 17'h 00000
 `define lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A0_C3_RST 32'h 00000000
 `define lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A1_C3_RST 32'h 00000000
 `define lcl_COUNTER_ALL_APB_REG_CAPTURE_REG_A2_C3_RST 32'h 00000000
@@ -474,6 +485,7 @@
 `define lcl_COUNTER_ALL_APB_REG_SHIFTIN_DATA_CTRL_BITCNTS_C3_RST 5'h 00
 `define lcl_COUNTER_ALL_APB_REG_SHIFTIN_DATA_C3_RST 32'h 00000000
 `define lcl_COUNTER_ALL_APB_REG_SHIFTIN_DATABITS_UPDATED_C3_RST 32'h 00000000
+`define lcl_COUNTER_ALL_APB_REG_SHIFTMODE_POINT_EN_C3_RST 17'h 00001
 
 // Field locations within each register
 `define COUNTER_ALL_APB_REG_intr_status_RANGE 31:0
@@ -563,9 +575,10 @@
 `define COUNTER_ALL_APB_REG_capture_reg_status_c0_RANGE 5:0
 `define COUNTER_ALL_APB_REG_capture_reg_status_c0_i_capture_reg_status_c0_RANGE 5:0
 `define COUNTER_ALL_APB_REG_capture_reg_status_c0_dummy_field_RANGE 7:6
-`define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c0_RANGE 5:0
+`define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c0_RANGE 16:0
 `define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c0_o_capture_reg_overflow_ctrl_c0_RANGE 5:0
-`define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c0_dummy_field_RANGE 7:6
+`define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c0_o_capture_mode_automatic_validedge_c0_RANGE 16
+`define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c0_dummy_field_RANGE 23:17
 `define COUNTER_ALL_APB_REG_capture_reg_a0_c0_RANGE 31:0
 `define COUNTER_ALL_APB_REG_capture_reg_a0_c0_i_capture_reg_a0_c0_RANGE 31:0
 `define COUNTER_ALL_APB_REG_capture_reg_a1_c0_RANGE 31:0
@@ -604,6 +617,10 @@
 `define COUNTER_ALL_APB_REG_shiftin_data_c0_i_shiftin_data_c0_RANGE 31:0
 `define COUNTER_ALL_APB_REG_shiftin_databits_updated_c0_RANGE 31:0
 `define COUNTER_ALL_APB_REG_shiftin_databits_updated_c0_i_shiftin_databits_updated_c0_RANGE 31:0
+`define COUNTER_ALL_APB_REG_shiftmode_point_en_c0_RANGE 16:0
+`define COUNTER_ALL_APB_REG_shiftmode_point_en_c0_o_shiftmode_point_cnts_c0_RANGE 15:0
+`define COUNTER_ALL_APB_REG_shiftmode_point_en_c0_o_shiftmode_point_en_c0_RANGE 16
+`define COUNTER_ALL_APB_REG_shiftmode_point_en_c0_dummy_field_RANGE 23:17
 `define COUNTER_ALL_APB_REG_single_start_trigger_c1_RANGE 0:0
 `define COUNTER_ALL_APB_REG_single_start_trigger_c1_o_single_start_trigger_c1_RANGE 0
 `define COUNTER_ALL_APB_REG_single_start_trigger_c1_dummy_field_RANGE 7:1
@@ -664,9 +681,10 @@
 `define COUNTER_ALL_APB_REG_capture_reg_status_c1_RANGE 5:0
 `define COUNTER_ALL_APB_REG_capture_reg_status_c1_i_capture_reg_status_c1_RANGE 5:0
 `define COUNTER_ALL_APB_REG_capture_reg_status_c1_dummy_field_RANGE 7:6
-`define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c1_RANGE 5:0
+`define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c1_RANGE 16:0
 `define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c1_o_capture_reg_overflow_ctrl_c1_RANGE 5:0
-`define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c1_dummy_field_RANGE 7:6
+`define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c1_o_capture_mode_automatic_validedge_c1_RANGE 16
+`define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c1_dummy_field_RANGE 23:17
 `define COUNTER_ALL_APB_REG_capture_reg_a0_c1_RANGE 31:0
 `define COUNTER_ALL_APB_REG_capture_reg_a0_c1_i_capture_reg_a0_c1_RANGE 31:0
 `define COUNTER_ALL_APB_REG_capture_reg_a1_c1_RANGE 31:0
@@ -705,6 +723,10 @@
 `define COUNTER_ALL_APB_REG_shiftin_data_c1_i_shiftin_data_c1_RANGE 31:0
 `define COUNTER_ALL_APB_REG_shiftin_databits_updated_c1_RANGE 31:0
 `define COUNTER_ALL_APB_REG_shiftin_databits_updated_c1_i_shiftin_databits_updated_c1_RANGE 31:0
+`define COUNTER_ALL_APB_REG_shiftmode_point_en_c1_RANGE 16:0
+`define COUNTER_ALL_APB_REG_shiftmode_point_en_c1_o_shiftmode_point_cnts_c1_RANGE 15:0
+`define COUNTER_ALL_APB_REG_shiftmode_point_en_c1_o_shiftmode_point_en_c1_RANGE 16
+`define COUNTER_ALL_APB_REG_shiftmode_point_en_c1_dummy_field_RANGE 23:17
 `define COUNTER_ALL_APB_REG_single_start_trigger_c2_RANGE 0:0
 `define COUNTER_ALL_APB_REG_single_start_trigger_c2_o_single_start_trigger_c2_RANGE 0
 `define COUNTER_ALL_APB_REG_single_start_trigger_c2_dummy_field_RANGE 7:1
@@ -765,9 +787,10 @@
 `define COUNTER_ALL_APB_REG_capture_reg_status_c2_RANGE 5:0
 `define COUNTER_ALL_APB_REG_capture_reg_status_c2_i_capture_reg_status_c2_RANGE 5:0
 `define COUNTER_ALL_APB_REG_capture_reg_status_c2_dummy_field_RANGE 7:6
-`define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c2_RANGE 5:0
+`define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c2_RANGE 16:0
 `define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c2_o_capture_reg_overflow_ctrl_c2_RANGE 5:0
-`define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c2_dummy_field_RANGE 7:6
+`define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c2_o_capture_mode_automatic_validedge_c2_RANGE 16
+`define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c2_dummy_field_RANGE 23:17
 `define COUNTER_ALL_APB_REG_capture_reg_a0_c2_RANGE 31:0
 `define COUNTER_ALL_APB_REG_capture_reg_a0_c2_i_capture_reg_a0_c2_RANGE 31:0
 `define COUNTER_ALL_APB_REG_capture_reg_a1_c2_RANGE 31:0
@@ -806,6 +829,10 @@
 `define COUNTER_ALL_APB_REG_shiftin_data_c2_i_shiftin_data_c2_RANGE 31:0
 `define COUNTER_ALL_APB_REG_shiftin_databits_updated_c2_RANGE 31:0
 `define COUNTER_ALL_APB_REG_shiftin_databits_updated_c2_i_shiftin_databits_updated_c2_RANGE 31:0
+`define COUNTER_ALL_APB_REG_shiftmode_point_en_c2_RANGE 16:0
+`define COUNTER_ALL_APB_REG_shiftmode_point_en_c2_o_shiftmode_point_cnts_c2_RANGE 15:0
+`define COUNTER_ALL_APB_REG_shiftmode_point_en_c2_o_shiftmode_point_en_c2_RANGE 16
+`define COUNTER_ALL_APB_REG_shiftmode_point_en_c2_dummy_field_RANGE 23:17
 `define COUNTER_ALL_APB_REG_single_start_trigger_c3_RANGE 0:0
 `define COUNTER_ALL_APB_REG_single_start_trigger_c3_o_single_start_trigger_c3_RANGE 0
 `define COUNTER_ALL_APB_REG_single_start_trigger_c3_dummy_field_RANGE 7:1
@@ -866,9 +893,10 @@
 `define COUNTER_ALL_APB_REG_capture_reg_status_c3_RANGE 5:0
 `define COUNTER_ALL_APB_REG_capture_reg_status_c3_i_capture_reg_status_c3_RANGE 5:0
 `define COUNTER_ALL_APB_REG_capture_reg_status_c3_dummy_field_RANGE 7:6
-`define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c3_RANGE 5:0
+`define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c3_RANGE 16:0
 `define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c3_o_capture_reg_overflow_ctrl_c3_RANGE 5:0
-`define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c3_dummy_field_RANGE 7:6
+`define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c3_o_capture_mode_automatic_validedge_c3_RANGE 16
+`define COUNTER_ALL_APB_REG_capture_reg_overflow_ctrl_c3_dummy_field_RANGE 23:17
 `define COUNTER_ALL_APB_REG_capture_reg_a0_c3_RANGE 31:0
 `define COUNTER_ALL_APB_REG_capture_reg_a0_c3_i_capture_reg_a0_c3_RANGE 31:0
 `define COUNTER_ALL_APB_REG_capture_reg_a1_c3_RANGE 31:0
@@ -907,13 +935,17 @@
 `define COUNTER_ALL_APB_REG_shiftin_data_c3_i_shiftin_data_c3_RANGE 31:0
 `define COUNTER_ALL_APB_REG_shiftin_databits_updated_c3_RANGE 31:0
 `define COUNTER_ALL_APB_REG_shiftin_databits_updated_c3_i_shiftin_databits_updated_c3_RANGE 31:0
+`define COUNTER_ALL_APB_REG_shiftmode_point_en_c3_RANGE 16:0
+`define COUNTER_ALL_APB_REG_shiftmode_point_en_c3_o_shiftmode_point_cnts_c3_RANGE 15:0
+`define COUNTER_ALL_APB_REG_shiftmode_point_en_c3_o_shiftmode_point_en_c3_RANGE 16
+`define COUNTER_ALL_APB_REG_shiftmode_point_en_c3_dummy_field_RANGE 23:17
 
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //
 //  $Log: counter_all_apb_reg_v.h,v $
-//  Revision 1.0  5/20/2018 18:52:12  register_slave.pl
+//  Revision 1.0  5/29/2018 1:20:29  register_slave.pl
 //  Initial rev
 //
 //

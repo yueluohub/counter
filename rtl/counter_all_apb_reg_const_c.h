@@ -31,8 +31,8 @@ typedef struct {
 } field_const_array_t;
 #endif // __REG_CONST_T
 
-#define NUM_REGS__COUNTER_ALL_APB_REG  155
-/* { reg_const_counter_all_apb_reg, 155, "counter_all_apb_reg"},  */ 
+#define NUM_REGS__COUNTER_ALL_APB_REG  159
+/* { reg_const_counter_all_apb_reg, 159, "counter_all_apb_reg"},  */ 
 static reg_const_t reg_const_counter_all_apb_reg[NUM_REGS__COUNTER_ALL_APB_REG] = {
   {/* name */ "intr_status", /* address */ 0x44120000, /* default */ 0x00000000, /* description */ "Interrupt status register bits. \n"}, 
   {/* name */ "intr_mask_status", /* address */ 0x44120004, /* default */ 0x00000001, /* description */ "Interrupt mask status register\n"}, 
@@ -81,6 +81,7 @@ static reg_const_t reg_const_counter_all_apb_reg[NUM_REGS__COUNTER_ALL_APB_REG] 
   {/* name */ "shiftin_data_ctrl_bitcnts_c0", /* address */ 0x44120108, /* default */ 0x00000000, /* description */ "how man bits of shift_in data for counter 0. . \n"}, 
   {/* name */ "shiftin_data_c0", /* address */ 0x4412010c, /* default */ 0x00000000, /* description */ "shift_in data for counter 0. \n"}, 
   {/* name */ "shiftin_databits_updated_c0", /* address */ 0x44120110, /* default */ 0x00000000, /* description */ "shift_in data(bitmap is updated) for counter 0. \n"}, 
+  {/* name */ "shiftmode_point_en_c0", /* address */ 0x44120114, /* default */ 0x00000001, /* description */ "automatic waveform and capture switch mode,for counter 0. \n"}, 
   {/* name */ "single_start_trigger_c1", /* address */ 0x44120180, /* default */ 0x00000000, /* description */ "counter 1 single trigger register bits. \n"}, 
   {/* name */ "single_stop_trigger_c1", /* address */ 0x44120184, /* default */ 0x00000000, /* description */ "counter 1 single trigger register bits. \n"}, 
   {/* name */ "single_clear_trigger_c1", /* address */ 0x44120188, /* default */ 0x00000000, /* description */ "counter 1 single trigger register bits. \n"}, 
@@ -117,6 +118,7 @@ static reg_const_t reg_const_counter_all_apb_reg[NUM_REGS__COUNTER_ALL_APB_REG] 
   {/* name */ "shiftin_data_ctrl_bitcnts_c1", /* address */ 0x44120208, /* default */ 0x00000000, /* description */ "how man bits of shift_in data for counter 1. . \n"}, 
   {/* name */ "shiftin_data_c1", /* address */ 0x4412020c, /* default */ 0x00000000, /* description */ "shift_in data for counter 1. \n"}, 
   {/* name */ "shiftin_databits_updated_c1", /* address */ 0x44120210, /* default */ 0x00000000, /* description */ "shift_in data(bitmap is updated) for counter 1. \n"}, 
+  {/* name */ "shiftmode_point_en_c1", /* address */ 0x44120214, /* default */ 0x00000001, /* description */ "automatic waveform and capture switch mode,for counter 0. \n"}, 
   {/* name */ "single_start_trigger_c2", /* address */ 0x44120280, /* default */ 0x00000000, /* description */ "counter 2 single trigger register bits. \n"}, 
   {/* name */ "single_stop_trigger_c2", /* address */ 0x44120284, /* default */ 0x00000000, /* description */ "counter 2 single trigger register bits. \n"}, 
   {/* name */ "single_clear_trigger_c2", /* address */ 0x44120288, /* default */ 0x00000000, /* description */ "counter 2 single trigger register bits. \n"}, 
@@ -153,6 +155,7 @@ static reg_const_t reg_const_counter_all_apb_reg[NUM_REGS__COUNTER_ALL_APB_REG] 
   {/* name */ "shiftin_data_ctrl_bitcnts_c2", /* address */ 0x44120308, /* default */ 0x00000000, /* description */ "how man bits of shift_in data for counter 2. . \n"}, 
   {/* name */ "shiftin_data_c2", /* address */ 0x4412030c, /* default */ 0x00000000, /* description */ "shift_in data for counter 2. \n"}, 
   {/* name */ "shiftin_databits_updated_c2", /* address */ 0x44120310, /* default */ 0x00000000, /* description */ "shift_in data(bitmap is updated) for counter 2. \n"}, 
+  {/* name */ "shiftmode_point_en_c2", /* address */ 0x44120314, /* default */ 0x00000001, /* description */ "automatic waveform and capture switch mode,for counter 0. \n"}, 
   {/* name */ "single_start_trigger_c3", /* address */ 0x44120380, /* default */ 0x00000000, /* description */ "counter 3 single trigger register bits. \n"}, 
   {/* name */ "single_stop_trigger_c3", /* address */ 0x44120384, /* default */ 0x00000000, /* description */ "counter 3 single trigger register bits. \n"}, 
   {/* name */ "single_clear_trigger_c3", /* address */ 0x44120388, /* default */ 0x00000000, /* description */ "counter 3 single trigger register bits. \n"}, 
@@ -188,7 +191,8 @@ static reg_const_t reg_const_counter_all_apb_reg[NUM_REGS__COUNTER_ALL_APB_REG] 
   {/* name */ "shiftout_data_valid_c3", /* address */ 0x44120404, /* default */ 0x00000000, /* description */ "a new shift_out data flag for counter 3. \n"}, 
   {/* name */ "shiftin_data_ctrl_bitcnts_c3", /* address */ 0x44120408, /* default */ 0x00000000, /* description */ "how man bits of shift_in data for counter 3. . \n"}, 
   {/* name */ "shiftin_data_c3", /* address */ 0x4412040c, /* default */ 0x00000000, /* description */ "shift_in data for counter 3. \n"}, 
-  {/* name */ "shiftin_databits_updated_c3", /* address */ 0x44120410, /* default */ 0x00000000, /* description */ "shift_in data(bitmap is updated) for counter 3. \n"}
+  {/* name */ "shiftin_databits_updated_c3", /* address */ 0x44120410, /* default */ 0x00000000, /* description */ "shift_in data(bitmap is updated) for counter 3. \n"}, 
+  {/* name */ "shiftmode_point_en_c3", /* address */ 0x44120414, /* default */ 0x00000001, /* description */ "automatic waveform and capture switch mode,for counter 0. \n"}
 };
 
 field_const_t field_const_counter_all_apb_reg__intr_status[]  = {
@@ -311,7 +315,8 @@ field_const_t field_const_counter_all_apb_reg__capture_reg_status_c0[]  = {
 };
 field_const_t field_const_counter_all_apb_reg__capture_reg_overflow_ctrl_c0[]  = {
   {/* name */ "o_capture_reg_overflow_ctrl_c0", /* range */ "[5:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "every bit means the same as i_capture_reg_status_c0.\n1--> rewrite, o--> discard.\n\n"}, 
-  {/* name */ "dummy_field", /* range */ "[7:6]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
+  {/* name */ "o_capture_mode_automatic_validedge_c0", /* range */ "[16:16]", /* default */ "0x0", /* access */ "read-write", /* description */ "capture mode first valid edge flag on ,1- enable,0-disable.\n"}, 
+  {/* name */ "dummy_field", /* range */ "[23:17]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
 };
 field_const_t field_const_counter_all_apb_reg__capture_reg_a0_c0[]  = {
   {/* name */ "i_capture_reg_a0_c0", /* range */ "[31:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "capture mode, capture register a0.\n"}
@@ -365,6 +370,11 @@ field_const_t field_const_counter_all_apb_reg__shiftin_data_c0[]  = {
 };
 field_const_t field_const_counter_all_apb_reg__shiftin_databits_updated_c0[]  = {
   {/* name */ "i_shiftin_databits_updated_c0", /* range */ "[31:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "shift_in data(bitmap is updated) for counter 0. value 1 is acitve.\n"}
+};
+field_const_t field_const_counter_all_apb_reg__shiftmode_point_en_c0[]  = {
+  {/* name */ "o_shiftmode_point_cnts_c0", /* range */ "[15:0]", /* default */ "0x1", /* access */ "read-write", /* description */ "shiftin data in this cnts or shiftout data in the cnts..\n"}, 
+  {/* name */ "o_shiftmode_point_en_c0", /* range */ "[16:16]", /* default */ "0x0", /* access */ "read-write", /* description */ "shiftin data in this cnts or shiftout data in the cnts enable ,1 is active. 1- enable,0-disable.\n"}, 
+  {/* name */ "dummy_field", /* range */ "[23:17]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
 };
 field_const_t field_const_counter_all_apb_reg__single_start_trigger_c1[]  = {
   {/* name */ "o_single_start_trigger_c1", /* range */ "[0:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "counter 1 single start trigger. \n"}, 
@@ -448,7 +458,8 @@ field_const_t field_const_counter_all_apb_reg__capture_reg_status_c1[]  = {
 };
 field_const_t field_const_counter_all_apb_reg__capture_reg_overflow_ctrl_c1[]  = {
   {/* name */ "o_capture_reg_overflow_ctrl_c1", /* range */ "[5:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "every bit means the same as i_capture_reg_status_c1.\n1--> rewrite, o--> discard.\n\n"}, 
-  {/* name */ "dummy_field", /* range */ "[7:6]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
+  {/* name */ "o_capture_mode_automatic_validedge_c1", /* range */ "[16:16]", /* default */ "0x0", /* access */ "read-write", /* description */ "capture mode first valid edge flag on ,1- enable,0-disable.\n"}, 
+  {/* name */ "dummy_field", /* range */ "[23:17]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
 };
 field_const_t field_const_counter_all_apb_reg__capture_reg_a0_c1[]  = {
   {/* name */ "i_capture_reg_a0_c1", /* range */ "[31:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "capture mode, capture register a0.\n"}
@@ -502,6 +513,11 @@ field_const_t field_const_counter_all_apb_reg__shiftin_data_c1[]  = {
 };
 field_const_t field_const_counter_all_apb_reg__shiftin_databits_updated_c1[]  = {
   {/* name */ "i_shiftin_databits_updated_c1", /* range */ "[31:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "shift_in data(bitmap is updated) for counter 1. value 1 is acitve.\n"}
+};
+field_const_t field_const_counter_all_apb_reg__shiftmode_point_en_c1[]  = {
+  {/* name */ "o_shiftmode_point_cnts_c1", /* range */ "[15:0]", /* default */ "0x1", /* access */ "read-write", /* description */ "shiftin data in this cnts or shiftout data in the cnts..\n"}, 
+  {/* name */ "o_shiftmode_point_en_c1", /* range */ "[16:16]", /* default */ "0x0", /* access */ "read-write", /* description */ "shiftin data in this cnts or shiftout data in the cnts enable ,1 is active. 1- enable,0-disable.\n"}, 
+  {/* name */ "dummy_field", /* range */ "[23:17]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
 };
 field_const_t field_const_counter_all_apb_reg__single_start_trigger_c2[]  = {
   {/* name */ "o_single_start_trigger_c2", /* range */ "[0:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "counter 2 single start trigger. \n"}, 
@@ -585,7 +601,8 @@ field_const_t field_const_counter_all_apb_reg__capture_reg_status_c2[]  = {
 };
 field_const_t field_const_counter_all_apb_reg__capture_reg_overflow_ctrl_c2[]  = {
   {/* name */ "o_capture_reg_overflow_ctrl_c2", /* range */ "[5:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "every bit means the same as i_capture_reg_status_c2.\n1--> rewrite, o--> discard.\n\n"}, 
-  {/* name */ "dummy_field", /* range */ "[7:6]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
+  {/* name */ "o_capture_mode_automatic_validedge_c2", /* range */ "[16:16]", /* default */ "0x0", /* access */ "read-write", /* description */ "capture mode first valid edge flag on ,1- enable,0-disable.\n"}, 
+  {/* name */ "dummy_field", /* range */ "[23:17]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
 };
 field_const_t field_const_counter_all_apb_reg__capture_reg_a0_c2[]  = {
   {/* name */ "i_capture_reg_a0_c2", /* range */ "[31:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "capture mode, capture register a0.\n"}
@@ -639,6 +656,11 @@ field_const_t field_const_counter_all_apb_reg__shiftin_data_c2[]  = {
 };
 field_const_t field_const_counter_all_apb_reg__shiftin_databits_updated_c2[]  = {
   {/* name */ "i_shiftin_databits_updated_c2", /* range */ "[31:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "shift_in data(bitmap is updated) for counter 2. value 1 is acitve.\n"}
+};
+field_const_t field_const_counter_all_apb_reg__shiftmode_point_en_c2[]  = {
+  {/* name */ "o_shiftmode_point_cnts_c2", /* range */ "[15:0]", /* default */ "0x1", /* access */ "read-write", /* description */ "shiftin data in this cnts or shiftout data in the cnts..\n"}, 
+  {/* name */ "o_shiftmode_point_en_c2", /* range */ "[16:16]", /* default */ "0x0", /* access */ "read-write", /* description */ "shiftin data in this cnts or shiftout data in the cnts enable ,1 is active. 1- enable,0-disable.\n"}, 
+  {/* name */ "dummy_field", /* range */ "[23:17]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
 };
 field_const_t field_const_counter_all_apb_reg__single_start_trigger_c3[]  = {
   {/* name */ "o_single_start_trigger_c3", /* range */ "[0:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "counter 3 single start trigger. \n"}, 
@@ -722,7 +744,8 @@ field_const_t field_const_counter_all_apb_reg__capture_reg_status_c3[]  = {
 };
 field_const_t field_const_counter_all_apb_reg__capture_reg_overflow_ctrl_c3[]  = {
   {/* name */ "o_capture_reg_overflow_ctrl_c3", /* range */ "[5:0]", /* default */ "0x0", /* access */ "read-write", /* description */ "every bit means the same as i_capture_reg_status_c3.\n1--> rewrite, o--> discard.\n\n"}, 
-  {/* name */ "dummy_field", /* range */ "[7:6]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
+  {/* name */ "o_capture_mode_automatic_validedge_c3", /* range */ "[16:16]", /* default */ "0x0", /* access */ "read-write", /* description */ "capture mode first valid edge flag on ,1- enable,0-disable.\n"}, 
+  {/* name */ "dummy_field", /* range */ "[23:17]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
 };
 field_const_t field_const_counter_all_apb_reg__capture_reg_a0_c3[]  = {
   {/* name */ "i_capture_reg_a0_c3", /* range */ "[31:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "capture mode, capture register a0.\n"}
@@ -777,6 +800,11 @@ field_const_t field_const_counter_all_apb_reg__shiftin_data_c3[]  = {
 field_const_t field_const_counter_all_apb_reg__shiftin_databits_updated_c3[]  = {
   {/* name */ "i_shiftin_databits_updated_c3", /* range */ "[31:0]", /* default */ "0x0", /* access */ "read-only", /* description */ "shift_in data(bitmap is updated) for counter 3. value 1 is acitve.\n"}
 };
+field_const_t field_const_counter_all_apb_reg__shiftmode_point_en_c3[]  = {
+  {/* name */ "o_shiftmode_point_cnts_c3", /* range */ "[15:0]", /* default */ "0x1", /* access */ "read-write", /* description */ "shiftin data in this cnts or shiftout data in the cnts..\n"}, 
+  {/* name */ "o_shiftmode_point_en_c3", /* range */ "[16:16]", /* default */ "0x0", /* access */ "read-write", /* description */ "shiftin data in this cnts or shiftout data in the cnts enable ,1 is active. 1- enable,0-disable.\n"}, 
+  {/* name */ "dummy_field", /* range */ "[23:17]", /* default */ "0x0", /* access */ "no-access", /* description */ ""}
+};
 
 field_const_array_t reg_pnt_list__counter_all_apb_reg[NUM_REGS__COUNTER_ALL_APB_REG] = {
   { /* pfield */ field_const_counter_all_apb_reg__intr_status, /* size */ 1}, 
@@ -810,7 +838,7 @@ field_const_array_t reg_pnt_list__counter_all_apb_reg[NUM_REGS__COUNTER_ALL_APB_
   { /* pfield */ field_const_counter_all_apb_reg__target_reg_b1_c0, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__target_reg_b2_c0, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__capture_reg_status_c0, /* size */ 2}, 
-  { /* pfield */ field_const_counter_all_apb_reg__capture_reg_overflow_ctrl_c0, /* size */ 2}, 
+  { /* pfield */ field_const_counter_all_apb_reg__capture_reg_overflow_ctrl_c0, /* size */ 3}, 
   { /* pfield */ field_const_counter_all_apb_reg__capture_reg_a0_c0, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__capture_reg_a1_c0, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__capture_reg_a2_c0, /* size */ 1}, 
@@ -826,6 +854,7 @@ field_const_array_t reg_pnt_list__counter_all_apb_reg[NUM_REGS__COUNTER_ALL_APB_
   { /* pfield */ field_const_counter_all_apb_reg__shiftin_data_ctrl_bitcnts_c0, /* size */ 2}, 
   { /* pfield */ field_const_counter_all_apb_reg__shiftin_data_c0, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__shiftin_databits_updated_c0, /* size */ 1}, 
+  { /* pfield */ field_const_counter_all_apb_reg__shiftmode_point_en_c0, /* size */ 3}, 
   { /* pfield */ field_const_counter_all_apb_reg__single_start_trigger_c1, /* size */ 2}, 
   { /* pfield */ field_const_counter_all_apb_reg__single_stop_trigger_c1, /* size */ 2}, 
   { /* pfield */ field_const_counter_all_apb_reg__single_clear_trigger_c1, /* size */ 2}, 
@@ -846,7 +875,7 @@ field_const_array_t reg_pnt_list__counter_all_apb_reg[NUM_REGS__COUNTER_ALL_APB_
   { /* pfield */ field_const_counter_all_apb_reg__target_reg_b1_c1, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__target_reg_b2_c1, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__capture_reg_status_c1, /* size */ 2}, 
-  { /* pfield */ field_const_counter_all_apb_reg__capture_reg_overflow_ctrl_c1, /* size */ 2}, 
+  { /* pfield */ field_const_counter_all_apb_reg__capture_reg_overflow_ctrl_c1, /* size */ 3}, 
   { /* pfield */ field_const_counter_all_apb_reg__capture_reg_a0_c1, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__capture_reg_a1_c1, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__capture_reg_a2_c1, /* size */ 1}, 
@@ -862,6 +891,7 @@ field_const_array_t reg_pnt_list__counter_all_apb_reg[NUM_REGS__COUNTER_ALL_APB_
   { /* pfield */ field_const_counter_all_apb_reg__shiftin_data_ctrl_bitcnts_c1, /* size */ 2}, 
   { /* pfield */ field_const_counter_all_apb_reg__shiftin_data_c1, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__shiftin_databits_updated_c1, /* size */ 1}, 
+  { /* pfield */ field_const_counter_all_apb_reg__shiftmode_point_en_c1, /* size */ 3}, 
   { /* pfield */ field_const_counter_all_apb_reg__single_start_trigger_c2, /* size */ 2}, 
   { /* pfield */ field_const_counter_all_apb_reg__single_stop_trigger_c2, /* size */ 2}, 
   { /* pfield */ field_const_counter_all_apb_reg__single_clear_trigger_c2, /* size */ 2}, 
@@ -882,7 +912,7 @@ field_const_array_t reg_pnt_list__counter_all_apb_reg[NUM_REGS__COUNTER_ALL_APB_
   { /* pfield */ field_const_counter_all_apb_reg__target_reg_b1_c2, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__target_reg_b2_c2, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__capture_reg_status_c2, /* size */ 2}, 
-  { /* pfield */ field_const_counter_all_apb_reg__capture_reg_overflow_ctrl_c2, /* size */ 2}, 
+  { /* pfield */ field_const_counter_all_apb_reg__capture_reg_overflow_ctrl_c2, /* size */ 3}, 
   { /* pfield */ field_const_counter_all_apb_reg__capture_reg_a0_c2, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__capture_reg_a1_c2, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__capture_reg_a2_c2, /* size */ 1}, 
@@ -898,6 +928,7 @@ field_const_array_t reg_pnt_list__counter_all_apb_reg[NUM_REGS__COUNTER_ALL_APB_
   { /* pfield */ field_const_counter_all_apb_reg__shiftin_data_ctrl_bitcnts_c2, /* size */ 2}, 
   { /* pfield */ field_const_counter_all_apb_reg__shiftin_data_c2, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__shiftin_databits_updated_c2, /* size */ 1}, 
+  { /* pfield */ field_const_counter_all_apb_reg__shiftmode_point_en_c2, /* size */ 3}, 
   { /* pfield */ field_const_counter_all_apb_reg__single_start_trigger_c3, /* size */ 2}, 
   { /* pfield */ field_const_counter_all_apb_reg__single_stop_trigger_c3, /* size */ 2}, 
   { /* pfield */ field_const_counter_all_apb_reg__single_clear_trigger_c3, /* size */ 2}, 
@@ -918,7 +949,7 @@ field_const_array_t reg_pnt_list__counter_all_apb_reg[NUM_REGS__COUNTER_ALL_APB_
   { /* pfield */ field_const_counter_all_apb_reg__target_reg_b1_c3, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__target_reg_b2_c3, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__capture_reg_status_c3, /* size */ 2}, 
-  { /* pfield */ field_const_counter_all_apb_reg__capture_reg_overflow_ctrl_c3, /* size */ 2}, 
+  { /* pfield */ field_const_counter_all_apb_reg__capture_reg_overflow_ctrl_c3, /* size */ 3}, 
   { /* pfield */ field_const_counter_all_apb_reg__capture_reg_a0_c3, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__capture_reg_a1_c3, /* size */ 1}, 
   { /* pfield */ field_const_counter_all_apb_reg__capture_reg_a2_c3, /* size */ 1}, 
@@ -933,5 +964,6 @@ field_const_array_t reg_pnt_list__counter_all_apb_reg[NUM_REGS__COUNTER_ALL_APB_
   { /* pfield */ field_const_counter_all_apb_reg__shiftout_data_valid_c3, /* size */ 2}, 
   { /* pfield */ field_const_counter_all_apb_reg__shiftin_data_ctrl_bitcnts_c3, /* size */ 2}, 
   { /* pfield */ field_const_counter_all_apb_reg__shiftin_data_c3, /* size */ 1}, 
-  { /* pfield */ field_const_counter_all_apb_reg__shiftin_databits_updated_c3, /* size */ 1}
+  { /* pfield */ field_const_counter_all_apb_reg__shiftin_databits_updated_c3, /* size */ 1}, 
+  { /* pfield */ field_const_counter_all_apb_reg__shiftmode_point_en_c3, /* size */ 3}
 };

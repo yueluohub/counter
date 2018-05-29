@@ -64,6 +64,7 @@
    wire              [ 31 : 0 ] o_target_reg_b2_c0;
    wire              [  5 : 0 ] i_capture_reg_status_c0;
    wire              [  5 : 0 ] o_capture_reg_overflow_ctrl_c0;
+   wire                         o_capture_mode_automatic_validedge_c0;
    wire                         ren_capture_reg_a0_c0;
    wire                         ren_capture_reg_a0_c0_d;
    wire              [ 31 : 0 ] i_capture_reg_a0_c0;
@@ -96,6 +97,8 @@
    wire              [  4 : 0 ] o_shiftin_data_ctrl_bitcnts_c0;
    wire              [ 31 : 0 ] i_shiftin_data_c0;
    wire              [ 31 : 0 ] i_shiftin_databits_updated_c0;
+   wire              [ 15 : 0 ] o_shiftmode_point_cnts_c0;
+   wire                         o_shiftmode_point_en_c0;
    wire                         o_single_start_trigger_c1;
    wire                         o_single_stop_trigger_c1;
    wire                         o_single_clear_trigger_c1;
@@ -132,6 +135,7 @@
    wire              [ 31 : 0 ] o_target_reg_b2_c1;
    wire              [  5 : 0 ] i_capture_reg_status_c1;
    wire              [  5 : 0 ] o_capture_reg_overflow_ctrl_c1;
+   wire                         o_capture_mode_automatic_validedge_c1;
    wire                         ren_capture_reg_a0_c1;
    wire                         ren_capture_reg_a0_c1_d;
    wire              [ 31 : 0 ] i_capture_reg_a0_c1;
@@ -164,6 +168,8 @@
    wire              [  4 : 0 ] o_shiftin_data_ctrl_bitcnts_c1;
    wire              [ 31 : 0 ] i_shiftin_data_c1;
    wire              [ 31 : 0 ] i_shiftin_databits_updated_c1;
+   wire              [ 15 : 0 ] o_shiftmode_point_cnts_c1;
+   wire                         o_shiftmode_point_en_c1;
    wire                         o_single_start_trigger_c2;
    wire                         o_single_stop_trigger_c2;
    wire                         o_single_clear_trigger_c2;
@@ -200,6 +206,7 @@
    wire              [ 31 : 0 ] o_target_reg_b2_c2;
    wire              [  5 : 0 ] i_capture_reg_status_c2;
    wire              [  5 : 0 ] o_capture_reg_overflow_ctrl_c2;
+   wire                         o_capture_mode_automatic_validedge_c2;
    wire                         ren_capture_reg_a0_c2;
    wire                         ren_capture_reg_a0_c2_d;
    wire              [ 31 : 0 ] i_capture_reg_a0_c2;
@@ -232,6 +239,8 @@
    wire              [  4 : 0 ] o_shiftin_data_ctrl_bitcnts_c2;
    wire              [ 31 : 0 ] i_shiftin_data_c2;
    wire              [ 31 : 0 ] i_shiftin_databits_updated_c2;
+   wire              [ 15 : 0 ] o_shiftmode_point_cnts_c2;
+   wire                         o_shiftmode_point_en_c2;
    wire                         o_single_start_trigger_c3;
    wire                         o_single_stop_trigger_c3;
    wire                         o_single_clear_trigger_c3;
@@ -268,6 +277,7 @@
    wire              [ 31 : 0 ] o_target_reg_b2_c3;
    wire              [  5 : 0 ] i_capture_reg_status_c3;
    wire              [  5 : 0 ] o_capture_reg_overflow_ctrl_c3;
+   wire                         o_capture_mode_automatic_validedge_c3;
    wire                         ren_capture_reg_a0_c3;
    wire                         ren_capture_reg_a0_c3_d;
    wire              [ 31 : 0 ] i_capture_reg_a0_c3;
@@ -300,6 +310,8 @@
    wire              [  4 : 0 ] o_shiftin_data_ctrl_bitcnts_c3;
    wire              [ 31 : 0 ] i_shiftin_data_c3;
    wire              [ 31 : 0 ] i_shiftin_databits_updated_c3;
+   wire              [ 15 : 0 ] o_shiftmode_point_cnts_c3;
+   wire                         o_shiftmode_point_en_c3;
 
 
    //***********************************************************************************************
@@ -370,6 +382,7 @@
       .o_target_reg_b2_c0                                          ( o_target_reg_b2_c0                                          ),
       .i_capture_reg_status_c0                                     ( i_capture_reg_status_c0                                     ),
       .o_capture_reg_overflow_ctrl_c0                              ( o_capture_reg_overflow_ctrl_c0                              ),
+      .o_capture_mode_automatic_validedge_c0                       ( o_capture_mode_automatic_validedge_c0                       ),
       .ren_capture_reg_a0_c0                                       ( ren_capture_reg_a0_c0                                       ),
       .ren_capture_reg_a0_c0_d                                     ( ren_capture_reg_a0_c0_d                                     ),
       .i_capture_reg_a0_c0                                         ( i_capture_reg_a0_c0                                         ),
@@ -402,6 +415,8 @@
       .o_shiftin_data_ctrl_bitcnts_c0                              ( o_shiftin_data_ctrl_bitcnts_c0                              ),
       .i_shiftin_data_c0                                           ( i_shiftin_data_c0                                           ),
       .i_shiftin_databits_updated_c0                               ( i_shiftin_databits_updated_c0                               ),
+      .o_shiftmode_point_cnts_c0                                   ( o_shiftmode_point_cnts_c0                                   ),
+      .o_shiftmode_point_en_c0                                     ( o_shiftmode_point_en_c0                                     ),
       .o_single_start_trigger_c1                                   ( o_single_start_trigger_c1                                   ),
       .o_single_stop_trigger_c1                                    ( o_single_stop_trigger_c1                                    ),
       .o_single_clear_trigger_c1                                   ( o_single_clear_trigger_c1                                   ),
@@ -438,6 +453,7 @@
       .o_target_reg_b2_c1                                          ( o_target_reg_b2_c1                                          ),
       .i_capture_reg_status_c1                                     ( i_capture_reg_status_c1                                     ),
       .o_capture_reg_overflow_ctrl_c1                              ( o_capture_reg_overflow_ctrl_c1                              ),
+      .o_capture_mode_automatic_validedge_c1                       ( o_capture_mode_automatic_validedge_c1                       ),
       .ren_capture_reg_a0_c1                                       ( ren_capture_reg_a0_c1                                       ),
       .ren_capture_reg_a0_c1_d                                     ( ren_capture_reg_a0_c1_d                                     ),
       .i_capture_reg_a0_c1                                         ( i_capture_reg_a0_c1                                         ),
@@ -470,6 +486,8 @@
       .o_shiftin_data_ctrl_bitcnts_c1                              ( o_shiftin_data_ctrl_bitcnts_c1                              ),
       .i_shiftin_data_c1                                           ( i_shiftin_data_c1                                           ),
       .i_shiftin_databits_updated_c1                               ( i_shiftin_databits_updated_c1                               ),
+      .o_shiftmode_point_cnts_c1                                   ( o_shiftmode_point_cnts_c1                                   ),
+      .o_shiftmode_point_en_c1                                     ( o_shiftmode_point_en_c1                                     ),
       .o_single_start_trigger_c2                                   ( o_single_start_trigger_c2                                   ),
       .o_single_stop_trigger_c2                                    ( o_single_stop_trigger_c2                                    ),
       .o_single_clear_trigger_c2                                   ( o_single_clear_trigger_c2                                   ),
@@ -506,6 +524,7 @@
       .o_target_reg_b2_c2                                          ( o_target_reg_b2_c2                                          ),
       .i_capture_reg_status_c2                                     ( i_capture_reg_status_c2                                     ),
       .o_capture_reg_overflow_ctrl_c2                              ( o_capture_reg_overflow_ctrl_c2                              ),
+      .o_capture_mode_automatic_validedge_c2                       ( o_capture_mode_automatic_validedge_c2                       ),
       .ren_capture_reg_a0_c2                                       ( ren_capture_reg_a0_c2                                       ),
       .ren_capture_reg_a0_c2_d                                     ( ren_capture_reg_a0_c2_d                                     ),
       .i_capture_reg_a0_c2                                         ( i_capture_reg_a0_c2                                         ),
@@ -538,6 +557,8 @@
       .o_shiftin_data_ctrl_bitcnts_c2                              ( o_shiftin_data_ctrl_bitcnts_c2                              ),
       .i_shiftin_data_c2                                           ( i_shiftin_data_c2                                           ),
       .i_shiftin_databits_updated_c2                               ( i_shiftin_databits_updated_c2                               ),
+      .o_shiftmode_point_cnts_c2                                   ( o_shiftmode_point_cnts_c2                                   ),
+      .o_shiftmode_point_en_c2                                     ( o_shiftmode_point_en_c2                                     ),
       .o_single_start_trigger_c3                                   ( o_single_start_trigger_c3                                   ),
       .o_single_stop_trigger_c3                                    ( o_single_stop_trigger_c3                                    ),
       .o_single_clear_trigger_c3                                   ( o_single_clear_trigger_c3                                   ),
@@ -574,6 +595,7 @@
       .o_target_reg_b2_c3                                          ( o_target_reg_b2_c3                                          ),
       .i_capture_reg_status_c3                                     ( i_capture_reg_status_c3                                     ),
       .o_capture_reg_overflow_ctrl_c3                              ( o_capture_reg_overflow_ctrl_c3                              ),
+      .o_capture_mode_automatic_validedge_c3                       ( o_capture_mode_automatic_validedge_c3                       ),
       .ren_capture_reg_a0_c3                                       ( ren_capture_reg_a0_c3                                       ),
       .ren_capture_reg_a0_c3_d                                     ( ren_capture_reg_a0_c3_d                                     ),
       .i_capture_reg_a0_c3                                         ( i_capture_reg_a0_c3                                         ),
@@ -605,7 +627,9 @@
       .o_shiftout_data_valid_c3                                    ( o_shiftout_data_valid_c3                                    ),
       .o_shiftin_data_ctrl_bitcnts_c3                              ( o_shiftin_data_ctrl_bitcnts_c3                              ),
       .i_shiftin_data_c3                                           ( i_shiftin_data_c3                                           ),
-      .i_shiftin_databits_updated_c3                               ( i_shiftin_databits_updated_c3                               )
+      .i_shiftin_databits_updated_c3                               ( i_shiftin_databits_updated_c3                               ),
+      .o_shiftmode_point_cnts_c3                                   ( o_shiftmode_point_cnts_c3                                   ),
+      .o_shiftmode_point_en_c3                                     ( o_shiftmode_point_en_c3                                     )
    );
 
 
@@ -614,7 +638,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //
 //  $Log: counter_all_apb_reg_inst.inc,v $
-//  Revision 1.0  5/20/2018 18:52:12  register_slave.pl
+//  Revision 1.0  5/29/2018 1:20:29  register_slave.pl
 //  Initial rev
 //
 //
