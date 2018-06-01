@@ -216,7 +216,7 @@ reg  [63:0] r1_shiftout_data;
 reg  [63:0] r1_shiftout_databits_valid;
 reg  r1_shiftout_data_valid_dly;
 wire  w1_shiftout_only_onebit_flag;
-reg   r1_shiftout_start_onebit_flag;
+// reg   r1_shiftout_start_onebit_flag;
 wire [31:0] i_shiftin_data_ctrl_bitmap;
 wire  counter_shiftin_din;
 wire  shiftin_complete_flag;
@@ -411,7 +411,7 @@ assign w_count_overflow_flag = &current_counter[31:0];
 reg r1_count_overflow_flag_target_reg_a;
 reg r1_count_overflow_flag_target_reg_b;
 reg r1_count_overflow_flag_automatic;
-reg [5:0] r1_target_reg_status_dly;
+// reg [5:0] r1_target_reg_status_dly;
 reg r1_count_flag_automatic_update;
 reg r1_count_flag_automatic_update_dly;
 
@@ -463,10 +463,10 @@ always @(posedge i_clk or negedge i_rst_n) begin
     end
 end
         
-always @(posedge i_clk) begin
-    r1_target_reg_status_dly <= r1_target_reg_status;
-    r1_count_flag_automatic_update_dly <= r1_count_flag_automatic_update;
-end
+//always @(posedge i_clk) begin
+//    // r1_target_reg_status_dly <= r1_target_reg_status;
+//    r1_count_flag_automatic_update_dly <= r1_count_flag_automatic_update;
+//end
         
         
 
@@ -514,7 +514,7 @@ always @(posedge i_clk or negedge i_rst_n) begin
     if(!i_rst_n) begin
         r1_shiftout_data[31:0] <= 32'h0;
         r1_shiftout_databits_valid[31:0] <= 32'hffffffff;
-        r1_shiftout_start_onebit_flag <= 1'b0;
+        // r1_shiftout_start_onebit_flag <= 1'b0;
     end
     //else if(soft_start_flag||start_flag) begin
     //    if(i_mode_sel[0] && i_mode_sel[1]) begin// shiftout mode.
@@ -526,8 +526,6 @@ always @(posedge i_clk or negedge i_rst_n) begin
     if(!r1_shiftout_mode_en_dly) begin//only one bit.
             r1_shiftout_data[31:0] <= r1_shiftout_data[63:32];
             r1_shiftout_databits_valid[31:0]  <= r1_shiftout_databits_valid[63:32];    
-            if(i_shiftmode_point_en)
-                r1_shiftout_start_onebit_flag <= 1'b1;
     end
     else if(!i_shiftmode_point_en) begin
         if(w1_shiftout_only_onebit_flag) begin//only one bit.
@@ -541,19 +539,19 @@ always @(posedge i_clk or negedge i_rst_n) begin
     end
     else if(i_shiftmode_point_en &&(current_counter_automatic==(lastbit_current_counter+i_switch_mode_onebit_cnts))) begin// i_shiftmode_point_cnts
         if(w1_shiftout_only_onebit_flag) begin//only one bit.
-            r1_shiftout_start_onebit_flag <= 1'b1;
+            // r1_shiftout_start_onebit_flag <= 1'b1;
             r1_shiftout_data[31:0] <= r1_shiftout_data[63:32];
             r1_shiftout_databits_valid[31:0]  <= r1_shiftout_databits_valid[63:32];         
         end
         else begin
-            r1_shiftout_start_onebit_flag <= 1'b0;
+            // r1_shiftout_start_onebit_flag <= 1'b0;
             r1_shiftout_data[31:0] <= r1_shiftout_data[31:0]>>1;                
             r1_shiftout_databits_valid[31:0]  <= r1_shiftout_databits_valid[31:0]>>1;
         end
     end
     end
     else begin
-        r1_shiftout_start_onebit_flag <= 1'b0;
+        // r1_shiftout_start_onebit_flag <= 1'b0;
         r1_shiftout_data[31:0] <= 32'h0;
         r1_shiftout_databits_valid[31:0] <= 32'hffffffff;
     end
@@ -604,11 +602,9 @@ always @(posedge i_clk or negedge i_rst_n) begin
         // end 
         else if(waveform_mode_en) begin //counter waveform mode.
             if(!r1_waveform_mode_en_dly) begin
-                r1_target_reg_status <= 6'b0;
+                r1_target_reg_status[2:0] <= 6'b0;
                 o_extern_dout_a     <= i_target_reg_ctrl[4];//reset value.
-                o_extern_dout_b     <= i_target_reg_ctrl[5];//reset value.                
                 last_current_counter_a <= current_counter;
-                last_current_counter_b <= current_counter;    
             end
             else if(((i_target_reg_a0+last_current_counter_a)==current_counter_target_reg_a) && (!r1_target_reg_status[0])) begin //
                 o_extern_dout_a         <= 1'b0;
@@ -631,7 +627,12 @@ always @(posedge i_clk or negedge i_rst_n) begin
                     o_extern_dout_a <= i_target_reg_ctrl[4];//reset value.
             end
             //
-            if(((i_target_reg_b0+last_current_counter_b)==current_counter_target_reg_b) && (!r1_target_reg_status[3])) begin
+            if(!r1_waveform_mode_en_dly) begin
+                r1_target_reg_status[5:3] <= 3'b0;
+                o_extern_dout_b     <= i_target_reg_ctrl[5];//reset value.                
+                last_current_counter_b <= current_counter;    
+            end            
+            else if(((i_target_reg_b0+last_current_counter_b)==current_counter_target_reg_b) && (!r1_target_reg_status[3])) begin
                 o_extern_dout_b <= 1'b0;
                 r1_target_reg_status[3] <= 1'b1;
             end
