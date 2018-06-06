@@ -6,8 +6,8 @@
 
 // `define SIM_FINISH_MS 10
 // `define SIM_FINISH_MS 20
-`define SIM_FINISH_MS 50
-// `define SIM_FINISH_MS 200
+// `define SIM_FINISH_MS 50
+`define SIM_FINISH_MS 300
 // `define APB_BUS_MONITOR
 
 // `define CAPTURE_DATA_IN
@@ -55,4 +55,9 @@
 
 // `define TESTCASE_ALL_ISO7816_IFC
 // `define TESTCASE_ALL_SHIFTMODE_ISO7816_IFC  //shiftin mode.
-`define TESTCASE_ALL_SHIFTMODE_ISO7816_IFC_1 //shiftout mode.
+// `define TESTCASE_ALL_SHIFTMODE_ISO7816_IFC_1 //shiftout mode.
+
+ `define TESTCASE_ALL_SHIFTMODE_IR_REMOTE_CONTROL_IFC_0 //shiftout mode.
+
+
+

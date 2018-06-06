@@ -2957,6 +2957,361 @@ end
 `endif
 
 
+`ifdef TESTCASE_ALL_SHIFTMODE_IR_REMOTE_CONTROL_IFC_0 //shift mode out.
+`define CLK_32M
+
+//output  [COUNTER_NUM-1:0] o_extern_din_a;
+//input [COUNTER_NUM-1:0] i_extern_dout_a;
+//input [COUNTER_NUM-1:0] i_extern_dout_a_oen;
+
+// wire w_bfm_iso7816_vdd;
+// wire w_bfm_iso7816_clk;
+// wire w_bfm_iso7816_rstn;
+// wire w_bfm_iso7816_io_data;
+wire w_bfm_ir_dout;
+
+reg [9:0] rec_data0;
+reg [9:0] rec_data1;
+
+// pulldown U0(w_bfm_iso7816_vdd);
+// pulldown U1(w_bfm_iso7816_clk);
+// pulldown U2(w_bfm_iso7816_rstn);
+// pullup U3(w_bfm_iso7816_io_data);
+
+// assign w_bfm_iso7816_vdd =      !i_extern_dout_a_oen[0]  ? i_extern_dout_a[0] : 'z;
+// assign w_bfm_iso7816_clk =      !i_extern_dout_a_oen[1]  ? i_extern_dout_a[1] : 'z;
+// assign w_bfm_iso7816_rstn =     !i_extern_dout_a_oen[2]  ? i_extern_dout_a[2] : 'z;
+// assign w_bfm_iso7816_io_data =  !i_extern_dout_a_oen[3]  ? i_extern_dout_a[3] : 'z;
+// always @* o_extern_din_a[3:0] = {w_bfm_iso7816_io_data,w_bfm_iso7816_rstn,w_bfm_iso7816_clk,w_bfm_iso7816_vdd};
+
+bfm_ir_remote_control_ifc   U_bfm_ir_remote_control_ifc(
+    .o_ir_dout(w_bfm_ir_dout)
+);
+
+assign o_extern_din_a[2] = w_bfm_ir_dout;//counter mode.
+assign o_extern_din_a[3] = w_bfm_ir_dout;//shift mode.
+
+
+reg stop_flag0;
+reg [31:0] pulse_wd_0,pulse_wd_1,pulse_wd_2,pulse_wd_3;
+reg [31:0] pulse_wd_0_cnts,pulse_wd_1_cnts,pulse_wd_2_cnts,pulse_wd_3_cnts;
+
+reg [31:0] pulse_wd_h,pulse_wd_l;
+reg [31:0] pulse_wd_h_cnts,pulse_wd_l_cnts;
+
+
+initial begin
+rec_data0 = '1;
+stop_flag0 = '0;
+rec_data1 = '0;
+pulse_wd_0 = '0;
+pulse_wd_1 = '0;
+pulse_wd_2 = '0;
+pulse_wd_3 = '0;
+pulse_wd_0_cnts = '0;
+pulse_wd_1_cnts = '0;
+pulse_wd_2_cnts = '0;
+pulse_wd_3_cnts = '0;
+pulse_wd_h_cnts = '0;
+pulse_wd_l_cnts = '0;
+pulse_wd_h = '0;
+pulse_wd_l = '0;
+
+wait (stop_event) ;
+for(i=0;i<4;i++) begin
+    addr_base=base_c1*i;
+    //apb_write_read(addr_base+`SOFT_TRIGGER_CTRL_C0,32'b00001111,data);//global trigger enable.
+    if(i==2)
+        apb_write_read(addr_base+`MODE_SEL_C0,32'b000,data);//count in .
+    else if(i==3)
+        apb_write_read(addr_base+`MODE_SEL_C0,32'b010,data);//shift in . switch disable;
+
+    if(i==2) begin//
+        //
+    apb_write_read(addr_base+`SRC_SEL_EDGE_C0,32'h2021000b,data);
+    apb_write_read(addr_base+`TARGET_REG_CTRL_C0,32'b001111,data);
+    apb_write_read(addr_base+`TARGET_REG_A0_C0,32'h10,data);
+    apb_write_read(addr_base+`TARGET_REG_A1_C0,32'd400*2,data);
+    apb_write_read(addr_base+`TARGET_REG_A2_C0,32'd40000*2,data);
+    //apb_write_read(addr_base+`TARGET_REG_A2_C0,32'ha0,data);
+    apb_write_read(addr_base+`TARGET_REG_B0_C0,32'h10,data);
+    apb_write_read(addr_base+`TARGET_REG_B1_C0,32'h20,data);
+    apb_write_read(addr_base+`TARGET_REG_B2_C0,32'd400*2,data);
+    end
+    //
+    if(i==3) begin//io
+    apb_write_read(addr_base+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
+    // apb_write_read(addr_base+`MODE_SEL_C0,32'b110,data);//shift switch 
+//
+    apb_write_read(addr_base+`SHIFTIN_DATA_CTRL_BITCNTS_C0,32'h9,data);
+    apb_write_read(addr_base+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,32'h9,data);
+    apb_write_read(addr_base+`SRC_SEL_EDGE_C0,32'h22210011,data);//
+        // 
+    apb_write_read(addr_base+`SWITCH_MODE_ONEBIT_CNTS_C0,32'd372*2,data);//one bit represent how many cycle.
+    apb_write_read(addr_base+`WAVEFORM_MODE_AUTOMATIC_C0,32'h00000a02,data);//enable switch to waveform and capture mode.
+    apb_write_read(addr_base+`SHIFTMODE_POINT_EN_C0,32'h00010174,data);//enable point shift capture.     
+    end
+//
+    // apb_write_read(addr_base+`SWITCH_MODE_ONEBIT_CNTS_C0,32'h1,data);//one bit represent how many cycle.
+    apb_read (addr_base+`ENABLE_C0,data);
+    apb_write(addr_base+`ENABLE_C0,data|32'h0001);//c0,enable.
+//
+  
+end    
+    //
+// for(i=0;i<4;i++) begin
+    addr_base=base_c1*2;
+    apb_read(addr_base+`SINGLE_START_TRIGGER_C0,data);//start;
+    apb_write_read(addr_base+`SINGLE_START_TRIGGER_C0,~data,data);//start;
+    //addr_base=base_c1*3;
+    //apb_read(addr_base+`SINGLE_START_TRIGGER_C0,data);//start;
+    //apb_write_read(addr_base+`SINGLE_START_TRIGGER_C0,~data,data);//start;    
+// end
+    //i=0;
+        //
+   
+    int_flag_en = 0;
+    tmp_i=32'h1f;
+    apb_read(`INTR_STATUS,int_status0);
+        //apb_read(`INTR_STATUS,int_status0);
+    tmp0=32'ha;    
+    i=2;
+    addr_base=base_c1*2;
+    apb_read(addr_base+`SHADOW_REG_C0,data);
+    cap_count_a = data;
+    $display("counter num =%0d , in bus a ,new start capture time = %h",3,cap_count_a);        
+    while(tmp0--)  begin
+    wait(i_int);
+    apb_read(`INTR_STATUS,int_status0);
+    apb_write_read(`INTR_CLR,int_status0,data);   
+        i=2;
+        addr_base=base_c1*2;
+        apb_read(addr_base+`CAPTURE_REG_STATUS_C0,data_1);
+        if(&data_1[2:0]) begin
+                apb_read(addr_base+`CAPTURE_REG_A0_C0,data);
+                $display("counter num =%0d , in bus a ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_a);
+                if((data-cap_count_a==pulse_wd_0)&&!(&pulse_wd_0_cnts)) begin
+                    pulse_wd_0_cnts++;
+                end
+                else if(pulse_wd_0_cnts==0) begin
+                    pulse_wd_0_cnts++;
+                    pulse_wd_0 = data-cap_count_a;
+                end
+                else if((data-cap_count_a==pulse_wd_1)&&!(&pulse_wd_1_cnts)) begin
+                    pulse_wd_1_cnts++;
+                end
+                else if(pulse_wd_1_cnts==0) begin
+                    pulse_wd_1_cnts++;
+                    pulse_wd_1 = data-cap_count_a;
+                end
+                else if((data-cap_count_a==pulse_wd_2)&&!(&pulse_wd_2_cnts)) begin
+                    pulse_wd_2_cnts++;
+                end
+                else if(pulse_wd_2_cnts==0) begin
+                    pulse_wd_2_cnts++;
+                    pulse_wd_2 = data-cap_count_a;
+                end
+                else if((data-cap_count_a==pulse_wd_3)&&!(&pulse_wd_3_cnts)) begin
+                    pulse_wd_3_cnts++;
+                end
+                else if(pulse_wd_3_cnts==0) begin
+                    pulse_wd_3_cnts++;
+                    pulse_wd_3 = data-cap_count_a;
+                end
+                cap_count_a = data;
+                apb_read(addr_base+`CAPTURE_REG_A1_C0,data);
+                $display("counter num =%0d , in bus a ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_a);
+                if((data-cap_count_a==pulse_wd_0)&&!(&pulse_wd_0_cnts)) begin
+                    pulse_wd_0_cnts++;
+                end
+                else if(pulse_wd_0_cnts==0) begin
+                    pulse_wd_0_cnts++;
+                    pulse_wd_0 = data-cap_count_a;
+                end
+                else if((data-cap_count_a==pulse_wd_1)&&!(&pulse_wd_1_cnts)) begin
+                    pulse_wd_1_cnts++;
+                end
+                else if(pulse_wd_1_cnts==0) begin
+                    pulse_wd_1_cnts++;
+                    pulse_wd_1 = data-cap_count_a;
+                end
+                else if((data-cap_count_a==pulse_wd_2)&&!(&pulse_wd_2_cnts)) begin
+                    pulse_wd_2_cnts++;
+                end
+                else if(pulse_wd_2_cnts==0) begin
+                    pulse_wd_2_cnts++;
+                    pulse_wd_2 = data-cap_count_a;
+                end
+                else if((data-cap_count_a==pulse_wd_3)&&!(&pulse_wd_3_cnts)) begin
+                    pulse_wd_3_cnts++;
+                end
+                else if(pulse_wd_3_cnts==0) begin
+                    pulse_wd_3_cnts++;
+                    pulse_wd_3 = data-cap_count_a;
+                end                
+                cap_count_a = data;
+                apb_read(addr_base+`CAPTURE_REG_A2_C0,data); 
+                $display("counter num =%0d , in bus a ,new capture edge time = %h,pluse width = %0h ",i,data,data-cap_count_a);
+                if((data-cap_count_a==pulse_wd_0)&&!(&pulse_wd_0_cnts)) begin
+                    pulse_wd_0_cnts++;
+                end
+                else if(pulse_wd_0_cnts==0) begin
+                    pulse_wd_0_cnts++;
+                    pulse_wd_0 = data-cap_count_a;
+                end
+                else if((data-cap_count_a==pulse_wd_1)&&!(&pulse_wd_1_cnts)) begin
+                    pulse_wd_1_cnts++;
+                end
+                else if(pulse_wd_1_cnts==0) begin
+                    pulse_wd_1_cnts++;
+                    pulse_wd_1 = data-cap_count_a;
+                end
+                else if((data-cap_count_a==pulse_wd_2)&&!(&pulse_wd_2_cnts)) begin
+                    pulse_wd_2_cnts++;
+                end
+                else if(pulse_wd_2_cnts==0) begin
+                    pulse_wd_2_cnts++;
+                    pulse_wd_2 = data-cap_count_a;
+                end
+                else if((data-cap_count_a==pulse_wd_3)&&!(&pulse_wd_3_cnts)) begin
+                    pulse_wd_3_cnts++;
+                end
+                else if(pulse_wd_3_cnts==0) begin
+                    pulse_wd_3_cnts++;
+                    pulse_wd_3 = data-cap_count_a;
+                end                
+                cap_count_a = data;
+                $display("counter num =%0d , in bus a ,pulse 0 = %0h (repeat times=%0h),pulse 1 = %0h (repeat times=%0h),pulse 2 = %0h (repeat times=%0h),pulse 3 = %0h (repeat times=%0h), ",i,pulse_wd_0,pulse_wd_0_cnts,pulse_wd_1,pulse_wd_1_cnts,pulse_wd_2,pulse_wd_2_cnts,pulse_wd_3,pulse_wd_3_cnts);
+            end 
+    wait(!i_int);
+    end
+    if(pulse_wd_h_cnts<pulse_wd_0_cnts) begin
+        pulse_wd_h = pulse_wd_0;
+        pulse_wd_h_cnts = pulse_wd_0_cnts;
+    end
+    if(pulse_wd_h_cnts<pulse_wd_1_cnts) begin
+        pulse_wd_h = pulse_wd_1;
+        pulse_wd_h_cnts = pulse_wd_1_cnts;
+    end
+    if(pulse_wd_h_cnts<pulse_wd_2_cnts) begin
+        pulse_wd_h = pulse_wd_2;
+        pulse_wd_h_cnts = pulse_wd_2_cnts;
+    end
+    if(pulse_wd_h_cnts<pulse_wd_3_cnts) begin
+        pulse_wd_h = pulse_wd_3;
+        pulse_wd_h_cnts = pulse_wd_3_cnts;        
+    end
+    if((pulse_wd_l_cnts<pulse_wd_0_cnts )&& (pulse_wd_0_cnts<pulse_wd_h_cnts)) begin
+        pulse_wd_l = pulse_wd_0;
+        pulse_wd_l_cnts = pulse_wd_0_cnts;
+    end
+    if((pulse_wd_l_cnts<pulse_wd_1_cnts )&& (pulse_wd_1_cnts<pulse_wd_h_cnts)) begin
+        pulse_wd_l = pulse_wd_1;
+        pulse_wd_l_cnts = pulse_wd_1_cnts;
+    end
+    if((pulse_wd_l_cnts<pulse_wd_2_cnts )&& (pulse_wd_2_cnts<pulse_wd_h_cnts)) begin
+        pulse_wd_l = pulse_wd_2;
+        pulse_wd_l_cnts = pulse_wd_2_cnts;
+    end
+    if((pulse_wd_l_cnts<pulse_wd_3_cnts )&& (pulse_wd_3_cnts<pulse_wd_h_cnts)) begin
+        pulse_wd_l = pulse_wd_3;  
+        pulse_wd_l_cnts = pulse_wd_3_cnts;
+    end
+    if(pulse_wd_h>pulse_wd_l) begin
+        pulse_wd_0 = pulse_wd_h;
+        pulse_wd_h = pulse_wd_l;
+        pulse_wd_l = pulse_wd_0;
+    end
+    $display("counter num =%0d , in bus a , high pulse  = %0h , low pulse  = %0h ",i,pulse_wd_h,pulse_wd_l);
+    addr_base=base_c1*2;
+    apb_read(addr_base+`SINGLE_STOP_TRIGGER_C0,data);//stop
+    apb_write_read(addr_base+`SINGLE_STOP_TRIGGER_C0,~data,data);//
+//    
+    apb_write_read(addr_base+`MODE_SEL_C0,32'b101,data);//count out.en automatic.
+    apb_write_read(addr_base+`SRC_SEL_EDGE_C0,32'h20210001,data);
+    apb_write_read(addr_base+`TARGET_REG_CTRL_C0,32'b001100,data);
+    apb_write_read(addr_base+`TARGET_REG_A0_C0,pulse_wd_h*3/2,data);
+    apb_write_read(addr_base+`TARGET_REG_A1_C0,pulse_wd_h/2,data);
+    apb_write_read(addr_base+`TARGET_REG_A2_C0,pulse_wd_l+pulse_wd_h,data);
+    apb_write_read(addr_base+`SWITCH_MODE_ONEBIT_CNTS_C0,pulse_wd_l+pulse_wd_h,data);//one bit represent how many cycle.
+    apb_write_read(addr_base+`WAVEFORM_MODE_AUTOMATIC_C0,32'h00000120,data);//enable switch to waveform and capture mode.
+//    
+ 
+ //  //while(1) 
+ //  begin
+ //    
+ //   apb_read(`INTR_STATUS,int_status0);
+ //   while(~(|int_status0[30])) begin
+ //   apb_read(`INTR_STATUS,int_status0);    
+ //   apb_write_read(`INTR_CLR,int_status0,data);     
+ //   end
+ //   apb_write_read(`INTR_CLR,int_status0,data);     
+ //   if(int_status0[30])  begin
+ //     // stop_flag0 = '1;
+ //       i=3;
+ //       addr_base=base_c1*3;
+ //       apb_read (addr_base+`ENABLE_C0,data);
+ //       apb_write(addr_base+`ENABLE_C0,data|32'h0000);//c0,disable.
+ //       apb_read(addr_base+`SHIFTIN_DATA_C0,data);
+ //       apb_read(addr_base+`SHIFTIN_DATABITS_UPDATED_C0,data_1);
+ //       $display("new shiftin data = %h,src data = %h , bits=%0d,counter num =%d",data,count_reverse(data,count_valid_cnts(data_1)),count_valid_cnts(data_1),i);
+ //    end
+ //       apb_write_read(addr_base+`WAVEFORM_MODE_AUTOMATIC_C0,32'h0101020c,data);//enable switch to waveform and capture mode.
+ //       // apb_write_read(addr_base+`WAVEFORM_MODE_AUTOMATIC_C0,32'h01010218,data);//enable switch to waveform and capture mode.
+ //       apb_write_read(addr_base+`SRC_SEL_EDGE_C0,32'h22210031,data);//
+ //       apb_write_read(addr_base+`SHIFTOUT_DATA_CTRL_BITCNTS_C0,32'hb,data);
+ //       apb_write_read(addr_base+`SHIFTIN_DATA_CTRL_BITCNTS_C0,32'h1,data); 
+ //           tmp0={$random }% 256;
+ //           //$display("new shiftout data =%h",tmp0);
+ //           tmp0[11:0]={2'b11,1'b0,tmp0[7:0],^tmp0[7:0]};
+ //           $display("new shiftout data =%h",tmp0[11:0]);
+ //           $display("new shiftout data(bin) =%b",tmp0[9:0]);
+ //           tmp0[11:0]=count_reverse(tmp0[11:0],5'd11);
+ //           // $display("new shiftout data(reverse) =%h",tmp0);
+ //           apb_write_read(addr_base+`SHIFTOUT_DATA_C0,tmp0[11:0],data);
+ //           apb_write(addr_base+`SHIFTOUT_DATA_VALID_C0,32'h0);        
+ //           apb_write_read(addr_base+`MODE_SEL_C0,32'b111,data);//count out . switch en;
+ //           apb_read (addr_base+`ENABLE_C0,data);
+ //           apb_write(addr_base+`ENABLE_C0,data|32'h0001);//c0,enable.
+ //           apb_read(addr_base+`SINGLE_START_TRIGGER_C0,data);//start;
+ //           apb_write_read(addr_base+`SINGLE_START_TRIGGER_C0,~data,data);//start;
+ //       while(1)  begin
+ //           apb_read(`INTR_STATUS,int_status0); 
+ //           while(~(int_status0[31])) begin
+ //           apb_read(`INTR_STATUS,int_status0); 
+ //           apb_write_read(`INTR_CLR,int_status0,data); 
+ //           end
+ //           if(((int_status0[31]))) begin
+ //           apb_write_read(`INTR_CLR,int_status0,data); 
+ //           apb_read(addr_base+`SHIFTIN_DATA_C0,data);
+ //           apb_read(addr_base+`SHIFTIN_DATABITS_UPDATED_C0,data_1);
+ //
+ //           tmp0={$random }% 256;
+ //           tmp0={2'b11,1'b0,tmp0[7:0],^tmp0[7:0]};
+ //           $display("new shiftout data =%h",tmp0[11:0]);
+ //           $display("new shiftout data(bin) =%b",tmp0[9:0]);
+ //           tmp0[11:0]=count_reverse(tmp0[11:0],5'd11);
+ //           apb_write_read(addr_base+`SHIFTOUT_DATA_C0,tmp0[11:0],data);
+ //           apb_write(addr_base+`SHIFTOUT_DATA_VALID_C0,32'h0);        
+ //           
+ //           end
+ //       end
+ //   end
+
+
+
+    // apb_read(addr_base+`SINGLE_STOP_TRIGGER_C0,data);//stop;
+    // apb_write_read(addr_base+`SINGLE_STOP_TRIGGER_C0,~data,data);//stop;
+    #20_000;
+    //apb_read(`GLOBAL_STOP_TRIGGER,data);//stop;
+    //apb_write_read(`GLOBAL_STOP_TRIGGER,~data,data);//stop;
+    //#20_000;  
+
+end
+
+`endif
+
+
 ///
 
 
