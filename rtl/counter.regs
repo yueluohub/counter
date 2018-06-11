@@ -607,7 +607,7 @@ Register_Parameters
 register_begin
   name: capture_reg_overflow_ctrl_c0
   default_access: read-write
-  size: 6 
+  size: 17 
   address_offset: 0x34
   description:  capture mode , when overflow ,discard or rewrite. 
   field_begin
@@ -619,6 +619,13 @@ register_begin
         every bit means the same as i_capture_reg_status_c0.
         1--> rewrite, o--> discard.
     description_end
+  field_end 
+  field_begin
+    name: start0
+    rtl_name:o_capture_mode_automatic_validedge_c0
+    bit_range:[16:16] 
+    field_reset_value: 0x0
+    description: capture mode first valid edge flag on ,1- enable,0-disable.
   field_end 
 register_end
 
@@ -881,6 +888,95 @@ register_begin
     field_reset_value: 0x0
     description: shift_in data(bitmap is updated) for counter 0. value 1 is acitve.
   field_end 
+register_end
+
+register_begin
+  name: shiftmode_point_en_c0
+  default_access: read-write
+  size: 17 
+  address_offset: 0x45
+  description:  automatic waveform and capture switch mode,for counter 0. 
+  field_begin
+    name: start
+    rtl_name:o_shiftmode_point_cnts_c0
+    bit_range:[15:0] 
+    field_reset_value: 0x1
+    description: shiftin data in this cnts or shiftout data in the cnts..
+  field_end  
+  field_begin
+    name: start
+    rtl_name:o_shiftmode_point_en_c0
+    bit_range:[16:16] 
+    field_reset_value: 0x0
+    description: shiftin data in this cnts or shiftout data in the cnts enable ,1 is active. 1- enable,0-disable.
+  field_end 
+register_end
+
+register_begin
+  name: ir_din_bypass_c0
+  default_access: read-write
+  size: 2 
+  address_offset: 0x46
+  description: bypass control bit for din , for counter 0. 
+  field_begin
+    name: start
+    rtl_name:o_ir_din_bypass_c0
+    bit_range:[1:0] 
+    field_reset_value: 0x3
+    description: bypass control bit,0->a,1->b.
+  field_end  
+register_end
+
+register_begin
+  name: ir_din_onecycle_value_a_c0
+  default_access: read-write
+  size: 32 
+  address_offset: 0x47
+  description: IR interface clk 's one cycle value for din , for counter 0. 
+  field_begin
+    name: start
+    rtl_name:o_ir_din_onecycle_value_a_c0
+    bit_range:[31:0] 
+    field_reset_value: 0x100
+    description: IR interface clk 's one cycle value for din,for bus a.
+  field_end  
+register_end
+
+register_begin
+  name: ir_din_onecycle_value_b_c0
+  default_access: read-write
+  size: 32 
+  address_offset: 0x48
+  description: IR interface clk 's one cycle value for din , for counter 0. 
+  field_begin
+    name: start
+    rtl_name:o_ir_din_onecycle_value_b_c0
+    bit_range:[31:0] 
+    field_reset_value: 0x100
+    description: IR interface clk 's one cycle value for din,for bus b.
+  field_end  
+register_end
+
+register_begin
+  name: ir_dout_bypass_c0
+  default_access: read-write
+  size: 18 
+  address_offset: 0x49
+  description:  bypass control bit for dout and opts ,for counter 0. 
+  field_begin
+    name: start
+    rtl_name:o_ir_dout_opts_c0
+    bit_range:[7:0] 
+    field_reset_value: 0x0
+    description: opts control bit,0->a,1->b.
+  field_end
+  field_begin
+    name: start
+    rtl_name:o_ir_dout_bypass_c0
+    bit_range:[17:16] 
+    field_reset_value: 0x3
+    description: dout bypass control bit,0->a,1->b.
+  field_end
 register_end
 
 ###c1####
@@ -1313,7 +1409,7 @@ Register_Parameters
 register_begin
   name: capture_reg_overflow_ctrl_c1
   default_access: read-write
-  size: 6 
+  size: 17 
   address_offset: 0x74
   description:  capture mode , when overflow ,discard or rewrite. 
   field_begin
@@ -1325,6 +1421,13 @@ register_begin
         every bit means the same as i_capture_reg_status_c1.
         1--> rewrite, o--> discard.
     description_end
+  field_end 
+  field_begin
+    name: start0
+    rtl_name:o_capture_mode_automatic_validedge_c1
+    bit_range:[16:16] 
+    field_reset_value: 0x0
+    description: capture mode first valid edge flag on ,1- enable,0-disable.
   field_end 
 register_end
 
@@ -1589,9 +1692,94 @@ register_begin
   field_end 
 register_end
 
+register_begin
+  name: shiftmode_point_en_c1
+  default_access: read-write
+  size: 17 
+  address_offset: 0x85
+  description:  automatic waveform and capture switch mode,for counter 0. 
+  field_begin
+    name: start
+    rtl_name:o_shiftmode_point_cnts_c1
+    bit_range:[15:0] 
+    field_reset_value: 0x1
+    description: shiftin data in this cnts or shiftout data in the cnts..
+  field_end  
+  field_begin
+    name: start
+    rtl_name:o_shiftmode_point_en_c1
+    bit_range:[16:16] 
+    field_reset_value: 0x0
+    description: shiftin data in this cnts or shiftout data in the cnts enable ,1 is active. 1- enable,0-disable.
+  field_end 
+register_end
 
+register_begin
+  name: ir_din_bypass_c1
+  default_access: read-write
+  size: 2 
+  address_offset: 0x86
+  description: bypass control bit for din , for counter 1. 
+  field_begin
+    name: start
+    rtl_name:o_ir_din_bypass_c1
+    bit_range:[1:0] 
+    field_reset_value: 0x3
+    description: bypass control bit,0->a,1->b.
+  field_end  
+register_end
 
+register_begin
+  name: ir_din_onecycle_value_a_c1
+  default_access: read-write
+  size: 32 
+  address_offset: 0x87
+  description: IR interface clk 's one cycle value for din , for counter 1. 
+  field_begin
+    name: start
+    rtl_name:o_ir_din_onecycle_value_a_c1
+    bit_range:[31:0] 
+    field_reset_value: 0x100
+    description: IR interface clk 's one cycle value for din,for bus a.
+  field_end  
+register_end
 
+register_begin
+  name: ir_din_onecycle_value_b_c1
+  default_access: read-write
+  size: 32 
+  address_offset: 0x88
+  description: IR interface clk 's one cycle value for din , for counter 1. 
+  field_begin
+    name: start
+    rtl_name:o_ir_din_onecycle_value_b_c1
+    bit_range:[31:0] 
+    field_reset_value: 0x100
+    description: IR interface clk 's one cycle value for din,for bus b.
+  field_end  
+register_end
+
+register_begin
+  name: ir_dout_bypass_c1
+  default_access: read-write
+  size: 18 
+  address_offset: 0x89
+  description:  bypass control bit for dout and opts ,for counter 1. 
+  field_begin
+    name: start
+    rtl_name:o_ir_dout_opts_c1
+    bit_range:[7:0] 
+    field_reset_value: 0x0
+    description: opts control bit,0->a,1->b.
+  field_end
+  field_begin
+    name: start
+    rtl_name:o_ir_dout_bypass_c1
+    bit_range:[17:16] 
+    field_reset_value: 0x3
+    description: dout bypass control bit,0->a,1->b.
+  field_end
+register_end
 
 
 
@@ -2026,7 +2214,7 @@ Register_Parameters
 register_begin
   name: capture_reg_overflow_ctrl_c2
   default_access: read-write
-  size: 6 
+  size: 17 
   address_offset: 0xb4
   description:  capture mode , when overflow ,discard or rewrite. 
   field_begin
@@ -2038,6 +2226,13 @@ register_begin
         every bit means the same as i_capture_reg_status_c2.
         1--> rewrite, o--> discard.
     description_end
+  field_end 
+  field_begin
+    name: start0
+    rtl_name:o_capture_mode_automatic_validedge_c2
+    bit_range:[16:16] 
+    field_reset_value: 0x0
+    description: capture mode first valid edge flag on ,1- enable,0-disable.
   field_end 
 register_end
 
@@ -2300,6 +2495,95 @@ register_begin
     field_reset_value: 0x0
     description: shift_in data(bitmap is updated) for counter 2. value 1 is acitve.
   field_end 
+register_end
+
+register_begin
+  name: shiftmode_point_en_c2
+  default_access: read-write
+  size: 17 
+  address_offset: 0xc5
+  description:  automatic waveform and capture switch mode,for counter 0. 
+  field_begin
+    name: start
+    rtl_name:o_shiftmode_point_cnts_c2
+    bit_range:[15:0] 
+    field_reset_value: 0x1
+    description: shiftin data in this cnts or shiftout data in the cnts..
+  field_end  
+  field_begin
+    name: start
+    rtl_name:o_shiftmode_point_en_c2
+    bit_range:[16:16] 
+    field_reset_value: 0x0
+    description: shiftin data in this cnts or shiftout data in the cnts enable ,1 is active. 1- enable,0-disable.
+  field_end 
+register_end
+
+register_begin
+  name: ir_din_bypass_c2
+  default_access: read-write
+  size: 2 
+  address_offset: 0xc6
+  description: bypass control bit for din , for counter 2. 
+  field_begin
+    name: start
+    rtl_name:o_ir_din_bypass_c2
+    bit_range:[1:0] 
+    field_reset_value: 0x3
+    description: bypass control bit,0->a,1->b.
+  field_end  
+register_end
+
+register_begin
+  name: ir_din_onecycle_value_a_c2
+  default_access: read-write
+  size: 32 
+  address_offset: 0xc7
+  description: IR interface clk 's one cycle value for din , for counter 2. 
+  field_begin
+    name: start
+    rtl_name:o_ir_din_onecycle_value_a_c2
+    bit_range:[31:0] 
+    field_reset_value: 0x100
+    description: IR interface clk 's one cycle value for din,for bus a.
+  field_end  
+register_end
+
+register_begin
+  name: ir_din_onecycle_value_b_c2
+  default_access: read-write
+  size: 32 
+  address_offset: 0xc8
+  description: IR interface clk 's one cycle value for din , for counter 2. 
+  field_begin
+    name: start
+    rtl_name:o_ir_din_onecycle_value_b_c2
+    bit_range:[31:0] 
+    field_reset_value: 0x100
+    description: IR interface clk 's one cycle value for din,for bus b.
+  field_end  
+register_end
+
+register_begin
+  name: ir_dout_bypass_c2
+  default_access: read-write
+  size: 18 
+  address_offset: 0xc9
+  description:  bypass control bit for dout and opts ,for counter 2. 
+  field_begin
+    name: start
+    rtl_name:o_ir_dout_opts_c2
+    bit_range:[7:0] 
+    field_reset_value: 0x0
+    description: opts control bit,0->a,1->b.
+  field_end
+  field_begin
+    name: start
+    rtl_name:o_ir_dout_bypass_c2
+    bit_range:[17:16] 
+    field_reset_value: 0x3
+    description: dout bypass control bit,0->a,1->b.
+  field_end
 register_end
 
 #####c3#######
@@ -2733,7 +3017,7 @@ Register_Parameters
 register_begin
   name: capture_reg_overflow_ctrl_c3
   default_access: read-write
-  size: 6 
+  size: 17 
   address_offset: 0xf4
   description:  capture mode , when overflow ,discard or rewrite. 
   field_begin
@@ -2745,6 +3029,13 @@ register_begin
         every bit means the same as i_capture_reg_status_c3.
         1--> rewrite, o--> discard.
     description_end
+  field_end 
+  field_begin
+    name: start0
+    rtl_name:o_capture_mode_automatic_validedge_c3
+    bit_range:[16:16] 
+    field_reset_value: 0x0
+    description: capture mode first valid edge flag on ,1- enable,0-disable.
   field_end 
 register_end
 
@@ -3009,7 +3300,96 @@ register_begin
   field_end 
 register_end
 
+register_begin
+  name: shiftmode_point_en_c3
+  default_access: read-write
+  size: 17 
+  address_offset: 0x105
+  description:  automatic waveform and capture switch mode,for counter 0. 
+  field_begin
+    name: start
+    rtl_name:o_shiftmode_point_cnts_c3
+    bit_range:[15:0] 
+    field_reset_value: 0x1
+    description: shiftin data in this cnts or shiftout data in the cnts..
+  field_end  
+  field_begin
+    name: start
+    rtl_name:o_shiftmode_point_en_c3
+    bit_range:[16:16] 
+    field_reset_value: 0x0
+    description: shiftin data in this cnts or shiftout data in the cnts enable ,1 is active. 1- enable,0-disable.
+  field_end 
+register_end
 
+register_begin
+  name: ir_din_bypass_c3
+  default_access: read-write
+  size: 2 
+  address_offset: 0x106
+  description: bypass control bit for din , for counter 3. 
+  field_begin
+    name: start
+    rtl_name:o_ir_din_bypass_c3
+    bit_range:[1:0] 
+    field_reset_value: 0x3
+    description: bypass control bit,0->a,1->b.
+  field_end  
+register_end
+
+register_begin
+  name: ir_din_onecycle_value_a_c3
+  default_access: read-write
+  size: 32 
+  address_offset: 0x107
+  description: IR interface clk 's one cycle value for din , for counter 3. 
+  field_begin
+    name: start
+    rtl_name:o_ir_din_onecycle_value_a_c3
+    bit_range:[31:0] 
+    field_reset_value: 0x100
+    description: IR interface clk 's one cycle value for din,for bus a.
+  field_end  
+register_end
+
+register_begin
+  name: ir_din_onecycle_value_b_c3
+  default_access: read-write
+  size: 32 
+  address_offset: 0x108
+  description: IR interface clk 's one cycle value for din , for counter 3. 
+  field_begin
+    name: start
+    rtl_name:o_ir_din_onecycle_value_b_c3
+    bit_range:[31:0] 
+    field_reset_value: 0x100
+    description: IR interface clk 's one cycle value for din,for bus b.
+  field_end  
+register_end
+
+register_begin
+  name: ir_dout_bypass_c3
+  default_access: read-write
+  size: 18 
+  address_offset: 0x109
+  description:  bypass control bit for dout and opts ,for counter 3. 
+  field_begin
+    name: start
+    rtl_name:o_ir_dout_opts_c3
+    bit_range:[7:0] 
+    field_reset_value: 0x0
+    description: opts control bit,0->a,1->b.
+  field_end
+  field_begin
+    name: start
+    rtl_name:o_ir_dout_bypass_c3
+    bit_range:[17:16] 
+    field_reset_value: 0x3
+    description: dout bypass control bit,0->a,1->b.
+  field_end
+register_end
+
+#####
 
 
 

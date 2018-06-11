@@ -4,6 +4,7 @@
 ../rtl/counter_data_syn.v
 ../rtl/counter_data_syn_param.v
 ../rtl/counter_datamux_syn.v
+../rtl/counter_ir_frontend.v
 ../rtl/counter_top.v
 
 //../rtl/counter_clkgen.v

@@ -1,5 +1,5 @@
 // `define CLK_32M
-`define COUNTER_NUM   0
+//`define COUNTER_NUM   0
 // `define COUNTER_NUM   1
 // `define COUNTER_NUM   2
 // `define COUNTER_NUM   3
@@ -7,8 +7,9 @@
 // `define SIM_FINISH_MS 10
 // `define SIM_FINISH_MS 20
 // `define SIM_FINISH_MS 50
-`define SIM_FINISH_MS 300
-// `define APB_BUS_MONITOR
+`define SIM_FINISH_MS 200
+`define AUTO_FINISH 1
+`define APB_BUS_MONITOR
 
 // `define CAPTURE_DATA_IN
 // `define SHIFT_DATA_IN
@@ -41,25 +42,32 @@
 
 // `define CAPTURE_DATA_CASECADE
 
-// `define TESTCASE_ALL_SHIFTMODE_0
+ // `define TESTCASE_ALL_SHIFTMODE_0
 // `define TESTCASE_ALL_SHIFTMODE_1
 
-//`define TESTCASE_ALL_COUNTERMODE_0
-//`define TESTCASE_ALL_COUNTERMODE_1
-//`define TESTCASE_ALL_COUNTERMODE_2
-// `define TESTCASE_ALL_COUNTERMODE_3
+// `define TESTCASE_ALL_COUNTERMODE_0
+// `define TESTCASE_ALL_COUNTERMODE_1
+// `define TESTCASE_ALL_COUNTERMODE_2
+//`define TESTCASE_ALL_COUNTERMODE_3
 
-//`define TESTCASE_ALL_COUNTERMODE_4 //single trigger.
-//`define TESTCASE_ALL_COUNTERMODE_5 //global trigger.
+// `define TESTCASE_ALL_COUNTERMODE_4 //single trigger.
+// `define TESTCASE_ALL_COUNTERMODE_5 //global trigger.
 //`define TESTCASE_ALL_COUNTERMODE_6 // start 、stop
 
-// `define TESTCASE_ALL_ISO7816_IFC
-// `define TESTCASE_ALL_SHIFTMODE_ISO7816_IFC  //shiftin mode.
-// `define TESTCASE_ALL_SHIFTMODE_ISO7816_IFC_1 //shiftout mode.
-
- // `define TESTCASE_ALL_SHIFTMODE_IR_REMOTE_CONTROL_IFC_0 //shiftout mode.
- //`define TESTCASE_ALL_SHIFTMODE_IR_REMOTE_CONTROL_IFC_1 //shiftin mode.
- `define TESTCASE_ALL_SHIFTMODE_IR_REMOTE_CONTROL_IFC_2 //counter out mode.
-
-
-
+//
+//
+// `define TESTCASE_C1_WAVEFORM_0
+// `define TESTCASE_C1_WAVEFORM_1
+// `define TESTCASE_C1_WAVEFORM_2
+// `define TESTCASE_C1_WAVEFORM_3
+// 
+// 
+// `define TESTCASE_C2_WAVEFORM_0
+// `define TESTCASE_C2_WAVEFORM_1
+// `define TESTCASE_C2_WAVEFORM_2
+// `define TESTCASE_C2_WAVEFORM_3
+// 
+// `define TESTCASE_C3_WAVEFORM_0
+// `define TESTCASE_C3_WAVEFORM_1
+// `define TESTCASE_C3_WAVEFORM_2
+// `define TESTCASE_C3_WAVEFORM_3

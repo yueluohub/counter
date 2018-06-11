@@ -27,9 +27,23 @@ reg     r1_din_pose_req;
 reg     r1_dout_pose_ack;
 reg     r1_din_nege_req;
 reg     r1_dout_nege_ack;
+reg [1:0]  r1_din_pose_req_dly;
+reg [1:0]  r1_dout_pose_ack_dly;
+reg [1:0]  r1_din_nege_req_dly;
+reg [1:0]  r1_dout_nege_ack_dly;
 
 always @(posedge i_clk_din) begin
     r1_din_dly <= i_din;
+end
+
+always @(posedge i_clk_din) begin
+   r1_dout_pose_ack_dly[1:0] <= {r1_dout_pose_ack_dly[0],r1_dout_pose_ack};
+   r1_dout_nege_ack_dly[1:0] <= {r1_dout_nege_ack_dly[0],r1_dout_nege_ack};
+end
+
+always @(posedge i_clk_dout ) begin
+  r1_din_pose_req_dly[1:0] <= {r1_din_pose_req_dly[0],r1_din_pose_req};
+  r1_din_nege_req_dly[1:0] <= {r1_din_nege_req_dly[0],r1_din_nege_req};
 end
 
 
@@ -40,7 +54,7 @@ end
 else if(i_din&&!r1_din_dly) begin
     r1_din_pose_req <= 1'b1;
 end
-else if(r1_dout_pose_ack) begin
+else if(r1_dout_pose_ack_dly[1]) begin
     r1_din_pose_req <= 1'b0;
 end
 
@@ -51,7 +65,7 @@ end
 else if(!i_din&&r1_din_dly) begin
     r1_din_nege_req <= 1'b1;
 end
-else if(r1_dout_nege_ack) begin
+else if(r1_dout_nege_ack_dly[1]) begin
     r1_din_nege_req <= 1'b0;
 end
 
@@ -59,10 +73,10 @@ always @(posedge i_clk_dout or negedge i_rstn_dout)
 if(!i_rstn_dout) begin
     r1_dout_pose_ack <= 1'b0;
 end
-else if(r1_din_pose_req) begin
+else if(r1_din_pose_req_dly[1]) begin
     r1_dout_pose_ack <= 1'b1;
 end
-else if(!r1_din_pose_req) begin
+else if(!r1_din_pose_req_dly[1]) begin
     r1_dout_pose_ack <= 1'b0;
 end
 
@@ -70,10 +84,10 @@ always @(posedge i_clk_dout or negedge i_rstn_dout)
 if(!i_rstn_dout) begin
     r1_dout_nege_ack <= 1'b0;
 end
-else if(r1_din_nege_req) begin
+else if(r1_din_nege_req_dly[1]) begin
     r1_dout_nege_ack <= 1'b1;
 end
-else if(!r1_din_nege_req) begin
+else if(!r1_din_nege_req_dly[1]) begin
     r1_dout_nege_ack <= 1'b0;
 end
 
@@ -89,6 +103,15 @@ end
 // end
 
 //
+reg  r2_dout_pose_ack_dly;
+reg  r2_dout_nege_ack_dly;
+always @(posedge i_clk_dout) begin
+  r2_dout_pose_ack_dly <= r1_dout_pose_ack;
+  r2_dout_nege_ack_dly <= r1_dout_nege_ack;
+end
+
+
+
 always @(posedge i_clk_dout or negedge i_rstn_dout)
 if(!i_rstn_dout) begin
     r1_dout_ack  <= 1'b0;
@@ -98,14 +121,14 @@ else if(r1_din_pulse) begin
     r1_dout_ack <= ~r1_dout_ack;
     r1_din_pulse <= 1'b0;
 end
-else if(r1_dout_pose_ack&&r1_dout_nege_ack) begin
+else if(r1_dout_pose_ack&&!r2_dout_pose_ack_dly&&r1_dout_nege_ack&&!r2_dout_nege_ack_dly) begin
     r1_dout_ack <= ~r1_dout_ack;
     r1_din_pulse <= 1'b1;  
 end
-else if(r1_dout_pose_ack) begin
+else if(r1_dout_pose_ack&&!r2_dout_pose_ack_dly) begin
     r1_dout_ack <= 1'b1;
 end
-else if(r1_dout_nege_ack) begin
+else if(r1_dout_nege_ack&&!r2_dout_nege_ack_dly) begin
     r1_dout_ack <= 1'b0;
 end
 

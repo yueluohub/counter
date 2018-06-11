@@ -63,6 +63,9 @@ module counter_all(
         i_capture_mode_cnts,
         i_waveform_mode_automatic_sw,
         i_capture_mode_automatic_sw,
+        i_capture_mode_automatic_validedge,
+        i_shiftmode_point_en,
+        i_shiftmode_point_cnts,         
         i_shiftmode_ctrl,
         i_shiftout_data,
         i_shiftout_data_ctrl_bitcnts,
@@ -70,6 +73,14 @@ module counter_all(
         o_shiftin_data,
         o_shiftin_databits_updated,
         i_shiftin_data_ctrl_bitcnts,
+        //IR remote control ifc.
+        i_clk_ir_s,
+        i_rst_ir_n,
+        i_ir_din_onecycle_value_a,
+        i_ir_din_onecycle_value_b,
+        i_ir_din_bypass,
+        i_ir_dout_opts,
+        i_ir_dout_bypass,   
         //interrupt.
         o_int
 );
@@ -99,6 +110,7 @@ output  wire [COUNTER_NUM-1:0] o_extern_dout_a_oen;
 output  wire [COUNTER_NUM-1:0] o_extern_dout_b;
 output  wire [COUNTER_NUM-1:0] o_extern_dout_b_oen;
 //
+
 //configure register & status.
 input  wire [COUNTER_NUM-1:0] i_enable;
 input  wire [COUNTER_NUM*COUNTER_NUM-1:0] i_mux_sel;
@@ -147,12 +159,24 @@ input  wire [COUNTER_NUM*8-1:0] i_capture_mode_cnts;//capture/shiftin mode cnts.
 input  wire [COUNTER_NUM-1:0] i_waveform_mode_automatic_sw;//1-automatic switch to waveform mode enable,0-disable.
 input  wire [COUNTER_NUM-1:0] i_capture_mode_automatic_sw;//1-automatic switch to capture mode enable,0-disable.
 input  wire [COUNTER_NUM-1:0] i_shiftmode_ctrl;//0-bus_a(din_a/dout_a),1-bus_b(din_b/dout_b).
+input wire  [COUNTER_NUM-1:0] i_capture_mode_automatic_validedge;//1-automatic capture mode first valid edge enable,0-disable.
+input wire  [COUNTER_NUM-1:0] i_shiftmode_point_en;//shiftin data in this cnts or shiftout data in the cnts enable ,1 is active.
+input wire  [COUNTER_NUM*16-1:0] i_shiftmode_point_cnts;//shiftin data in this cnts or shiftout data in the cnts.
+
 input  wire [COUNTER_NUM*32-1:0] i_shiftout_data;
 input  wire [COUNTER_NUM*5-1:0] i_shiftout_data_ctrl_bitcnts;//n-> (n+1) bit;
 input  wire [COUNTER_NUM-1:0] i_shiftout_data_valid;//1->active.
 output wire [COUNTER_NUM*32-1:0] o_shiftin_data;
 output wire [COUNTER_NUM*32-1:0] o_shiftin_databits_updated;//1-> new data.
 input  wire [COUNTER_NUM*5-1:0] i_shiftin_data_ctrl_bitcnts;//n-> (n+1) bit;
+
+input  wire [COUNTER_NUM-1:0]       i_clk_ir_s;//
+input  wire [COUNTER_NUM-1:0]       i_rst_ir_n;//
+input  wire [COUNTER_NUM*32-1:0]    i_ir_din_onecycle_value_a;//
+input  wire [COUNTER_NUM*32-1:0]    i_ir_din_onecycle_value_b;//
+input  wire [COUNTER_NUM*2-1:0]     i_ir_din_bypass;
+input  wire [COUNTER_NUM*8-1:0]     i_ir_dout_opts;//3~0 ->a,7~4 ->b;
+input  wire [COUNTER_NUM*2-1:0]     i_ir_dout_bypass;//0->a,1->b.
 
 //interrupt.
 output wire [COUNTER_NUM*8-1:0] o_int;//
@@ -176,6 +200,10 @@ wire [COUNTER_NUM*6-1:0]    w_syn_capture_reg_read_flag;//(a2/a1/a0)bit2-bit0:1-
 wire [COUNTER_NUM*4-1:0] w_syn_snap_status;
 wire [COUNTER_NUM-1:0]   w_syn_clear_snap;
 
+wire [COUNTER_NUM-1:0] w_ir_extern_din_a;
+wire [COUNTER_NUM-1:0] w_ir_extern_din_b;
+wire [COUNTER_NUM-1:0] w_ir_extern_dout_a;
+wire [COUNTER_NUM-1:0] w_ir_extern_dout_b;
 
 genvar i;
 generate for(i=0;i<COUNTER_NUM;i=i+1) begin:counter_loop
@@ -224,8 +252,8 @@ counter #(.COUNTER_NUM(COUNTER_NUM)) u_counter(
         .i_clk                              (i_clk[i]                                      ),
         .i_rst_n                            (i_rst_n[i]                                    ),
         //sync data & trigger                                                              
-        .i_extern_din_a                     (i_extern_din_a[i]                             ),
-        .i_extern_din_b                     (i_extern_din_b[i]                             ),
+        .i_extern_din_a                     (w_ir_extern_din_a[i]                          ),
+        .i_extern_din_b                     (w_ir_extern_din_b[i]                          ),
         .i_inner_din                        (w_inner_din[COUNTER_NUM*(i+1)-1:COUNTER_NUM*i]),           
         .i_single_start_trigger             (w_syn_single_start_trigger[i]                 ),
         .i_single_stop_trigger              (w_syn_single_stop_trigger[i]                  ),
@@ -235,9 +263,9 @@ counter #(.COUNTER_NUM(COUNTER_NUM)) u_counter(
         .i_global_stop_trigger              (w_syn_global_stop_trigger[i]                  ),
         .i_global_clear_trigger             (w_syn_global_clear_trigger[i]                 ),
         .i_global_reset_trigger             (w_syn_global_reset_trigger[i]                 ),
-        .o_extern_dout_a                    (o_extern_dout_a[i]                            ),
+        .o_extern_dout_a                    (w_ir_extern_dout_a[i]                         ),
         .o_extern_dout_a_oen                (o_extern_dout_a_oen[i]                        ),
-        .o_extern_dout_b                    (o_extern_dout_b[i]                            ),
+        .o_extern_dout_b                    (w_ir_extern_dout_b[i]                         ),
         .o_extern_dout_b_oen                (o_extern_dout_b_oen[i]                        ),
         //configure register & status.                                                     
         .i_enable                           (w_syn_enable[i]                               ),
@@ -276,6 +304,9 @@ counter #(.COUNTER_NUM(COUNTER_NUM)) u_counter(
         .i_capture_mode_cnts                (i_capture_mode_cnts[(i+1)*8-1:i*8]            ),
         .i_waveform_mode_automatic_sw       (i_waveform_mode_automatic_sw[i]               ),
         .i_capture_mode_automatic_sw        (i_capture_mode_automatic_sw[i]                ),
+        .i_capture_mode_automatic_validedge (i_capture_mode_automatic_validedge[i]         ),
+        .i_shiftmode_point_en               (i_shiftmode_point_en[i]                       ),
+        .i_shiftmode_point_cnts             (i_shiftmode_point_cnts[(i+1)*16-1:i*16]       ),  
         .i_shiftmode_ctrl                   (i_shiftmode_ctrl[i]                           ),
         .i_shiftout_data                    (i_shiftout_data[(i+1)*32-1:i*32]              ),
         .i_shiftout_data_ctrl_bitcnts       (i_shiftout_data_ctrl_bitcnts[(i+1)*5-1:i*5]   ),
@@ -300,6 +331,23 @@ counter_datamux_syn #(.COUNTER_NUM(COUNTER_NUM)) u_mux_syn(
 );
 
 
+counter_ir_frontend u_counter_ir_frontend(
+        .i_clk                      (i_clk_ir_s[i]                                  ),
+        .i_rst_n                    (i_rst_ir_n[i]                                  ),
+        .i_ir_din_onecycle_value_a  (i_ir_din_onecycle_value_a[(i+1)*32-1:i*32]     ),
+        .i_ir_din_onecycle_value_b  (i_ir_din_onecycle_value_b[(i+1)*32-1:i*32]     ),
+        .i_ir_din_bypass            (i_ir_din_bypass[2*(i+1)-1:2*i]                 ),
+        .i_extern_din_a             (i_extern_din_a[i]                              ),
+        .i_extern_din_b             (i_extern_din_b[i]                              ),
+        .o_ir_extern_din_a          (w_ir_extern_din_a[i]                           ),
+        .o_ir_extern_din_b          (w_ir_extern_din_b[i]                           ),
+        .i_ir_dout_opts             (i_ir_dout_opts[8*(i+1)-1:8*i]                  ),
+        .i_ir_dout_bypass           (i_ir_dout_bypass[2*(i+1)-1:2*i]                ),
+        .i_extern_dout_a            (w_ir_extern_dout_a[i]                          ),
+        .i_extern_dout_b            (w_ir_extern_dout_b[i]                          ),
+        .o_ir_extern_dout_a         (o_extern_dout_a[i]                             ),
+        .o_ir_extern_dout_b         (o_extern_dout_b[i]                             )
+);
 
 
 end

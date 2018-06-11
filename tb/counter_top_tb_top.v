@@ -159,6 +159,8 @@ counter_top counter_top(
         //clock select ,enable, inv clock enable.
         .o_enable               (w_enable),
         .o_clk_ctrl             (w_clk_ctrl),
+        .i_clk_ir_s             (w_clk),
+        .i_rst_ir_n             (w_rst_n),
         //interrupt.
         .o_int                  (w_int)
 );

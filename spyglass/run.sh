@@ -22,7 +22,7 @@ elif [ "$1"x = "CLEAN"x ] ; then
 echo "dir clean"
 rm -rf *.log counter_top/ spyglass*/ *.rpt *.out
 else 
-echo "please input"
+echo "please input CDC or LINT or CLEAN"
 fi
 
 #spyglass -shell -tcl  counter_top.tcl
