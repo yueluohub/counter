@@ -123,3 +123,6 @@ else if(i_extern_din_b&&!r1_extern_din_b_dly)
 
 
 endmodule
+
+`default_nettype wire
+
