@@ -1,20 +1,20 @@
 // `define CLK_32M
-`define COUNTER_NUM   0
-// `define COUNTER_NUM   1
-// `define COUNTER_NUM   2
-// `define COUNTER_NUM   3
+//`define COUNTER_NUM   0
+ //`define COUNTER_NUM   1
+ //`define COUNTER_NUM   2
+ `define COUNTER_NUM   3
 
 // `define SIM_FINISH_MS 10
-// `define SIM_FINISH_MS 20
+ `define SIM_FINISH_MS 20
 // `define SIM_FINISH_MS 50
-`define SIM_FINISH_MS 300
+//`define SIM_FINISH_MS 300
 // `define APB_BUS_MONITOR
 
 // `define CAPTURE_DATA_IN
 // `define SHIFT_DATA_IN
 
 // `define TESTCASE_C0_WAVEFORM_0
-// `define TESTCASE_C0_WAVEFORM_1
+ `define TESTCASE_C0_WAVEFORM_1
  // `define TESTCASE_C0_WAVEFORM_2
 // `define TESTCASE_C0_WAVEFORM_3
 
@@ -55,11 +55,11 @@
 
 // `define TESTCASE_ALL_ISO7816_IFC
 // `define TESTCASE_ALL_SHIFTMODE_ISO7816_IFC  //shiftin mode.
-// `define TESTCASE_ALL_SHIFTMODE_ISO7816_IFC_1 //shiftout mode.
+ //`define TESTCASE_ALL_SHIFTMODE_ISO7816_IFC_1 //shiftout mode.
 
  // `define TESTCASE_ALL_SHIFTMODE_IR_REMOTE_CONTROL_IFC_0 //shiftout mode.
  //`define TESTCASE_ALL_SHIFTMODE_IR_REMOTE_CONTROL_IFC_1 //shiftin mode.
- `define TESTCASE_ALL_SHIFTMODE_IR_REMOTE_CONTROL_IFC_2 //counter out mode.
+// `define TESTCASE_ALL_SHIFTMODE_IR_REMOTE_CONTROL_IFC_2 //counter out mode.
 
 
 

@@ -80,96 +80,6 @@ always @ ( posedge i_pclk or negedge i_prst_n) begin
   else if (hren) o_prdata <= hrdata_32w;
 end
 
-//   wire              [ 31 : 0 ] sts_intr_status_counter;
-//   wire              [ 31 : 0 ] sts_intr_mask_status_counter;
-//   wire                         wen_intr_clr;
-//   wire                         wen_intr_clr_d;
-//   wire              [ 31 : 0 ] ctl_intr_clr_counter;
-//   wire                         wen_intr_set;
-//   wire                         wen_intr_set_d;
-//   wire              [ 31 : 0 ] ctl_intr_set_counter;
-//   wire                         wen_intr_mask_set;
-//   wire                         wen_intr_mask_set_d;
-//   wire              [ 31 : 0 ] ctl_intr_mask_set_counter;
-//   wire                         wen_intr_mask_clr;
-//   wire                         wen_intr_mask_clr_d;
-//   wire              [ 31 : 0 ] ctl_intr_mask_clr_counter;
-
-//   wire                         o_global_start_trigger;
-//   wire                         o_global_stop_trigger;
-//   wire                         o_global_clear_trigger;
-//   wire                         o_global_reset_trigger;
-
-//   wire                         o_single_start_trigger_c0;
-//   wire                         o_single_stop_trigger_c0;
-//   wire                         o_single_clear_trigger_c0;
-//   wire                         o_single_reset_trigger_c0;
-
-//   wire                         o_enable_c0;
-//   wire              [  7 : 0 ] o_soft_trigger_ctrl_c0;
-//   wire              [  3 : 0 ] o_src_sel_start_c0;
-//   wire              [  1 : 0 ] o_src_edge_start_c0;
-//   wire              [  3 : 0 ] o_src_sel_stop_c0;
-//   wire              [  1 : 0 ] o_src_edge_stop_c0;
-//   wire              [  3 : 0 ] o_src_sel_din0_c0;
-//   wire              [  1 : 0 ] o_src_edge_din0_c0;
-//   wire              [  3 : 0 ] o_src_sel_din1_c0;
-//   wire              [  1 : 0 ] o_src_edge_din1_c0;
-//   wire                         wen_ctrl_snap_c0;
-//   wire                         wen_ctrl_snap_c0_d;
-//   wire              [  3 : 0 ] o_ctrl_snap_c0;
-//   wire              [ 31 : 0 ] i_shadow_reg_c0;
-//   wire              [  2 : 0 ] o_mode_sel_c0;
-//   wire              [  5 : 0 ] o_target_reg_ctrl_c0;
-//   wire              [ 31 : 0 ] o_target_reg_a0_c0;
-//   wire                         wen_target_reg_a1_c0;
-//   wire                         wen_target_reg_a1_c0_d;
-//   wire              [ 31 : 0 ] o_target_reg_a1_c0;
-//   wire              [ 31 : 0 ] o_target_reg_a2_c0;
-//   wire              [ 31 : 0 ] o_target_reg_b0_c0;
-//   wire              [ 31 : 0 ] o_target_reg_b1_c0;
-//   wire              [ 31 : 0 ] o_target_reg_b2_c0;
-//   wire              [  5 : 0 ] i_capture_reg_status_c0;
-//   wire              [  5 : 0 ] o_capture_reg_overflow_ctrl_c0;
-//   wire                         ren_capture_reg_a0_c0;
-//   wire                         ren_capture_reg_a0_c0_d;
-//   wire              [ 31 : 0 ] i_capture_reg_a0_c0;
-//   wire                         ren_capture_reg_a1_c0;
-//   wire                         ren_capture_reg_a1_c0_d;
-//   wire              [ 31 : 0 ] i_capture_reg_a1_c0;
-//   wire                         ren_capture_reg_a2_c0;
-//   wire                         ren_capture_reg_a2_c0_d;
-//   wire              [ 31 : 0 ] i_capture_reg_a2_c0;
-//   wire                         ren_capture_reg_b0_c0;
-//   wire                         ren_capture_reg_b0_c0_d;
-//   wire              [ 31 : 0 ] i_capture_reg_b0_c0;
-//   wire                         ren_capture_reg_b1_c0;
-//   wire                         ren_capture_reg_b1_c0_d;
-//   wire              [ 31 : 0 ] i_capture_reg_b1_c0;
-//   wire                         ren_capture_reg_b2_c0;
-//   wire                         ren_capture_reg_b2_c0_d;
-//   wire              [ 31 : 0 ] i_capture_reg_b2_c0;
-//   wire              [ 15 : 0 ] o_switch_mode_onebit_cnts_c0;
-//   wire              [  7 : 0 ] o_waveform_mode_cnts_c0;
-//   wire              [  7 : 0 ] o_capture_mode_cnts_c0;
-//   wire                         o_waveform_mode_automatic_sw_c0;
-//   wire                         o_capture_mode_automatic_sw_c0;
-//   wire                         o_shiftmode_ctrl_c0;
-//   wire              [  4 : 0 ] o_shiftout_data_ctrl_bitcnts_c0;
-//   wire              [ 31 : 0 ] o_shiftout_data_c0;
-//   wire                         wen_shiftout_data_valid_c0;
-//   wire                         wen_shiftout_data_valid_c0_d;
-//   wire                         o_shiftout_data_valid_c0;
-//   wire              [  4 : 0 ] o_shiftin_data_ctrl_bitcnts_c0;
-//   wire              [ 31 : 0 ] i_shiftin_data_c0;
-//   wire              [ 31 : 0 ] i_shiftin_databits_updated_c0;
-//   wire              [  1 : 0 ] o_ir_din_bypass_c1;
-//   wire              [ 31 : 0 ] o_ir_din_onecycle_value_a_c1;
-//   wire              [ 31 : 0 ] o_ir_din_onecycle_value_b_c1;
-//   wire              [  7 : 0 ] o_ir_dout_opts_c1;
-//   wire              [  1 : 0 ] o_ir_dout_bypass_c1;
-
-   
 wire [COUNTER_NUM-1:0]   w_single_start_trigger ;
 wire [COUNTER_NUM-1:0]   w_single_stop_trigger  ;
 wire [COUNTER_NUM-1:0]   w_single_clear_trigger ;
@@ -178,6 +88,22 @@ wire                     w_global_start_trigger ;
 wire                     w_global_stop_trigger  ;
 wire                     w_global_clear_trigger ;
 wire                     w_global_reset_trigger ;
+
+reg [2*COUNTER_NUM-1:0]    w_mux_din;
+//wire [2*COUNTER_NUM-1:0]    w_mux_din_1;
+wire [2*COUNTER_NUM-1:0]    w_mux_dout;
+wire [2*COUNTER_NUM-1:0]    w_mux_dout_oen;
+reg  [2*COUNTER_NUM-1:0]    w_mux_dout_1;
+reg  [2*COUNTER_NUM-1:0]    w_mux_dout_oen_1;
+wire [2*COUNTER_NUM-1:0]    w_ctl_dout_oen;
+wire [COUNTER_NUM-1:0] w1_extern_din_a;
+wire [COUNTER_NUM-1:0] w1_extern_din_b;
+wire [COUNTER_NUM-1:0] w1_extern_dout_a;
+wire [COUNTER_NUM-1:0] w1_extern_dout_a_oen;
+wire [COUNTER_NUM-1:0] w1_extern_dout_b;
+wire [COUNTER_NUM-1:0] w1_extern_dout_b_oen;
+
+
 
 //configure register & status.
 //wire  [COUNTER_NUM-1:0] o_enable;
@@ -192,7 +118,7 @@ wire  [COUNTER_NUM*2-1:0] w_src_edge_din0;
 wire  [COUNTER_NUM*SEL_WIDTH-1:0] w_src_sel_din1;
 wire  [COUNTER_NUM*2-1:0] w_src_edge_din1;
 wire  [COUNTER_NUM*4-1:0] w_ctrl_snap;
-wire  [COUNTER_NUM*4-1:0] w_snap_status;
+wire  [COUNTER_NUM*8-1:0] w_snap_status;
 wire  [COUNTER_NUM-1:0]   w_clear_snap;
 
 wire  [COUNTER_NUM*32-1:0] w_shadow_reg;
@@ -322,8 +248,8 @@ counter_all #(.COUNTER_NUM(COUNTER_NUM)) u_counter_all(
         .i_pclk                             (i_pclk                                     ),
         .i_prst_n                           (i_prst_n                                   ),
         //sync data & trigger                                                              
-        .i_extern_din_a                     (i_extern_din_a                             ),
-        .i_extern_din_b                     (i_extern_din_b                             ),
+        .i_extern_din_a                     (w1_extern_din_a                             ),
+        .i_extern_din_b                     (w1_extern_din_b                             ),
         .i_single_start_trigger             (w_single_start_trigger                     ),
         .i_single_stop_trigger              (w_single_stop_trigger                      ),
         .i_single_clear_trigger             (w_single_clear_trigger                     ),
@@ -332,10 +258,10 @@ counter_all #(.COUNTER_NUM(COUNTER_NUM)) u_counter_all(
         .i_global_stop_trigger              (w_global_stop_trigger                      ),
         .i_global_clear_trigger             (w_global_clear_trigger                     ),
         .i_global_reset_trigger             (w_global_reset_trigger                     ),
-        .o_extern_dout_a                    (o_extern_dout_a                            ),
-        .o_extern_dout_a_oen                (o_extern_dout_a_oen                        ),
-        .o_extern_dout_b                    (o_extern_dout_b                            ),
-        .o_extern_dout_b_oen                (o_extern_dout_b_oen                        ),
+        .o_extern_dout_a                    (w1_extern_dout_a                            ),
+        .o_extern_dout_a_oen                (w1_extern_dout_a_oen                        ),
+        .o_extern_dout_b                    (w1_extern_dout_b                            ),
+        .o_extern_dout_b_oen                (w1_extern_dout_b_oen                        ),
         //configure register & status.                                                     
         .i_enable                           (o_enable                                   ),
         .i_mux_sel                          (w_mux_sel                                  ),
@@ -398,6 +324,93 @@ counter_all #(.COUNTER_NUM(COUNTER_NUM)) u_counter_all(
 );
 
 wire [31:0] intr_src_d;
+
+assign o_extern_dout_a[0]  =   w_mux_dout_1[0];
+assign o_extern_dout_b[0]  =   w_mux_dout_1[1];
+assign o_extern_dout_a[1]  =   w_mux_dout_1[2];
+assign o_extern_dout_b[1]  =   w_mux_dout_1[3];
+assign o_extern_dout_a[2]  =   w_mux_dout_1[4];
+assign o_extern_dout_b[2]  =   w_mux_dout_1[5];
+assign o_extern_dout_a[3]  =   w_mux_dout_1[6];
+assign o_extern_dout_b[3]  =   w_mux_dout_1[7];
+assign o_extern_dout_a_oen[0] = w_mux_dout_oen_1[0];
+assign o_extern_dout_b_oen[0] = w_mux_dout_oen_1[1];
+assign o_extern_dout_a_oen[1] = w_mux_dout_oen_1[2];
+assign o_extern_dout_b_oen[1] = w_mux_dout_oen_1[3];
+assign o_extern_dout_a_oen[2] = w_mux_dout_oen_1[4];
+assign o_extern_dout_b_oen[2] = w_mux_dout_oen_1[5];
+assign o_extern_dout_a_oen[3] = w_mux_dout_oen_1[6];
+assign o_extern_dout_b_oen[3] = w_mux_dout_oen_1[7];
+assign w1_extern_din_a[0] =  w_mux_din[0];
+assign w1_extern_din_b[0] =  w_mux_din[1];
+assign w1_extern_din_a[1] =  w_mux_din[2];
+assign w1_extern_din_b[1] =  w_mux_din[3];
+assign w1_extern_din_a[2] =  w_mux_din[4];
+assign w1_extern_din_b[2] =  w_mux_din[5];
+assign w1_extern_din_a[3] =  w_mux_din[6];
+assign w1_extern_din_b[3] =  w_mux_din[7];
+assign w_mux_dout[0] = w1_extern_dout_a[0];
+assign w_mux_dout[1] = w1_extern_dout_b[0];
+assign w_mux_dout[2] = w1_extern_dout_a[1];
+assign w_mux_dout[3] = w1_extern_dout_b[1];
+assign w_mux_dout[4] = w1_extern_dout_a[2];
+assign w_mux_dout[5] = w1_extern_dout_b[2];
+assign w_mux_dout[6] = w1_extern_dout_a[3];
+assign w_mux_dout[7] = w1_extern_dout_b[3];
+assign w_mux_dout_oen[0] = w1_extern_dout_a_oen[0];
+assign w_mux_dout_oen[1] = w1_extern_dout_b_oen[0];
+assign w_mux_dout_oen[2] = w1_extern_dout_a_oen[1];
+assign w_mux_dout_oen[3] = w1_extern_dout_b_oen[1];
+assign w_mux_dout_oen[4] = w1_extern_dout_a_oen[2];
+assign w_mux_dout_oen[5] = w1_extern_dout_b_oen[2];
+assign w_mux_dout_oen[6] = w1_extern_dout_a_oen[3];
+assign w_mux_dout_oen[7] = w1_extern_dout_b_oen[3];
+
+genvar j;
+generate for(j=0;j<8;j=j+1) begin:pin_mux
+always @*
+case(o_din_mux_sel[(j+1)*4-2:j*4])
+3'h0:   w_mux_din[j] = i_extern_din_a[0];
+3'h1:   w_mux_din[j] = i_extern_din_b[0];
+3'h2:   w_mux_din[j] = i_extern_din_a[1];
+3'h3:   w_mux_din[j] = i_extern_din_b[1];
+3'h4:   w_mux_din[j] = i_extern_din_a[2];
+3'h5:   w_mux_din[j] = i_extern_din_b[2];
+3'h6:   w_mux_din[j] = i_extern_din_a[3];
+default:w_mux_din[j] = i_extern_din_b[3];
+endcase
+
+always @*
+case(o_dout_mux_sel[(j+1)*4-2:j*4])
+3'h0:   w_mux_dout_1[j]=w_mux_dout[0];
+3'h1:   w_mux_dout_1[j]=w_mux_dout[1];
+3'h2:   w_mux_dout_1[j]=w_mux_dout[2];
+3'h3:   w_mux_dout_1[j]=w_mux_dout[3];
+3'h4:   w_mux_dout_1[j]=w_mux_dout[4];
+3'h5:   w_mux_dout_1[j]=w_mux_dout[5];
+3'h6:   w_mux_dout_1[j]=w_mux_dout[6];
+default:w_mux_dout_1[j]=w_mux_dout[7];
+endcase
+
+always @*
+case(o_dout_mux_sel[(j+1)*4-2:j*4])
+3'h0:   w_mux_dout_oen_1[j] = w_ctl_dout_oen[0];
+3'h1:   w_mux_dout_oen_1[j] = w_ctl_dout_oen[1];
+3'h2:   w_mux_dout_oen_1[j] = w_ctl_dout_oen[2];
+3'h3:   w_mux_dout_oen_1[j] = w_ctl_dout_oen[3];
+3'h4:   w_mux_dout_oen_1[j] = w_ctl_dout_oen[4];
+3'h5:   w_mux_dout_oen_1[j] = w_ctl_dout_oen[5];
+3'h6:   w_mux_dout_oen_1[j] = w_ctl_dout_oen[6];
+default:w_mux_dout_oen_1[j] = w_ctl_dout_oen[7];
+endcase
+
+assign w_ctl_dout_oen[j] = w_mux_dout_oen[j] && o_dout_enable_ctrl[4*j] || o_dout_enable_ctrl[4*j+1];
+
+end
+endgenerate
+
+
+
 
 genvar i;
 generate for(i=0;i<COUNTER_NUM;i=i+1) begin:int_sync

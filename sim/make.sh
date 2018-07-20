@@ -1,13 +1,8 @@
 
-
-if [ -n "$1" ] ; then 
-FILENAME=$1;
-
-
-grep "num =0" ${FILENAME} > num0.log
-grep "num =1" ${FILENAME} > num1.log
-grep "num =2" ${FILENAME} > num2.log
-grep "num =3" ${FILENAME} > num3.log
+grep "num =0" sim.log > num0.log
+grep "num =1" sim.log > num1.log
+grep "num =2" sim.log > num2.log
+grep "num =3" sim.log > num3.log
 grep "bus a" num0.log > num0_a.log
 grep "bus b" num0.log > num0_b.log
 grep "bus a" num1.log > num1_a.log
@@ -17,13 +12,13 @@ grep "bus b" num2.log > num2_b.log
 grep "bus a" num3.log > num3_a.log
 grep "bus b" num3.log > num3_b.log
 
-grep "APB " ${FILENAME} > APB.log
+grep "APB " sim.log > APB.log
 
-grep "counter0:" ${FILENAME} > counter0.log
-grep "counter1:" ${FILENAME} > counter1.log
-grep "counter2:" ${FILENAME} > counter2.log
-grep "counter3:" ${FILENAME} > counter3.log
-grep "counter_all:" ${FILENAME} > counter_g.log
+grep "counter0:" sim.log > counter0.log
+grep "counter1:" sim.log > counter1.log
+grep "counter2:" sim.log > counter2.log
+grep "counter3:" sim.log > counter3.log
+grep "counter_all:" sim.log > counter_g.log
 
 grep "single start trigger" counter0.log > counter0_trigger0.log
 grep "single stop  trigger" counter0.log > counter0_trigger1.log
@@ -57,9 +52,3 @@ grep "global start trigger" counter_g.log > counter_g_trigger0.log
 grep "global stop  trigger" counter_g.log > counter_g_trigger1.log
 grep "global clear trigger" counter_g.log > counter_g_trigger2.log
 grep "global reset trigger" counter_g.log > counter_g_trigger3.log
-
-else
-
-echo "please input file name"
-
-fi

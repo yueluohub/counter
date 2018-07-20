@@ -68,6 +68,27 @@
 #define COUNTER_ALL_APB_REG_GLOBAL_RESET_TRIGGER_O_GLOBAL_RESET_TRIGGER                                         (Bit0)
 
 
+#define COUNTER_ALL_APB_REG_DIN_MUX_SEL                                                                         (COUNTER_ALL_APB_REG_BASE + 0x50)
+#define COUNTER_ALL_APB_REG_DIN_MUX_SEL_DEFAULT                                                                 0x76543210
+#define COUNTER_ALL_APB_REG_DIN_MUX_SEL_O_DIN_MUX_SEL                                                           (Bit0+Bit1+Bit2+Bit3+Bit4+Bit5+Bit6+Bit7+Bit8+Bit9+Bit10+Bit11+Bit12+Bit13+Bit14+Bit15+Bit16+Bit17+Bit18+Bit19+Bit20+Bit21+Bit22+Bit23+Bit24+Bit25+Bit26+Bit27+Bit28+Bit29+Bit30+Bit31)
+#define COUNTER_ALL_APB_REG_DIN_MUX_SEL_O_DIN_MUX_SEL_MASK                                                      (Bit31+Bit30+Bit29+Bit28+Bit27+Bit26+Bit25+Bit24+Bit23+Bit22+Bit21+Bit20+Bit19+Bit18+Bit17+Bit16+Bit15+Bit14+Bit13+Bit12+Bit11+Bit10+Bit9+Bit8+Bit7+Bit6+Bit5+Bit4+Bit3+Bit2+Bit1+Bit0)
+#define COUNTER_ALL_APB_REG_DIN_MUX_SEL_O_DIN_MUX_SEL_SHIFT                                                     (0)
+
+
+#define COUNTER_ALL_APB_REG_DOUT_MUX_SEL                                                                        (COUNTER_ALL_APB_REG_BASE + 0x54)
+#define COUNTER_ALL_APB_REG_DOUT_MUX_SEL_DEFAULT                                                                0x76543210
+#define COUNTER_ALL_APB_REG_DOUT_MUX_SEL_O_DOUT_MUX_SEL                                                         (Bit0+Bit1+Bit2+Bit3+Bit4+Bit5+Bit6+Bit7+Bit8+Bit9+Bit10+Bit11+Bit12+Bit13+Bit14+Bit15+Bit16+Bit17+Bit18+Bit19+Bit20+Bit21+Bit22+Bit23+Bit24+Bit25+Bit26+Bit27+Bit28+Bit29+Bit30+Bit31)
+#define COUNTER_ALL_APB_REG_DOUT_MUX_SEL_O_DOUT_MUX_SEL_MASK                                                    (Bit31+Bit30+Bit29+Bit28+Bit27+Bit26+Bit25+Bit24+Bit23+Bit22+Bit21+Bit20+Bit19+Bit18+Bit17+Bit16+Bit15+Bit14+Bit13+Bit12+Bit11+Bit10+Bit9+Bit8+Bit7+Bit6+Bit5+Bit4+Bit3+Bit2+Bit1+Bit0)
+#define COUNTER_ALL_APB_REG_DOUT_MUX_SEL_O_DOUT_MUX_SEL_SHIFT                                                   (0)
+
+
+#define COUNTER_ALL_APB_REG_DOUT_ENABLE_CTRL                                                                    (COUNTER_ALL_APB_REG_BASE + 0x58)
+#define COUNTER_ALL_APB_REG_DOUT_ENABLE_CTRL_DEFAULT                                                            0x11111111
+#define COUNTER_ALL_APB_REG_DOUT_ENABLE_CTRL_O_DOUT_ENABLE_CTRL                                                 (Bit0+Bit1+Bit2+Bit3+Bit4+Bit5+Bit6+Bit7+Bit8+Bit9+Bit10+Bit11+Bit12+Bit13+Bit14+Bit15+Bit16+Bit17+Bit18+Bit19+Bit20+Bit21+Bit22+Bit23+Bit24+Bit25+Bit26+Bit27+Bit28+Bit29+Bit30+Bit31)
+#define COUNTER_ALL_APB_REG_DOUT_ENABLE_CTRL_O_DOUT_ENABLE_CTRL_MASK                                            (Bit31+Bit30+Bit29+Bit28+Bit27+Bit26+Bit25+Bit24+Bit23+Bit22+Bit21+Bit20+Bit19+Bit18+Bit17+Bit16+Bit15+Bit14+Bit13+Bit12+Bit11+Bit10+Bit9+Bit8+Bit7+Bit6+Bit5+Bit4+Bit3+Bit2+Bit1+Bit0)
+#define COUNTER_ALL_APB_REG_DOUT_ENABLE_CTRL_O_DOUT_ENABLE_CTRL_SHIFT                                           (0)
+
+
 #define COUNTER_ALL_APB_REG_SINGLE_START_TRIGGER_C0                                                             (COUNTER_ALL_APB_REG_BASE + 0x80)
 #define COUNTER_ALL_APB_REG_SINGLE_START_TRIGGER_C0_DEFAULT                                                     0x0
 #define COUNTER_ALL_APB_REG_SINGLE_START_TRIGGER_C0_O_SINGLE_START_TRIGGER_C0                                   (Bit0)
@@ -140,8 +161,8 @@
 
 #define COUNTER_ALL_APB_REG_SNAP_STATUS_C0                                                                      (COUNTER_ALL_APB_REG_BASE + 0xa0)
 #define COUNTER_ALL_APB_REG_SNAP_STATUS_C0_DEFAULT                                                              0x0
-#define COUNTER_ALL_APB_REG_SNAP_STATUS_C0_I_SNAP_STATUS_C0                                                     (Bit0+Bit1+Bit2+Bit3)
-#define COUNTER_ALL_APB_REG_SNAP_STATUS_C0_I_SNAP_STATUS_C0_MASK                                                (Bit3+Bit2+Bit1+Bit0)
+#define COUNTER_ALL_APB_REG_SNAP_STATUS_C0_I_SNAP_STATUS_C0                                                     (Bit0+Bit1+Bit2+Bit3+Bit4+Bit5+Bit6+Bit7)
+#define COUNTER_ALL_APB_REG_SNAP_STATUS_C0_I_SNAP_STATUS_C0_MASK                                                (Bit7+Bit6+Bit5+Bit4+Bit3+Bit2+Bit1+Bit0)
 #define COUNTER_ALL_APB_REG_SNAP_STATUS_C0_I_SNAP_STATUS_C0_SHIFT                                               (0)
 
 
@@ -448,8 +469,8 @@
 
 #define COUNTER_ALL_APB_REG_SNAP_STATUS_C1                                                                      (COUNTER_ALL_APB_REG_BASE + 0x1a0)
 #define COUNTER_ALL_APB_REG_SNAP_STATUS_C1_DEFAULT                                                              0x0
-#define COUNTER_ALL_APB_REG_SNAP_STATUS_C1_I_SNAP_STATUS_C1                                                     (Bit0+Bit1+Bit2+Bit3)
-#define COUNTER_ALL_APB_REG_SNAP_STATUS_C1_I_SNAP_STATUS_C1_MASK                                                (Bit3+Bit2+Bit1+Bit0)
+#define COUNTER_ALL_APB_REG_SNAP_STATUS_C1_I_SNAP_STATUS_C1                                                     (Bit0+Bit1+Bit2+Bit3+Bit4+Bit5+Bit6+Bit7)
+#define COUNTER_ALL_APB_REG_SNAP_STATUS_C1_I_SNAP_STATUS_C1_MASK                                                (Bit7+Bit6+Bit5+Bit4+Bit3+Bit2+Bit1+Bit0)
 #define COUNTER_ALL_APB_REG_SNAP_STATUS_C1_I_SNAP_STATUS_C1_SHIFT                                               (0)
 
 
@@ -756,8 +777,8 @@
 
 #define COUNTER_ALL_APB_REG_SNAP_STATUS_C2                                                                      (COUNTER_ALL_APB_REG_BASE + 0x2a0)
 #define COUNTER_ALL_APB_REG_SNAP_STATUS_C2_DEFAULT                                                              0x0
-#define COUNTER_ALL_APB_REG_SNAP_STATUS_C2_I_SNAP_STATUS_C2                                                     (Bit0+Bit1+Bit2+Bit3)
-#define COUNTER_ALL_APB_REG_SNAP_STATUS_C2_I_SNAP_STATUS_C2_MASK                                                (Bit3+Bit2+Bit1+Bit0)
+#define COUNTER_ALL_APB_REG_SNAP_STATUS_C2_I_SNAP_STATUS_C2                                                     (Bit0+Bit1+Bit2+Bit3+Bit4+Bit5+Bit6+Bit7)
+#define COUNTER_ALL_APB_REG_SNAP_STATUS_C2_I_SNAP_STATUS_C2_MASK                                                (Bit7+Bit6+Bit5+Bit4+Bit3+Bit2+Bit1+Bit0)
 #define COUNTER_ALL_APB_REG_SNAP_STATUS_C2_I_SNAP_STATUS_C2_SHIFT                                               (0)
 
 
@@ -1064,8 +1085,8 @@
 
 #define COUNTER_ALL_APB_REG_SNAP_STATUS_C3                                                                      (COUNTER_ALL_APB_REG_BASE + 0x3a0)
 #define COUNTER_ALL_APB_REG_SNAP_STATUS_C3_DEFAULT                                                              0x0
-#define COUNTER_ALL_APB_REG_SNAP_STATUS_C3_I_SNAP_STATUS_C3                                                     (Bit0+Bit1+Bit2+Bit3)
-#define COUNTER_ALL_APB_REG_SNAP_STATUS_C3_I_SNAP_STATUS_C3_MASK                                                (Bit3+Bit2+Bit1+Bit0)
+#define COUNTER_ALL_APB_REG_SNAP_STATUS_C3_I_SNAP_STATUS_C3                                                     (Bit0+Bit1+Bit2+Bit3+Bit4+Bit5+Bit6+Bit7)
+#define COUNTER_ALL_APB_REG_SNAP_STATUS_C3_I_SNAP_STATUS_C3_MASK                                                (Bit7+Bit6+Bit5+Bit4+Bit3+Bit2+Bit1+Bit0)
 #define COUNTER_ALL_APB_REG_SNAP_STATUS_C3_I_SNAP_STATUS_C3_SHIFT                                               (0)
 
 

@@ -14,6 +14,7 @@
 `define     GLOBAL_STOP_TRIGGER 	`BASE_ADDR+32'h044
 `define     GLOBAL_CLEAR_TRIGGER 	`BASE_ADDR+32'h048
 `define     GLOBAL_RESET_TRIGGER 	`BASE_ADDR+32'h04C
+
 `define     SINGLE_START_TRIGGER_C0 	    `BASE_ADDR+32'h080
 `define     SINGLE_STOP_TRIGGER_C0 	        `BASE_ADDR+32'h084
 `define     SINGLE_CLEAR_TRIGGER_C0 	    `BASE_ADDR+32'h088
@@ -334,6 +335,7 @@ initial begin
 
    `ifdef	TESTCASE_C0_WAVEFORM_1
     `define CLK_32M
+    apb_write_read(`GLOBAL_RESET_TRIGGER+32'hc,32'h000000000,data);
 
     apb_write_read(addr_base+`SOFT_TRIGGER_CTRL_C0,32'b000000000,data);
     apb_write_read(addr_base+`MODE_SEL_C0,32'b001,data);
@@ -347,10 +349,14 @@ initial begin
     apb_read (addr_base+`ENABLE_C0,data);
     apb_write(addr_base+`ENABLE_C0,data|32'h0001);//c0,enable.
     //
+
     apb_write_read(addr_base+`SINGLE_START_TRIGGER_C0,32'b1,data);//start;
     
     int_flag_en = 1;
     #200_000;
+    apb_write_read(`GLOBAL_RESET_TRIGGER+32'hc,32'h222222222,data);
+    #200_000;
+    apb_write_read(`GLOBAL_RESET_TRIGGER+32'hc,32'h111111111,data);
     //apb_read(addr_base+`SINGLE_STOP_TRIGGER_C0,data);//stop;
     //apb_write_read(addr_base+`SINGLE_STOP_TRIGGER_C0,~data,data);//stop;
     //#20_000;

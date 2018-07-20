@@ -124,7 +124,7 @@ input  wire [COUNTER_NUM*2-1:0] i_src_edge_din0;
 input  wire [COUNTER_NUM*SEL_WIDTH-1:0] i_src_sel_din1;
 input  wire [COUNTER_NUM*2-1:0] i_src_edge_din1;
 input  wire [COUNTER_NUM*4-1:0] i_ctrl_snap;
-output wire [COUNTER_NUM*4-1:0] o_snap_status;
+output wire [COUNTER_NUM*8-1:0] o_snap_status;
 input  wire [COUNTER_NUM-1:0]   i_clear_snap;
 output wire [COUNTER_NUM*32-1:0] o_shadow_reg;
 input  wire [COUNTER_NUM*6-1:0] i_target_reg_ctrl;
@@ -279,7 +279,7 @@ counter #(.COUNTER_NUM(COUNTER_NUM)) u_counter(
         .i_src_sel_din1                     (i_src_sel_din1[(i+1)*SEL_WIDTH-1:i*SEL_WIDTH] ),       
         .i_src_edge_din1                    (i_src_edge_din1[(i+1)*2-1:i*2]                ),
         .i_ctrl_snap                        (w_syn_ctrl_snap[(i+1)*4-1:i*4]                ),
-        .o_snap_status                      (o_snap_status[(i+1)*4-1:i*4]                  ),
+        .o_snap_status                      (o_snap_status[(i+1)*8-1:i*8]                  ),
         .i_clear_snap                       (w_syn_clear_snap[i]                           ),
         .o_shadow_reg                       (o_shadow_reg[(i+1)*32-1:i*32]                 ),
         .i_target_reg_ctrl                  (i_target_reg_ctrl[(i+1)*6-1:i*6]              ),

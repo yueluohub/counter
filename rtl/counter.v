@@ -117,7 +117,7 @@ input wire   [1:0] i_src_edge_din0;
 input wire   [SEL_WIDTH-1:0] i_src_sel_din1;
 input wire   [1:0] i_src_edge_din1;
 input wire   [3:0] i_ctrl_snap;
-output reg   [3:0] o_snap_status;
+output reg   [7:0] o_snap_status;
 input wire         i_clear_snap;
 output [31:0] o_shadow_reg;
 input wire   [5:0] i_target_reg_ctrl;
@@ -776,13 +776,22 @@ assign w_clear_snap_posedge = r1_clear_snap_dly[0]^(r1_clear_snap_dly[1]);
 //i_clear_snap
 always @(posedge i_clk or negedge i_rst_n) begin
     if(!i_rst_n) begin
-        o_snap_status <= 32'h0;
+        o_snap_status[3:0] <= 4'h0;
     end
     else if(|w_ctrl_snap_posedge) begin
-        o_snap_status <= w_ctrl_snap_posedge;
+        o_snap_status[3:0] <= w_ctrl_snap_posedge;
     end
     else if(w_clear_snap_posedge) begin
-        o_snap_status <= 32'h0;
+        o_snap_status[3:0] <= 32'h0;
+    end
+end
+
+always @(posedge i_clk or negedge i_rst_n) begin
+    if(!i_rst_n) begin
+        o_snap_status[7:4] <= 4'h0;
+    end
+    else begin
+        o_snap_status[7:4] <= {r1_shiftout_mode_en_dly,r1_shiftin_mode_en_dly,r1_waveform_mode_en_dly,r1_capture_mode_en_dly};
     end
 end
 

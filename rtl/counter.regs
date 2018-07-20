@@ -176,6 +176,107 @@ register_begin
   field_end 
 register_end
 
+
+Register_Parameters
+register_begin
+  name: din_mux_sel
+  default_access: read-write
+    size: 32 
+    address_offset: 0x14
+  description: din pin mux select. 
+  field_begin
+    name: start
+    rtl_name: o_din_mux_sel
+    bit_range: [31:0]
+    field_reset_value: 0x76543210
+    description_begin 
+    sel:
+	bit2~bit0: counter 0 a;
+	bit6~bit4: counter 0 b;
+	bit10~bit8: counter 1 a;
+	bit14~bit12: counter 1 b;
+	bit18~bit16: counter 2 a;
+	bit22~bit20: counter 2 b;
+	bit26~bit24: counter 3 a;
+	bit30~bit28: counter 3 b;
+    meaning;
+        0x0: din a0;
+        0x1: din b0;
+        0x2: din a1;
+        0x3: din b1;
+        0x4: din a2;
+        0x5: din b2;
+        0x6: din a2;
+        0x7: din b2;
+    description_end
+  field_end
+register_end
+
+Register_Parameters
+register_begin
+  name: dout_mux_sel
+  default_access: read-write
+    size: 32 
+    address_offset: 0x15
+  description: dout pin mux select. 
+  field_begin
+    name: start
+    rtl_name: o_dout_mux_sel
+    bit_range: [31:0]
+    field_reset_value: 0x76543210
+    description_begin 
+    sel:
+	bit2~bit0: counter 0 a;
+	bit6~bit4: counter 0 b;
+	bit10~bit8: counter 1 a;
+	bit14~bit12: counter 1 b;
+	bit18~bit16: counter 2 a;
+	bit22~bit20: counter 2 b;
+	bit26~bit24: counter 3 a;
+	bit30~bit28: counter 3 b;
+    meaning;
+        0x0: dout a0;
+        0x1: dout b0;
+        0x2: dout a1;
+        0x3: dout b1;
+        0x4: dout a2;
+        0x5: dout b2;
+        0x6: dout a2;
+        0x7: dout b2;
+    description_end
+  field_end
+register_end
+
+Register_Parameters
+register_begin
+  name: dout_enable_ctrl
+  default_access: read-write
+    size: 32 
+    address_offset: 0x16
+  description: dout pin output enable control. 
+  field_begin
+    name: start
+    rtl_name: o_dout_enable_ctrl
+    bit_range: [31:0]
+    field_reset_value: 0x11111111
+    description_begin 
+    sel:
+	bit1~bit0: counter 0 a;
+	bit5~bit4: counter 0 b;
+	bit9~bit8: counter 1 a;
+	bit13~bit12: counter 1 b;
+	bit17~bit16: counter 2 a;
+	bit21~bit20: counter 2 b;
+	bit25~bit24: counter 3 a;
+	bit29~bit28: counter 3 b;
+    meaning(bitmap);
+        bit0: dout_en_origial & bit0;
+        bit1: dout_en_origial | bit1;
+    description_end
+  field_end
+register_end
+
+
 Register_Parameters
 register_begin
   name: single_start_trigger_c0
@@ -388,13 +489,13 @@ register_begin
   name: snap_status_c0
   default_access: read-only
   enable_ren_pulse
-  size: 4 
+  size: 8 
   address_offset: 0x28
   description: the status of snapping the status or data from counter 0  
   field_begin
     name: start
     rtl_name:i_snap_status_c0
-    bit_range: [3:0]
+    bit_range: [7:0]
     field_reset_value: 0x0
     description: the status of snapping the status or data from counter 0. 
   field_end 
@@ -1190,13 +1291,13 @@ register_begin
   name: snap_status_c1
   default_access: read-only
   enable_ren_pulse
-  size: 4 
+  size: 8 
   address_offset: 0x68
   description: the status of snapping the status or data from counter 1  
   field_begin
     name: start
     rtl_name:i_snap_status_c1
-    bit_range: [3:0]
+    bit_range: [7:0]
     field_reset_value: 0x0
     description: the status of snapping the status or data from counter 1. 
   field_end 
@@ -1995,13 +2096,13 @@ register_begin
   name: snap_status_c2
   default_access: read-only
   enable_ren_pulse
-  size: 4 
+  size: 8 
   address_offset: 0xa8
   description: the status of snapping the status or data from counter 2  
   field_begin
     name: start
     rtl_name:i_snap_status_c2
-    bit_range: [3:0]
+    bit_range: [7:0]
     field_reset_value: 0x0
     description: the status of snapping the status or data from counter 2. 
   field_end 
@@ -2798,13 +2899,13 @@ register_begin
   name: snap_status_c3
   default_access: read-only
   enable_ren_pulse
-  size: 4 
+  size: 8 
   address_offset: 0xe8
   description: the status of snapping the status or data from counter 3. 
   field_begin
     name: start
     rtl_name:i_snap_status_c3
-    bit_range: [3:0]
+    bit_range: [7:0]
     field_reset_value: 0x0
     description: the status of snapping the status or data from counter 3. 
   field_end 

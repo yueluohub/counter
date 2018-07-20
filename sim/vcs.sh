@@ -1,5 +1,5 @@
 vcs \
-+incdir+../rtl/  \
++incdir+../../work_git1/rtl/  \
 -f counter_filelist.f  \
 -f counter_tb_filelist.f \
 -f int_filelist.f \
