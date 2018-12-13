@@ -1,0 +1,9 @@
+analyze -lib work -format verilog $RTL_DIR/counter.v
+analyze -lib work -format verilog $RTL_DIR/counter_all.v
+analyze -lib work -format verilog $RTL_DIR/counter_all_apb_reg.v
+analyze -lib work -format verilog $RTL_DIR/counter_data_syn.v
+analyze -lib work -format verilog $RTL_DIR/counter_data_syn_param.v
+analyze -lib work -format verilog $RTL_DIR/counter_datamux_syn.v
+analyze -lib work -format verilog $RTL_DIR/counter_ir_frontend.v
+analyze -lib work -format verilog $RTL_DIR/counter_top.v
+analyze -lib work -format sverilog /home/yueluo/LLORE/intrctrl/release/rtl/intrctrl.sv

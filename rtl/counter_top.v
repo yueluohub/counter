@@ -441,7 +441,7 @@ intrctrl #(
   .i_intr_reg_clr     ( ctl_intr_clr_counter            ), 
   .i_intr_reg_clr_wr  ( wen_intr_clr_d                  ), 
   .i_intr_reg_set     ( ctl_intr_set_counter            ), 
-  .i_intr_reg_set_wr  ( wen_intr_mask_set_d             ), 
+  .i_intr_reg_set_wr  ( wen_intr_mask_set_d             ), //seems wrong;
   .o_intr_status      ( sts_intr_status_counter         ), 
 
   .i_intr_mask_set    ( ctl_intr_mask_set_counter       ), 

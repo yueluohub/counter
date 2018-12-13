@@ -1,0 +1,39 @@
+#================================================================#
+#==   Andes core DC environment setup                          ==#
+#================================================================#
+set allow_newer_db_files "true"
+set edifout_netlist_only "true"
+set edifout_no_array "true"
+set edifout_power_and_ground_representation "net"
+set edifin_power_net_name "VCC"
+set edifin_ground_net_name "GND"
+set edifout_power_net_name "VCC"
+set edifout_ground_net_name "GND"
+set write_name_nets_same_as_ports "true"
+set compile_fix_multiple_port_nets "true"
+set verilogout_no_tri "true"
+set link_force_case "case_sensitive"
+set view_command_log_file "./view_command.log"
+set verilogout_show_unconnected_pins "false"
+set cache_write "work"
+set cache_read [concat $cache_read "work"]
+set vhdlout_preserve_hierarchical_types "vector"
+set vhdlout_single_bit "vector"
+set vhdlout_follow_vector_direction "true"
+set bus_naming_style "%s\[%d\]"
+set bus_inference_style "%s\[%d\]"
+set hdlout_internal_busses "true"
+set compile_preserve_subdesign_interfaces "true"
+
+### NCEHL2H100 synthesis environment setup
+source -echo -verbose ./env/ahblite2ahb.env > log/env.log
+
+set nds_home $env(NDS_HOME)
+set synopsys_path $env(SYNOPSYS)
+set search_path ". $synopsys_path/libraries/syn"
+set synthetic_library "dw_foundation.sldb"
+set link_library "* $synthetic_library"
+
+set search_path " $search_path $db_path $nds_home/rtl"
+set link_library " * ${tech_lib}.db $link_library"
+set target_library " ${tech_lib}.db"

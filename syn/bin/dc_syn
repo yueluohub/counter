@@ -1,0 +1,49 @@
+#!/bin/csh -f
+
+if (-d ./log) then
+else
+    mkdir log
+endif
+
+if (-d ./netlist) then
+else
+    mkdir netlist
+endif
+
+
+if (-d ./db) then
+else
+    mkdir db
+endif
+    
+if (-d ./ddc) then
+else
+    mkdir ddc
+endif
+
+if (-d ./rpt) then
+else
+    mkdir rpt
+endif
+
+if (-d ./work) then
+else
+    mkdir work
+endif
+
+if (-f ./log/run_syn.log) then
+    rm -f log/*
+    rm -f rpt/*
+endif
+
+loop:
+dc_shell-t -f ./dc_script/ahblite2ahb.tcl | tee ./log/run_syn.log
+
+if ($status) then
+    sleep 10
+    goto loop
+endif
+
+rm -rf synopsys*
+rm -rf dw*
+rm -rf work/*
